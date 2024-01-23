@@ -1,0 +1,1 @@
+project(NeoSekaiEngine VERSION 1.0.0)
