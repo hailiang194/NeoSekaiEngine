@@ -2,6 +2,7 @@
 #define _SEKAI_ENGINE_APPLICATION_H_
 
 #include "BaseType.h"
+#include "SekaiEngine/Window.h"
 
 namespace SekaiEngine
 {
@@ -13,6 +14,8 @@ namespace SekaiEngine
         virtual ~Application();
 
         void Run();
+    private:
+        IWindow* window;
     };
 
     //To be defined by CLIENT

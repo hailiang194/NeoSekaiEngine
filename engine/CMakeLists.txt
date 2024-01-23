@@ -1,14 +1,18 @@
 project(SekaiEngine VERSION 1.0.0)
 
 set(ENGINE_PUBLIC_HEADER
+    ./include/wrapper/raylib/Window.h
     ./include/SekaiEngine.h
     ./include/SekaiEngine/EntryPoint.h
     ./include/SekaiEngine/BaseType.h
     ./include/SekaiEngine/Application.h
+    ./include/SekaiEngine/Window.h
 )
 
 set(ENGINE_SOURCES
-    ./src/Application.cpp
+    ./src/wrapper/raylib/Window.cpp
+    ./src/SekaiEngine/Application.cpp
+    ./src/SekaiEngine/Window.cpp
 )
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
@@ -36,6 +40,7 @@ add_subdirectory(./vendors/raylib)
 
 add_library(SekaiEngine ${ENGINE_PUBLIC_HEADER} ${ENGINE_SOURCES})
 target_link_libraries(SekaiEngine PRIVATE raylib)
+target_compile_definitions(SekaiEngine PRIVATE USE_RAYLIB)
 
 if(BUILD_SHARED_LIBS)
     message(STATUS "Build shared lib for SekaiEngine")
