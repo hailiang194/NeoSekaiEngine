@@ -1,12 +1,14 @@
 project(SekaiEngine VERSION 1.0.0)
 
 set(ENGINE_PUBLIC_HEADER
-    ./include/BaseType.h
-    ./include/Test.h
+    ./include/SekaiEngine.h
+    ./include/SekaiEngine/EntryPoint.h
+    ./include/SekaiEngine/BaseType.h
+    ./include/SekaiEngine/Application.h
 )
 
 set(ENGINE_SOURCES
-    ./src/Test.cpp
+    ./src/Application.cpp
 )
 
 
