@@ -4,6 +4,7 @@
 #include "BaseType.h"
 #include "SekaiEngine/Window.h"
 #include "SekaiEngine/Event/Event.h"
+#include "SekaiEngine/Layer/LayerStack.h"
 
 namespace SekaiEngine
 {
@@ -18,10 +19,14 @@ namespace SekaiEngine
 
         bool OnWindowClose(Event::Event& event);
         bool OnWindowResize(Event::Event& event);
+
+        void PushLayer(Layer::Layer* layer);
+        void PushOverlay(Layer::Layer* overlay);
         void Run();
     private:
         IWindow* window;
         bool m_running;
+        Layer::LayerStack m_layerStack;
     };
 
     //To be defined by CLIENT

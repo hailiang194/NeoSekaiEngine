@@ -9,6 +9,8 @@ set(ENGINE_PUBLIC_HEADER
     ./include/SekaiEngine/Window.h
     ./include/SekaiEngine/Event/Event.h
     ./include/SekaiEngine/Event/WindowEvent.h
+    ./include/SekaiEngine/Layer/Layer.h
+    ./include/SekaiEngine/Layer/LayerStack.h
 )
 
 set(ENGINE_SOURCES
@@ -17,6 +19,8 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Window.cpp
     ./src/SekaiEngine/Event/Event.cpp
     ./src/SekaiEngine/Event/WindowEvent.cpp
+    ./src/SekaiEngine/Layer/Layer.cpp
+    ./src/SekaiEngine/Layer/LayerStack.cpp
 )
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)

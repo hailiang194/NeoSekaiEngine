@@ -5,12 +5,12 @@
 namespace SekaiEngine
 {
     Application::Application()
-        :window(IWindow::Create()), m_running(true)
+        :window(IWindow::Create()), m_running(true), m_layerStack()
     {
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
     }
     Application::Application(const Application& app)
-        :window(app.window), m_running(app.m_running)
+        :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack)
     {
 
     }
@@ -29,6 +29,13 @@ namespace SekaiEngine
         dispatcher.Dispatch<Event::WindowResizeEvent>(
             std::bind(&Application::OnWindowResize, this, std::placeholders::_1)
         );
+
+        for(auto it = m_layerStack.end(); it != m_layerStack.begin();)
+        {
+            (*--it)->OnEvent(event);
+            if(event.Handled)
+                break;
+        }
     }
 
     bool Application::OnWindowClose(Event::Event& event)
@@ -39,13 +46,27 @@ namespace SekaiEngine
 
     bool Application::OnWindowResize(Event::Event& event)
     {
-        return true;
+        return false;
     }
+
+    void Application::PushLayer(Layer::Layer* layer)
+    {
+        m_layerStack.PushLayer(layer);
+    }
+
+    void Application::PushOverlay(Layer::Layer* overlay)
+    {
+        m_layerStack.PushOverlay(overlay);
+    }   
 
     void Application::Run()
     {
         while(m_running)
         {
+            for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
+            {
+                (*it)->OnUpdate();
+            }
             window->OnUpdate();
         }
     }
