@@ -36,9 +36,6 @@ namespace Wrapper
         void Window::OnUpdate()
         {
             _pollEvent();
-            BeginDrawing();
-            ClearBackground(BLACK);
-            EndDrawing();
         }
 
         int Window::GetHeight()

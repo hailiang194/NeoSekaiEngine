@@ -1,7 +1,20 @@
 project(SekaiEngine VERSION 1.0.0)
 
-set(ENGINE_PUBLIC_HEADER
+set(WRAPPER_RAYLIB_HEADERS
     ./include/wrapper/raylib/Window.h
+    ./include/wrapper/raylib/Parser.h
+)
+
+set(WRAPPER_RAYLIB_SOURCES
+    ./src/wrapper/raylib/MainLoop.cpp
+    ./src/wrapper/raylib/Window.cpp
+    ./src/wrapper/raylib/Input.cpp
+    ./src/wrapper/raylib/RendererAPI.cpp
+    ./src/wrapper/raylib/Parser.cpp
+)
+
+set(ENGINE_PUBLIC_HEADERS
+    ${WRAPPER_RAYLIB_HEADERS}
     ./include/SekaiEngine.h
     ./include/SekaiEngine/EntryPoint.h
     ./include/SekaiEngine/BaseType.h
@@ -12,25 +25,29 @@ set(ENGINE_PUBLIC_HEADER
     ./include/SekaiEngine/Layer/Layer.h
     ./include/SekaiEngine/Layer/LayerStack.h
     ./include/SekaiEngine/Input.h
+    ./include/SekaiEngine/Render/RendererAPI.h
+    ./include/SekaiEngine/Render/Color.h
+    ./include/SekaiEngine/Render/RenderCommand.h
+    ./include/SekaiEngine/Render/Renderer.h
 )
 
 set(ENGINE_SOURCES
-    ./src/wrapper/raylib/MainLoop.cpp
-    ./src/wrapper/raylib/Window.cpp
-    ./src/wrapper/raylib/Input.cpp
+    ${WRAPPER_RAYLIB_SOURCES}
     ./src/SekaiEngine/Application.cpp
     ./src/SekaiEngine/Window.cpp
     ./src/SekaiEngine/Event/Event.cpp
     ./src/SekaiEngine/Event/WindowEvent.cpp
     ./src/SekaiEngine/Layer/Layer.cpp
     ./src/SekaiEngine/Layer/LayerStack.cpp
+    ./src/SekaiEngine/Render/Color.cpp
+    ./src/SekaiEngine/Render/Renderer.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
 
 add_subdirectory(./vendors/raylib)
 
-add_library(SekaiEngine ${ENGINE_PUBLIC_HEADER} ${ENGINE_SOURCES})
+add_library(SekaiEngine ${ENGINE_PUBLIC_HEADERS} ${ENGINE_SOURCES})
 target_link_libraries(SekaiEngine PRIVATE raylib)
 target_compile_definitions(SekaiEngine PRIVATE USE_RAYLIB)
 
