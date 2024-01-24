@@ -7,19 +7,21 @@ set(ENGINE_PUBLIC_HEADER
     ./include/SekaiEngine/BaseType.h
     ./include/SekaiEngine/Application.h
     ./include/SekaiEngine/Window.h
+    ./include/SekaiEngine/Event/Event.h
 )
 
 set(ENGINE_SOURCES
     ./src/wrapper/raylib/Window.cpp
     ./src/SekaiEngine/Application.cpp
     ./src/SekaiEngine/Window.cpp
+    ./src/SekaiEngine/Event/Event.cpp
 )
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)
-    target_link_libraries(${PROJECT_NAME} "-framework IOKit")
-    target_link_libraries(${PROJECT_NAME} "-framework Cocoa")
-    target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework IOKit")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework Cocoa")
+    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework OpenGL")
 endif()
 
 # Web Configuration

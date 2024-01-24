@@ -3,6 +3,7 @@
 
 #include "BaseType.h"
 #include "SekaiEngine/Window.h"
+#include "SekaiEngine/Event/Event.h"
 
 namespace SekaiEngine
 {
@@ -12,6 +13,8 @@ namespace SekaiEngine
         Application();
         Application(const Application& app);
         virtual ~Application();
+
+        void OnEvent(Event::Event& event);
 
         void Run();
     private:

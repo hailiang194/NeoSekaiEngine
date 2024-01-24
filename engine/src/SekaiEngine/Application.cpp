@@ -18,6 +18,11 @@ namespace SekaiEngine
         delete window;
     }
 
+    void Application::OnEvent(Event::Event& event)
+    {
+        
+    }
+
     void Application::Run()
     {
         while(true)
