@@ -5,5 +5,7 @@
 #include "SekaiEngine/EntryPoint.h"
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Event/WindowEvent.h"
+#include "SekaiEngine/Layer/Layer.h"
+#include "SekaiEngine/Layer/LayerStack.h"
 
 #endif //!_SEKAI_ENGINE_SEKAI_ENGINE_H_
