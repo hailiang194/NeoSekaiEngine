@@ -26,25 +26,6 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Layer/LayerStack.cpp
 )
 
-# Checks if OSX and links appropriate frameworks (Only required on MacOS)
-if (APPLE)
-    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework IOKit")
-    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework Cocoa")
-    target_link_libraries(${CMAKE_PROJECT_NAME} "-framework OpenGL")
-endif()
-
-# Web Configuration
-if (${PLATFORM} STREQUAL "Web")
-    # Tell Emscripten to build an example.html file.
-    set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES SUFFIX ".html")
-endif()
-
-if (EMSCRIPTEN)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY")
-    set(CMAKE_EXECUTABLE_SUFFIX ".html")
-endif ()
-
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
 
 add_subdirectory(./vendors/raylib)

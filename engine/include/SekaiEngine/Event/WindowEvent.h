@@ -15,7 +15,7 @@ namespace SekaiEngine
             WindowResizeEvent& operator=(const WindowResizeEvent& event);
             virtual ~WindowResizeEvent();
 
-            EVENT_CLASS_TYPE(WindowResize)
+            EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowResize)
             EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
             const int& Width() const;
@@ -37,7 +37,7 @@ namespace SekaiEngine
             WindowCloseEvent& operator=(const WindowCloseEvent& event) = default;
             ~WindowCloseEvent() {}
 
-            EVENT_CLASS_TYPE(WindowClose)
+            EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowClose)
             EVENT_CLASS_CATEGORY(EventCategoryApplication)
         };
 

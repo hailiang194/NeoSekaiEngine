@@ -74,11 +74,13 @@ namespace Wrapper
         {
             if(WindowShouldClose())
             {
-                m_eventCallbackFn(SekaiEngine::Event::WindowCloseEvent());
+                SekaiEngine::Event::WindowCloseEvent event;
+                m_eventCallbackFn(event);
             }
             if(IsWindowResized())
             {
-                m_eventCallbackFn(SekaiEngine::Event::WindowResizeEvent(GetWidth(), GetHeight()));
+                SekaiEngine::Event::WindowResizeEvent event(GetWidth(), GetHeight());
+                m_eventCallbackFn(event);
             }
         }
 

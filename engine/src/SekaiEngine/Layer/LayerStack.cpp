@@ -1,4 +1,5 @@
 #include "SekaiEngine/Layer/LayerStack.h"
+#include <algorithm>
 
 namespace SekaiEngine
 {

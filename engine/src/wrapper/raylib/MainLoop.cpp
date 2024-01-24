@@ -1,11 +1,12 @@
 #include "SekaiEngine/Application.h"
 
 #if defined(USE_RAYLIB) && defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
 namespace SekaiEngine
 {
-    void RunLoop(Application* app)
+    void RunLoop(void* app)
     {
-        app->loop();
+        reinterpret_cast<Application*>(app)->loop();
     }
 
     void Application::Run()
