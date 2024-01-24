@@ -23,10 +23,13 @@ namespace SekaiEngine
         void PushLayer(Layer::Layer* layer);
         void PushOverlay(Layer::Layer* overlay);
         void Run();
+        
+        void loop();
     private:
         IWindow* window;
         bool m_running;
         Layer::LayerStack m_layerStack;
+
     };
 
     //To be defined by CLIENT

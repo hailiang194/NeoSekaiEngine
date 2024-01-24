@@ -11,10 +11,13 @@ set(ENGINE_PUBLIC_HEADER
     ./include/SekaiEngine/Event/WindowEvent.h
     ./include/SekaiEngine/Layer/Layer.h
     ./include/SekaiEngine/Layer/LayerStack.h
+    ./include/SekaiEngine/Input.h
 )
 
 set(ENGINE_SOURCES
+    ./src/wrapper/raylib/MainLoop.cpp
     ./src/wrapper/raylib/Window.cpp
+    ./src/wrapper/raylib/Input.cpp
     ./src/SekaiEngine/Application.cpp
     ./src/SekaiEngine/Window.cpp
     ./src/SekaiEngine/Event/Event.cpp

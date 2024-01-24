@@ -59,15 +59,23 @@ namespace SekaiEngine
         m_layerStack.PushOverlay(overlay);
     }   
 
+#if !defined(USE_RAYLIB) || defined(PLATFORM_WEB)
+#else
     void Application::Run()
     {
         while(m_running)
         {
-            for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
-            {
-                (*it)->OnUpdate();
-            }
-            window->OnUpdate();
+            loop();
         }
+    }
+#endif
+
+    void Application::loop()
+    {
+        for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
+        {
+            (*it)->OnUpdate();
+        }
+        window->OnUpdate();
     }
 } // namespace SekaiEngine
