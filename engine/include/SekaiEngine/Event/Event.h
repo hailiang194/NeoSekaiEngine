@@ -55,13 +55,13 @@ namespace SekaiEngine
             using EventFn = std::function<bool(T&)>;
         public:
             EventDispatcher(Event& event);
-            EventDispatcher(const EventDispatcher& dispatcher) = delete;
-            EventDispatcher& operator=(const EventDispatcher& dispatcher) = delete;
+            EventDispatcher(const EventDispatcher& dispatcher);
+            EventDispatcher& operator=(const EventDispatcher& dispatcher);
+            ~EventDispatcher();
 
             template<typename T, typename F>
             bool Dispatch(const F& func);
 
-            ~EventDispatcher();
         private:
             Event& m_event;
         };

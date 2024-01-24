@@ -26,6 +26,28 @@ namespace SekaiEngine
         {
 
         }
+
+        EventDispatcher::EventDispatcher(Event& event)
+            :m_event(event)
+        {
+        }
+
+        EventDispatcher::EventDispatcher(const EventDispatcher& dispatcher)
+            :m_event(dispatcher.m_event)
+        {
+
+        }
+
+        EventDispatcher& EventDispatcher::operator=(const EventDispatcher& dispatcher)
+        {
+            m_event = dispatcher.m_event;
+            return (*this);
+        }
+
+        EventDispatcher::~EventDispatcher()
+        {
+
+        }
     } // namespace Event
     
 } // namespace SekaiEngine

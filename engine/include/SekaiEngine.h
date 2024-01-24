@@ -4,5 +4,6 @@
 #include "SekaiEngine/Application.h"
 #include "SekaiEngine/EntryPoint.h"
 #include "SekaiEngine/Event/Event.h"
+#include "SekaiEngine/Event/WindowEvent.h"
 
 #endif //!_SEKAI_ENGINE_SEKAI_ENGINE_H_

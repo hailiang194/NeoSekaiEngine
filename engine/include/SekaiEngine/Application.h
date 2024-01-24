@@ -16,9 +16,12 @@ namespace SekaiEngine
 
         void OnEvent(Event::Event& event);
 
+        bool OnWindowClose(Event::Event& event);
+        bool OnWindowResize(Event::Event& event);
         void Run();
     private:
         IWindow* window;
+        bool m_running;
     };
 
     //To be defined by CLIENT

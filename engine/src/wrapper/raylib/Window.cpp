@@ -1,4 +1,5 @@
 #include "wrapper/raylib/Window.h"
+#include "SekaiEngine/Event/WindowEvent.h"
 
 #ifdef USE_RAYLIB
 #include "raylib.h"
@@ -8,10 +9,11 @@ namespace Wrapper
     namespace Raylib
     {
         Window::Window(const SekaiEngine::WindowsProps& props)
-            :m_flag(0)
+            :m_flag(FLAG_WINDOW_RESIZABLE)
         {
-            InitWindow(props.Width, props.Height, props.Title);
             SetVSync(true);
+            InitWindow(props.Width, props.Height, props.Title);
+            SetTargetFPS(60);
         }
 
         Window::Window(const Window& window)
@@ -33,7 +35,10 @@ namespace Wrapper
 
         void Window::OnUpdate()
         {
-
+            _pollEvent();
+            BeginDrawing();
+            ClearBackground(BLACK);
+            EndDrawing();
         }
 
         int Window::GetHeight()
@@ -63,6 +68,18 @@ namespace Wrapper
         bool Window::IsVSync() const
         {
             return m_flag & FLAG_VSYNC_HINT;
+        }
+
+        void Window::_pollEvent()
+        {
+            if(WindowShouldClose())
+            {
+                m_eventCallbackFn(SekaiEngine::Event::WindowCloseEvent());
+            }
+            if(IsWindowResized())
+            {
+                m_eventCallbackFn(SekaiEngine::Event::WindowResizeEvent(GetWidth(), GetHeight()));
+            }
         }
 
     } // namespace Raylib

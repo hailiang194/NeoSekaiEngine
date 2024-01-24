@@ -20,12 +20,21 @@ namespace Wrapper
             void OnUpdate() override;
             int GetHeight() override;
             int GetWidth() override;
+            void setEventCallbackFn(const EventCallbackFn& fn) override;
 
             void SetVSync(bool enable) override;
             bool IsVSync() const override;
         private:
             unsigned int m_flag;
+            IWindow::EventCallbackFn m_eventCallbackFn;
+
+            void _pollEvent();
         };
+
+        inline void Window::setEventCallbackFn(const EventCallbackFn& fn)
+        {
+            m_eventCallbackFn = fn;
+        }
     } // namespace Raylib
     
 } // namespace Wrapper

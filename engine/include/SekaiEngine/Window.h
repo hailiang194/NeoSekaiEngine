@@ -1,8 +1,9 @@
 #ifndef _SEKAI_ENGINE_WINDOW_H_
 #define _SEKAI_ENGINE_WINDOW_H_
 
-#include <string>
+#include <functional>
 #include "SekaiEngine/BaseType.h"
+#include "SekaiEngine/Event/Event.h"
 
 namespace SekaiEngine 
 {
@@ -22,6 +23,8 @@ namespace SekaiEngine
     class EXTENDAPI IWindow
     {
     public:
+        using EventCallbackFn = std::function<void(Event::Event&)>;
+
         IWindow() = default;
         IWindow(const IWindow& window) = default;
         IWindow& operator=(const IWindow& window) = default;
@@ -30,6 +33,7 @@ namespace SekaiEngine
         virtual void OnUpdate() = 0;
         virtual int GetHeight() = 0;
         virtual int GetWidth() = 0;
+        virtual void setEventCallbackFn(const EventCallbackFn& fn) = 0;
 
         virtual void SetVSync(bool enable) = 0;
         virtual bool IsVSync() const = 0;
