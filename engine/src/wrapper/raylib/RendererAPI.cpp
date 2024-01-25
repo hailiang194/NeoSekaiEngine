@@ -26,6 +26,7 @@ namespace SekaiEngine
 
             void EndDrawing()
             {
+                ::EndMode2D();
                 ::EndDrawing();
             }
         } // namespace API

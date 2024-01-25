@@ -85,7 +85,7 @@ namespace SekaiEngine
 
         Render::Renderer::Render();
 
-        Render::Renderer::EndScreen(camera);
+        Render::Renderer::EndScreen();
 
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {

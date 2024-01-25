@@ -22,7 +22,6 @@ namespace SekaiEngine
             virtual ~Camera2D();
 
             void applyCamera();
-            void unapplyCamera();
 
             Math::Vector2D Position;
             Math::Vector2D Offset;

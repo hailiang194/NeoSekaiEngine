@@ -13,9 +13,8 @@ namespace SekaiEngine
             camera.applyCamera();
         }
 
-        void Renderer::EndScreen(Camera2D& camera)
+        void Renderer::EndScreen()
         {
-            camera.unapplyCamera();
             RenderCommand::EndDrawing();
         }
 
