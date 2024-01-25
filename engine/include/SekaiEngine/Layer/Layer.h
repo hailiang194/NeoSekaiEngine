@@ -4,6 +4,7 @@
 #include <string>
 #include "SekaiEngine/BaseType.h"
 #include "SekaiEngine/Event/Event.h"
+#include "SekaiEngine/Timer.h"
 
 namespace SekaiEngine
 {
@@ -19,7 +20,7 @@ namespace SekaiEngine
 
             virtual void OnAttach();
             virtual void OnDetach();
-            virtual void OnUpdate();
+            virtual void OnUpdate(const Timestep& elipse);
             virtual void OnEvent(Event::Event& event);
 
             const char* name() const;

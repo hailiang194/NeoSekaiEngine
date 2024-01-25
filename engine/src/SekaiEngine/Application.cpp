@@ -5,12 +5,12 @@
 namespace SekaiEngine
 {
     Application::Application()
-        :window(IWindow::Create()), m_running(true), m_layerStack()
+        :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
     {
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
     }
     Application::Application(const Application& app)
-        :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack)
+        :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack), m_timer()
     {
 
     }
@@ -72,9 +72,10 @@ namespace SekaiEngine
 
     void Application::loop()
     {
+        Timestep elipse = m_timer.update();
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {
-            (*it)->OnUpdate();
+            (*it)->OnUpdate(elipse);
         }
         window->OnUpdate();
     }

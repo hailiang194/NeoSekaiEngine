@@ -13,6 +13,7 @@ set(ENGINE_PUBLIC_HEADER
     ./include/SekaiEngine/Layer/LayerStack.h
     ./include/SekaiEngine/Input.h
     ./include/SekaiEngine/Math/Vector.h
+    ./include/SekaiEngine/Timer.h
 )
 
 set(ENGINE_SOURCES
@@ -26,6 +27,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Layer/Layer.cpp
     ./src/SekaiEngine/Layer/LayerStack.cpp
     ./src/SekaiEngine/Math/Vector.cpp
+    ./src/SekaiEngine/Timer.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
