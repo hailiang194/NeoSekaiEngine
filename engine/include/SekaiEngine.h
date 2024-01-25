@@ -7,5 +7,9 @@
 #include "SekaiEngine/Event/WindowEvent.h"
 #include "SekaiEngine/Layer/Layer.h"
 #include "SekaiEngine/Layer/LayerStack.h"
+#include "SekaiEngine/Render/Camera.h"
+#include "SekaiEngine/Render/Color.h"
+#include "SekaiEngine/Render/RenderCommand.h"
+#include "SekaiEngine/Render/Renderer.h"
 
 #endif //!_SEKAI_ENGINE_SEKAI_ENGINE_H_

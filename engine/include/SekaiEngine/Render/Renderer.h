@@ -7,7 +7,7 @@ namespace SekaiEngine
 {
     namespace Render
     {
-        class Renderer
+        class EXTENDAPI Renderer
         {
         public:
             static void BeginScreen(Camera2D& camera);

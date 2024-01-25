@@ -77,15 +77,7 @@ namespace SekaiEngine
 
     void Application::loop()
     {
-        static SekaiEngine::Render::Camera2D camera;
-        Render::RenderCommand::SetClearColor((Render::Color)0xffffffff);
-        Render::RenderCommand::Clear();
 
-        Render::Renderer::BeginScreen(camera);
-
-        Render::Renderer::Render();
-
-        Render::Renderer::EndScreen();
 
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {

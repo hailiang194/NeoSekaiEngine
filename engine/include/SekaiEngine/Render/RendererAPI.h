@@ -10,10 +10,10 @@ namespace SekaiEngine
     {
         namespace API
         {
-            void SetClearColor(const Color& color);
-            void Clear();
-            void BeginDrawing();
-            void EndDrawing();
+            EXTENDAPI void SetClearColor(const Color& color);
+            EXTENDAPI void Clear();
+            EXTENDAPI void BeginDrawing();
+            EXTENDAPI void EndDrawing();
         } // namespace API
         
     } // namespace Render
