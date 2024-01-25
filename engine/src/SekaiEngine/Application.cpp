@@ -1,6 +1,8 @@
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Event/WindowEvent.h"
 #include "SekaiEngine/Application.h"
+#include "SekaiEngine/Render/Renderer.h"
+#include "SekaiEngine/Render/RenderCommand.h"
 
 namespace SekaiEngine
 {
@@ -46,6 +48,8 @@ namespace SekaiEngine
 
     bool Application::OnWindowResize(Event::Event& event)
     {
+        Event::WindowResizeEvent& resizeEvt = dynamic_cast<Event::WindowResizeEvent&>(event);
+        Render::Renderer::OnWindowResize(resizeEvt.Width(), resizeEvt.Height());
         return false;
     }
 
@@ -72,6 +76,12 @@ namespace SekaiEngine
 
     void Application::loop()
     {
+        Render::RenderCommand::SetClearColor((Render::Color)0xffffffff);
+        Render::RenderCommand::Clear();
+
+        Render::Renderer::BeginScreen();
+        Render::Renderer::EndScreen();
+
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {
             (*it)->OnUpdate();
