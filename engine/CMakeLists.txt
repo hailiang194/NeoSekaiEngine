@@ -11,6 +11,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Input.cpp
     ./src/wrapper/raylib/RendererAPI.cpp
     ./src/wrapper/raylib/Parser.cpp
+    ./src/wrapper/raylib/Camera.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -30,6 +31,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/Color.h
     ./include/SekaiEngine/Render/RenderCommand.h
     ./include/SekaiEngine/Render/Renderer.h
+    ./include/SekaiEngine/Render/Camera.h
 )
 
 set(ENGINE_SOURCES
@@ -43,6 +45,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Math/Vector.cpp
     ./src/SekaiEngine/Render/Color.cpp
     ./src/SekaiEngine/Render/Renderer.cpp
+    ./src/SekaiEngine/Render/Camera.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
