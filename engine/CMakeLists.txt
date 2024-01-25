@@ -32,6 +32,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/RenderCommand.h
     ./include/SekaiEngine/Render/Renderer.h
     ./include/SekaiEngine/Render/Camera.h
+    ./include/SekaiEngine/Timer.h
 )
 
 set(ENGINE_SOURCES
@@ -46,6 +47,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Color.cpp
     ./src/SekaiEngine/Render/Renderer.cpp
     ./src/SekaiEngine/Render/Camera.cpp
+    ./src/SekaiEngine/Timer.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

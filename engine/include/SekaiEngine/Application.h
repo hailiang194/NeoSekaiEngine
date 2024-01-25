@@ -5,29 +5,31 @@
 #include "SekaiEngine/Window.h"
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Layer/LayerStack.h"
+#include "SekaiEngine/Timer.h"
 
 namespace SekaiEngine
 {
-    class EXTENDAPI Application 
+    class Application 
     {
     public:
-        Application();
-        Application(const Application& app);
-        virtual ~Application();
+        EXTENDAPI Application();
+        EXTENDAPI Application(const Application& app);
+        EXTENDAPI virtual ~Application();
 
-        void OnEvent(Event::Event& event);
+        EXTENDAPI void OnEvent(Event::Event& event);
 
-        bool OnWindowClose(Event::Event& event);
-        bool OnWindowResize(Event::Event& event);
+        EXTENDAPI bool OnWindowClose(Event::Event& event);
+        EXTENDAPI bool OnWindowResize(Event::Event& event);
 
-        void PushLayer(Layer::Layer* layer);
-        void PushOverlay(Layer::Layer* overlay);
-        void Run();
+        EXTENDAPI void PushLayer(Layer::Layer* layer);
+        EXTENDAPI void PushOverlay(Layer::Layer* overlay);
+        EXTENDAPI void Run();
         
-        void loop();
+        EXTENDAPI void loop();
     private:
         IWindow* window;
         bool m_running;
+        Timer m_timer;
         Layer::LayerStack m_layerStack;
 
     };

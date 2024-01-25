@@ -21,7 +21,7 @@ public:
 
     }
 
-    void OnUpdate() override
+    void OnUpdate(const SekaiEngine::Timestep& elipse) override
     {
         SekaiEngine::Render::RenderCommand::SetClearColor((SekaiEngine::Render::Color)0xffffffff);
         SekaiEngine::Render::RenderCommand::Clear();

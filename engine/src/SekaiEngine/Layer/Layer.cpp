@@ -37,7 +37,7 @@ namespace SekaiEngine
 
         }
 
-        void Layer::OnUpdate()
+        void Layer::OnUpdate(const Timestep& elipse)
         {
 
         }
