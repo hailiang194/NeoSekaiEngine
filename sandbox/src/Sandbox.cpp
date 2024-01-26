@@ -35,7 +35,7 @@ public:
 
     }
 
-    void OnRender()
+    void OnRender() override
     {
         
         camera.applyCamera();

@@ -33,7 +33,7 @@ namespace SekaiEngine
             const int& Segment();
 
         private:
-            Shape::Circle& m_drawCircle;
+            Shape::Circle m_drawCircle;
             float m_startAngle;
             float m_endAngle;
             int m_segment;
