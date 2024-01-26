@@ -10,30 +10,22 @@ namespace SekaiEngine
     {
         namespace RenderCommand
         {
-            void SetClearColor(const Color& color);
-            void Clear();
-            void BeginDrawing();
-            void EndDrawing();
 
-            inline void SetClearColor(const Color& color)
+            void StartDrawing(const Color& color);
+            void FinishDrawing();
+
+            inline void StartDrawing(const Color& color)
             {
+                Render::API::BeginDrawing();
                 Render::API::SetClearColor(color);
-            }
-
-            inline void Clear()
-            {
                 Render::API::Clear();
             }
 
-            inline void BeginDrawing()
-            {
-                Render::API::BeginDrawing();
-            }
-
-            inline void EndDrawing()
+            inline void FinishDrawing()
             {
                 Render::API::EndDrawing();
             }
+
 
         } // namespace RenderCommand
         

@@ -1,5 +1,7 @@
 project(SekaiEngine VERSION 1.0.0)
 
+include(cmake/import_engine.cmake)
+
 set(WRAPPER_RAYLIB_HEADERS
     ./include/wrapper/raylib/Window.h
     ./include/wrapper/raylib/Parser.h
@@ -14,6 +16,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Parser.cpp
     ./src/wrapper/raylib/Camera.cpp
     ./src/wrapper/raylib/Texture.cpp
+    ./src/wrapper/raylib/Timer.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS

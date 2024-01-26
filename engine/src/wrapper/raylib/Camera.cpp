@@ -17,6 +17,12 @@ namespace SekaiEngine
             BeginMode2D(camera);
         }
 
+        void Camera2D::unapplyCamera()
+        {
+            EndMode2D();
+        }
+
+
     } // namespace Render
     
 } // namespace SekaiEngine

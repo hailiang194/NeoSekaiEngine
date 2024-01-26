@@ -13,7 +13,6 @@ namespace Wrapper
         {
             SetVSync(true);
             InitWindow(props.Width, props.Height, props.Title);
-            SetTargetFPS(60);
         }
 
         Window::Window(const Window& window)

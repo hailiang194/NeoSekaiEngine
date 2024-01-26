@@ -13,6 +13,7 @@ namespace SekaiEngine
     {
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
+        m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
         :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack), m_timer()
@@ -81,10 +82,20 @@ namespace SekaiEngine
     void Application::loop()
     {
         Timestep elipse = m_timer.update();
+        window->OnUpdate();
+        if(!m_running)
+            return;
+        
+        
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {
             (*it)->OnUpdate(elipse);
         }
-        window->OnUpdate();
+        SekaiEngine::Render::RenderCommand::StartDrawing((SekaiEngine::Render::Color)0x000000ff);
+        for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
+        {
+            (*it)->OnRender();
+        }
+        SekaiEngine::Render::RenderCommand::FinishDrawing();
     }
 } // namespace SekaiEngine

@@ -33,17 +33,18 @@ public:
         else if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_S))
             rect.Position.Y() += (100 * elipse.ToSeconds());
 
-        SekaiEngine::Render::RenderCommand::SetClearColor((SekaiEngine::Render::Color)0xffffffff);
-        SekaiEngine::Render::RenderCommand::Clear();
+    }
 
-        SekaiEngine::Render::Renderer::BeginScreen(camera);
-
+    void OnRender()
+    {
+        
+        camera.applyCamera();
         SekaiEngine::Render::RenderProperties props;
         props.Tint = 0xff0000ff;
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
         SekaiEngine::Render::API::DrawRect(params.DrawRect(), params.Tint(), params.Origin(), params.Rotation());
-
-        SekaiEngine::Render::Renderer::EndScreen();
+        camera.unapplyCamera();
+        
     }
 private:
     SekaiEngine::Render::Camera2D camera;

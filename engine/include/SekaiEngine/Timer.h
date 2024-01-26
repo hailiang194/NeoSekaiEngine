@@ -33,7 +33,9 @@ namespace SekaiEngine
         Timer(const Timer& timer);
         Timer& operator=(const Timer& timer);
         ~Timer();
-
+        
+        void SetTargetFPS(const int& fps);
+        void wait();
         Timestep update();
 
     private:

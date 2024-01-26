@@ -7,17 +7,6 @@ namespace SekaiEngine
 {
     namespace Render
     {
-        void Renderer::BeginScreen(Camera2D& camera)
-        {
-            RenderCommand::BeginDrawing();
-            camera.applyCamera();
-        }
-
-        void Renderer::EndScreen()
-        {
-            RenderCommand::EndDrawing();
-        }
-
         void Renderer::OnWindowResize(const int& width, const int& height)
         {
 

@@ -14,8 +14,6 @@ namespace SekaiEngine
         class EXTENDAPI Renderer
         {
         public:
-            static void BeginScreen(Camera2D& camera);
-            static void EndScreen();
             static void OnWindowResize(const int& width, const int& height);
         };
     } // namespace Render

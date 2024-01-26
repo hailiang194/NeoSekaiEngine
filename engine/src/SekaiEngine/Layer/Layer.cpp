@@ -42,6 +42,12 @@ namespace SekaiEngine
 
         }
 
+        void Layer::OnRender()
+        {
+
+        }
+
+
         void Layer::OnEvent(Event::Event& event)
         {
             
