@@ -3,6 +3,10 @@
 
 #include "SekaiEngine/BaseType.h"
 #include "SekaiEngine/Render/Color.h"
+#include "SekaiEngine/Math/Vector.h"
+#include "SekaiEngine/Render/Texture.h"
+#include "SekaiEngine/Shape/Circle.h"
+#include "SekaiEngine/Shape/Rectangle.h"
 
 namespace SekaiEngine
 {
@@ -14,6 +18,22 @@ namespace SekaiEngine
             EXTENDAPI void Clear();
             EXTENDAPI void BeginDrawing();
             EXTENDAPI void EndDrawing();
+            EXTENDAPI void DrawCircle(const Shape::Circle& circle, const Color& color,
+                const float& startAngle = 0.0f, const float& endAngle = 360.0f, const int& segment = 36
+            );
+            
+            EXTENDAPI void DrawRect(const Shape::Rectangle& rect, const Color& color,
+                const Math::Vector2D& origin = Math::Vector2D(), const float& rotation = 0.0f
+            );
+
+            EXTENDAPI void DrawTexture(const Render::Texture& texture, 
+                const Color& color,
+                const Shape::Rectangle& source = FULL_RECTANGLE,
+                const Shape::Rectangle& dest = FULL_RECTANGLE,
+                const Math::Vector2D& origin = Math::Vector2D(),
+                const float rotation = 0.0f
+                );
+
         } // namespace API
         
     } // namespace Render

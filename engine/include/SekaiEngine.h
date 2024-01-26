@@ -11,5 +11,8 @@
 #include "SekaiEngine/Render/Color.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 #include "SekaiEngine/Render/Renderer.h"
+#include "SekaiEngine/Render/Params/TextureRenderParams.h"
+#include "SekaiEngine/Render/RendererAPI.h"
+#include "SekaiEngine/Input.h"
 
 #endif //!_SEKAI_ENGINE_SEKAI_ENGINE_H_

@@ -18,11 +18,6 @@ namespace SekaiEngine
             RenderCommand::EndDrawing();
         }
 
-        void Renderer::Render()
-        {
-            DrawText("Hello", 100, 100, 10, ::Color{ 230, 41, 55, 255 });
-        }
-
         void Renderer::OnWindowResize(const int& width, const int& height)
         {
 

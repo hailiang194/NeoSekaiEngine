@@ -3,6 +3,7 @@ project(SekaiEngine VERSION 1.0.0)
 set(WRAPPER_RAYLIB_HEADERS
     ./include/wrapper/raylib/Window.h
     ./include/wrapper/raylib/Parser.h
+    ./include/wrapper/raylib/Texture.h
 )
 
 set(WRAPPER_RAYLIB_SOURCES
@@ -12,6 +13,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/RendererAPI.cpp
     ./src/wrapper/raylib/Parser.cpp
     ./src/wrapper/raylib/Camera.cpp
+    ./src/wrapper/raylib/Texture.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -33,6 +35,13 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/Renderer.h
     ./include/SekaiEngine/Render/Camera.h
     ./include/SekaiEngine/Timer.h
+    ./include/SekaiEngine/Render/Texture.h
+    ./include/SekaiEngine/Shape/Shape.h
+    ./include/SekaiEngine/Shape/Circle.h
+    ./include/SekaiEngine/Shape/Rectangle.h
+    ./include/SekaiEngine/Render/RenderProperties.h
+    ./include/SekaiEngine/Render/Params/RenderParams.h
+    ./include/SekaiEngine/Render/Params/TextureRenderParams.h
 )
 
 set(ENGINE_SOURCES
@@ -48,6 +57,13 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Renderer.cpp
     ./src/SekaiEngine/Render/Camera.cpp
     ./src/SekaiEngine/Timer.cpp
+    ./src/SekaiEngine/Render/Texture.cpp
+    ./src/SekaiEngine/Shape/Shape.cpp
+    ./src/SekaiEngine/Shape/Circle.cpp
+    ./src/SekaiEngine/Shape/Rectangle.cpp
+    ./src/SekaiEngine/Render/RenderProperties.cpp
+    ./src/SekaiEngine/Render/Params/RenderParams.cpp
+    ./src/SekaiEngine/Render/Params/TextureRenderParams.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

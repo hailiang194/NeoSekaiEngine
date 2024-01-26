@@ -2,6 +2,10 @@
 #define _SEKAI_ENGINE_RENDER_RENDERER_H_
 
 #include "SekaiEngine/Render/Camera.h"
+#include "SekaiEngine/Render/RenderProperties.h"
+#include "SekaiEngine/Shape/Circle.h"
+#include "SekaiEngine/Shape/Rectangle.h"
+#include "SekaiEngine/Render/Texture.h"
 
 namespace SekaiEngine
 {
@@ -12,7 +16,6 @@ namespace SekaiEngine
         public:
             static void BeginScreen(Camera2D& camera);
             static void EndScreen();
-            static void Render();
             static void OnWindowResize(const int& width, const int& height);
         };
     } // namespace Render

@@ -4,6 +4,7 @@
 #include "SekaiEngine/Render/Renderer.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 #include "SekaiEngine/Input.h"
+#include "SekaiEngine/Render/Texture.h"
 
 namespace SekaiEngine
 {
@@ -11,6 +12,7 @@ namespace SekaiEngine
         :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
     {
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+        SekaiEngine::Render::initTextures();
     }
     Application::Application(const Application& app)
         :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack), m_timer()
@@ -20,6 +22,7 @@ namespace SekaiEngine
 
     Application::~Application()
     {
+        SekaiEngine::Render::destroyTextures();
         delete window;
     }
 
