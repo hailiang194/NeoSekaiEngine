@@ -42,6 +42,8 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/RenderProperties.h
     ./include/SekaiEngine/Render/Params/RenderParams.h
     ./include/SekaiEngine/Render/Params/TextureRenderParams.h
+    ./include/SekaiEngine/Render/Params/RectangleRenderParams.h
+    ./include/SekaiEngine/Render/Params/CircleRenderParams.h
 )
 
 set(ENGINE_SOURCES
@@ -64,6 +66,8 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/RenderProperties.cpp
     ./src/SekaiEngine/Render/Params/RenderParams.cpp
     ./src/SekaiEngine/Render/Params/TextureRenderParams.cpp
+    ./src/SekaiEngine/Render/Params/RectangleRenderParams.cpp
+    ./src/SekaiEngine/Render/Params/CircleRenderParams.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
