@@ -1,4 +1,4 @@
-project(SekaiEngine VERSION 1.0.0)
+project(SekaiEngine VERSION 1.0.1)
 
 include(cmake/import_engine.cmake)
 
