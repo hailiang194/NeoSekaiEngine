@@ -30,11 +30,11 @@ namespace SekaiEngine
             const bool operator==(const CommonVector& vector) const;
             const bool operator==(const CommonVector& vector);
             //dot product
-            const float dot(const CommonVector& vector) const;
-            const float dot(const CommonVector& vector);
+            const float Dot(const CommonVector& vector) const;
+            const float Dot(const CommonVector& vector);
 
-            const float distance() const;
-            const float distance();
+            const float Distance() const;
+            const float Distance();
 
         protected:
             CommonVector(const float values[dimensions]);
@@ -214,7 +214,7 @@ namespace SekaiEngine
         }
         
         template <std::size_t dimensions>
-        inline const float CommonVector<dimensions>::dot(const CommonVector<dimensions>& vector) const
+        inline const float CommonVector<dimensions>::Dot(const CommonVector<dimensions>& vector) const
         {
             float result = 0.0f;
 
@@ -227,13 +227,13 @@ namespace SekaiEngine
         }
 
         template <std::size_t dimensions>
-        inline const float CommonVector<dimensions>::dot(const CommonVector<dimensions>& vector)
+        inline const float CommonVector<dimensions>::Dot(const CommonVector<dimensions>& vector)
         {
-            return static_cast<const CommonVector<dimensions>&>(*this).dot(vector);
+            return static_cast<const CommonVector<dimensions>&>(*this).Dot(vector);
         }
 
         template <std::size_t dimensions>
-        inline const float CommonVector<dimensions>::distance() const
+        inline const float CommonVector<dimensions>::Distance() const
         {
             float result = 0;
 
@@ -248,9 +248,9 @@ namespace SekaiEngine
         }
 
         template <std::size_t dimensions>
-        inline const float CommonVector<dimensions>::distance()
+        inline const float CommonVector<dimensions>::Distance()
         {
-            return static_cast<const CommonVector<dimensions>&>(*this).distance();
+            return static_cast<const CommonVector<dimensions>&>(*this).Distance();
         }
 
         inline const float& Vector2D::X() const

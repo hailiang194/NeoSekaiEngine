@@ -76,11 +76,11 @@ TEST(EngineTest, TestVector2D_Scale)
 TEST(EngineTest, TestVector2D_Distance)
 {
     SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
-    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.distance(), 5.0f) == 0);
+    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.Distance(), 5.0f) == 0);
 }
 
 TEST(EngineTest, TestVector2D_Dot)
 {
     SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
-    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.dot(test), 25.0f) == 0);
+    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.Dot(test), 25.0f) == 0);
 }
