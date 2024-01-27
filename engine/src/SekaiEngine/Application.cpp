@@ -5,6 +5,7 @@
 #include "SekaiEngine/Render/RenderCommand.h"
 #include "SekaiEngine/Input.h"
 #include "SekaiEngine/Render/Texture.h"
+#include "SekaiEngine/Render/Font.h"
 
 namespace SekaiEngine
 {
@@ -13,6 +14,7 @@ namespace SekaiEngine
     {
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
+        SekaiEngine::Render::initFonts();
         m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
@@ -23,6 +25,7 @@ namespace SekaiEngine
 
     Application::~Application()
     {
+        SekaiEngine::Render::unloadFonts();
         SekaiEngine::Render::destroyTextures();
         delete window;
     }

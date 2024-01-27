@@ -43,6 +43,9 @@ public:
         props.Tint = 0xff0000ff;
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
         SekaiEngine::Render::RenderCommand::Render(params);
+
+        SekaiEngine::Render::API::DrawText(ENGINE_TEXT("Hello friend"), 13, SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20);
+
         camera.unapplyCamera();
         
     }

@@ -7,6 +7,7 @@
 #include "SekaiEngine/Render/Texture.h"
 #include "SekaiEngine/Shape/Circle.h"
 #include "SekaiEngine/Shape/Rectangle.h"
+#include "SekaiEngine/Render/Font.h"
 
 namespace SekaiEngine
 {
@@ -32,7 +33,14 @@ namespace SekaiEngine
                 const Shape::Rectangle& dest = FULL_RECTANGLE,
                 const Math::Vector2D& origin = Math::Vector2D(),
                 const float rotation = 0.0f
-                );
+            );
+
+            EXTENDAPI void DrawText(
+                const EngineChar_t* text, const int& textSize,
+                const Math::Vector2D& postion, const Render::Color& color,
+                const float& fontSize, const Render::Font& font = Render::Font("default"),
+                const float& spacing = 1.0f    
+            );
 
         } // namespace API
         

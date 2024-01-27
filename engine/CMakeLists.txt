@@ -7,6 +7,7 @@ set(WRAPPER_RAYLIB_HEADERS
     ./include/wrapper/raylib/Window.h
     ./include/wrapper/raylib/Parser.h
     ./include/wrapper/raylib/Texture.h
+    ./include/wrapper/raylib/Font.h
 )
 
 set(WRAPPER_RAYLIB_SOURCES
@@ -18,6 +19,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Camera.cpp
     ./src/wrapper/raylib/Texture.cpp
     ./src/wrapper/raylib/Timer.cpp
+    ./src/wrapper/raylib/Font.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -49,6 +51,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/Params/RectangleRenderParams.h
     ./include/SekaiEngine/Render/Params/CircleRenderParams.h
     ./include/SekaiEngine/Math/Utility.h
+    ./include/SekaiEngine/Render/Font.h
 )
 
 set(ENGINE_SOURCES
@@ -74,6 +77,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Params/RectangleRenderParams.cpp
     ./src/SekaiEngine/Render/Params/CircleRenderParams.cpp
     ./src/SekaiEngine/Math/Utility.cpp
+    ./src/SekaiEngine/Render/Font.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "wrapper/raylib/Parser.h"
 #include "wrapper/raylib/Texture.h"
+#include "wrapper/raylib/Font.h"
 #include <algorithm>
 
 namespace SekaiEngine
@@ -76,6 +77,25 @@ namespace SekaiEngine
                 };
 
                 ::DrawTexturePro(*rawTexture, realSource, realDest, { origin.X(), origin.Y() }, rotation, parseToRaylibColor(color));
+            }
+
+            void DrawText(
+                const EngineChar_t* text, const int& textSize,
+                const Math::Vector2D& postion, const Render::Color& color,
+                const float& fontSize, const Render::Font& font,
+                const float& spacing    
+            )
+            {
+                if(!font.isValid())
+                    return;
+
+                ::Font* rawFont = getFontById(font.Id());
+                if(rawFont == nullptr)
+                    return;
+
+                ::DrawTextCodepoints(*rawFont, (const int*)text, textSize, 
+                    ::Vector2{ postion.X(), postion.Y() }, fontSize, spacing, parseToRaylibColor(color)
+                );
             }
         } // namespace API
         

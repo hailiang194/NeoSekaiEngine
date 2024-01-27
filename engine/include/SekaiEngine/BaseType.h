@@ -16,4 +16,13 @@
     #define EXTENDAPI       // Functions defined as 'extern' by default (implicit specifiers)
 #endif
 
+#if UINT_MAX == 65535
+typedef char16_t EngineChar_t;
+#define ENGINE_TEXT(TEXT) u ## TEXT
+
+#else
+typedef char32_t EngineChar_t;
+#define ENGINE_TEXT(TEXT) U ## TEXT
+#endif
+
 #endif //!_SEKAI_ENGINE_BASE_TYPE_H_
