@@ -42,7 +42,7 @@ public:
         SekaiEngine::Render::RenderProperties props;
         props.Tint = 0xff0000ff;
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
-        SekaiEngine::Render::API::DrawRect(params.DrawRect(), params.Tint(), params.Origin(), params.Rotation());
+        SekaiEngine::Render::RenderCommand::Render(params);
         camera.unapplyCamera();
         
     }
