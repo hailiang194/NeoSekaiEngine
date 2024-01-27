@@ -54,3 +54,33 @@ TEST(EngineTest, TestVector4D_TValue)
     SekaiEngine::Math::Vector4D test(10.0f, 20.0f, 30.f, 40.0f);
     EXPECT_TRUE(test.T() == 40.0f);
 }
+
+TEST(EngineTest, TestVector2D_Add)
+{
+    SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
+    EXPECT_TRUE(test + test == SekaiEngine::Math::Vector2D(6.0f, 8.0f));
+}
+
+TEST(EngineTest, TestVector2D_Subtract)
+{
+    SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
+    EXPECT_TRUE(test - test == SekaiEngine::Math::Vector2D(0.0f, 0.0f));
+}
+
+TEST(EngineTest, TestVector2D_Scale)
+{
+    SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
+    EXPECT_TRUE(test * 2.0f == SekaiEngine::Math::Vector2D(6.0f, 8.0f));
+}
+
+TEST(EngineTest, TestVector2D_Distance)
+{
+    SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
+    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.distance(), 5.0f) == 0);
+}
+
+TEST(EngineTest, TestVector2D_Dot)
+{
+    SekaiEngine::Math::Vector2D test(3.0f, 4.0f);
+    EXPECT_TRUE(SekaiEngine::Math::cmpFloat(test.dot(test), 25.0f) == 0);
+}

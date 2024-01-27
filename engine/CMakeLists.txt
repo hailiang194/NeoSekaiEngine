@@ -1,4 +1,5 @@
 project(SekaiEngine VERSION 1.0.1)
+set (CMAKE_CXX_STANDARD 11)
 
 include(cmake/import_engine.cmake)
 
@@ -47,6 +48,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/Params/TextureRenderParams.h
     ./include/SekaiEngine/Render/Params/RectangleRenderParams.h
     ./include/SekaiEngine/Render/Params/CircleRenderParams.h
+    ./include/SekaiEngine/Math/Utility.h
 )
 
 set(ENGINE_SOURCES
@@ -71,6 +73,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Params/TextureRenderParams.cpp
     ./src/SekaiEngine/Render/Params/RectangleRenderParams.cpp
     ./src/SekaiEngine/Render/Params/CircleRenderParams.cpp
+    ./src/SekaiEngine/Math/Utility.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

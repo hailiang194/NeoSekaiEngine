@@ -3,8 +3,10 @@
 
 #include <initializer_list>
 #include <cassert>
+#include <cmath>
 #include "SekaiEngine/BaseType.h"
 #include "SekaiEngine/Math/Vector.h"
+#include "SekaiEngine/Math/Utility.h"
 
 namespace SekaiEngine
 {
@@ -18,7 +20,24 @@ namespace SekaiEngine
             CommonVector(const CommonVector& vector);
             CommonVector& operator=(const CommonVector& vector);
             virtual ~CommonVector();
+
+            const CommonVector operator+(const CommonVector& vector) const;
+            const CommonVector operator+(const CommonVector& vector);
+            const CommonVector operator*(const float& scale) const;
+            const CommonVector operator*(const float& scale);
+            const CommonVector operator-(const CommonVector& vector) const;
+            const CommonVector operator-(const CommonVector& vector);
+            const bool operator==(const CommonVector& vector) const;
+            const bool operator==(const CommonVector& vector);
+            //dot product
+            const float dot(const CommonVector& vector) const;
+            const float dot(const CommonVector& vector);
+
+            const float distance() const;
+            const float distance();
+
         protected:
+            CommonVector(const float values[dimensions]);
             float m_values[dimensions];
         };
 
@@ -110,6 +129,128 @@ namespace SekaiEngine
         template <std::size_t dimensions>
         CommonVector<dimensions>::~CommonVector()
         {
+        }
+
+        template <std::size_t dimensions>
+        CommonVector<dimensions>::CommonVector(const float values[dimensions])
+        {
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                m_values[i] = values[i];
+            }
+        }
+
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator+(const CommonVector<dimensions>& vector) const
+        {
+            
+            float result[dimensions] = { 0 };
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                result[i] = m_values[i] + vector.m_values[i];
+            }
+            
+            return CommonVector<dimensions>(result);
+        }
+
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator+(const CommonVector<dimensions>& vector)
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).operator+(vector);
+        }
+        
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator*(const float& scale) const
+        {
+            float result[dimensions] = { 0 };
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                result[i] = m_values[i] * scale;
+            }
+            
+            return CommonVector<dimensions>(result);
+        }
+
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator*(const float& scale)
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).operator*(scale);
+        }
+
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator-(const CommonVector<dimensions>& vector) const
+        {
+            float result[dimensions] = { 0 };
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                result[i] = m_values[i] - vector.m_values[i];
+            }
+            
+            return CommonVector<dimensions>(result);
+        }
+
+        template <std::size_t dimensions>
+        inline const CommonVector<dimensions> CommonVector<dimensions>::operator-(const CommonVector<dimensions>& vector)
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).operator-(vector);
+        }
+
+        template <std::size_t dimensions>
+        inline const bool CommonVector<dimensions>::operator==(const CommonVector<dimensions>& vector) const
+        {
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                if(cmpFloat(m_values[i], vector.m_values[i]) != 0)
+                    return false;
+            }
+            
+            return true;
+        }
+
+        template <std::size_t dimensions>
+        inline const bool CommonVector<dimensions>::operator==(const CommonVector<dimensions>& vector)
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).operator==(vector);
+        }
+        
+        template <std::size_t dimensions>
+        inline const float CommonVector<dimensions>::dot(const CommonVector<dimensions>& vector) const
+        {
+            float result = 0.0f;
+
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                result += (m_values[i] * vector.m_values[i]);
+            }
+
+            return result;
+        }
+
+        template <std::size_t dimensions>
+        inline const float CommonVector<dimensions>::dot(const CommonVector<dimensions>& vector)
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).dot(vector);
+        }
+
+        template <std::size_t dimensions>
+        inline const float CommonVector<dimensions>::distance() const
+        {
+            float result = 0;
+
+            for(std::size_t i = 0; i < dimensions; ++i)
+            {
+                float norm = std::abs(m_values[i]) * 0.0001f;
+
+                result += (norm * norm);
+            }
+
+            return static_cast<float>(std::sqrt(result)) / 0.0001f;
+        }
+
+        template <std::size_t dimensions>
+        inline const float CommonVector<dimensions>::distance()
+        {
+            return static_cast<const CommonVector<dimensions>&>(*this).distance();
         }
 
         inline const float& Vector2D::X() const
