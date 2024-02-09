@@ -80,7 +80,7 @@ namespace SekaiEngine
             }
 
             void DrawText(
-                const EngineChar_t* text, const int& textSize,
+                const char* text,
                 const Math::Vector2D& postion, const Render::Color& color,
                 const float& fontSize, const Render::Font& font,
                 const float& spacing    
@@ -93,9 +93,13 @@ namespace SekaiEngine
                 if(rawFont == nullptr)
                     return;
 
-                ::DrawTextCodepoints(*rawFont, (const int*)text, textSize, 
+                ::DrawTextEx(*rawFont, text, 
                     ::Vector2{ postion.X(), postion.Y() }, fontSize, spacing, parseToRaylibColor(color)
                 );
+
+                // ::DrawTextCodepoints(*rawFont, (const int*)text, textSize, 
+                //     ::Vector2{ postion.X(), postion.Y() }, fontSize, spacing, parseToRaylibColor(color)
+                // );
             }
         } // namespace API
         

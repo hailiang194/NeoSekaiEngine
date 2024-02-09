@@ -29,7 +29,7 @@ namespace SekaiEngine
             if(!IsFontReady(font))
                 return false;
 
-            if(fonts.find(std::string(id)) == fonts.end())
+            if(fonts.find(std::string(id)) != fonts.end())
                 return false;
 
             fonts.insert({std::string(id), font});

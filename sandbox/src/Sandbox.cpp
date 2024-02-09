@@ -5,13 +5,13 @@ class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     ExampleLayer()
-        :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(), 100, 50)
+        :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(), 100, 50), font("Arial", "./Arial.ttf")
     {
 
     }
 
     ExampleLayer(const ExampleLayer& layer)
-        :Layer(layer), camera(layer.camera), rect(layer.rect)
+        :Layer(layer), camera(layer.camera), rect(layer.rect), font(layer.font)
     {
 
     }
@@ -44,7 +44,7 @@ public:
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
         SekaiEngine::Render::RenderCommand::Render(params);
 
-        SekaiEngine::Render::API::DrawText(ENGINE_TEXT("Hello friend"), 13, SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20);
+        SekaiEngine::Render::API::DrawText("Hello friend", SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20, font);
 
         camera.unapplyCamera();
         
@@ -52,6 +52,7 @@ public:
 private:
     SekaiEngine::Render::Camera2D camera;
     SekaiEngine::Shape::Rectangle rect;
+    SekaiEngine::Render::Font font;
 };
 
 

@@ -36,7 +36,7 @@ namespace SekaiEngine
             );
 
             EXTENDAPI void DrawText(
-                const EngineChar_t* text, const int& textSize,
+                const char* text,
                 const Math::Vector2D& postion, const Render::Color& color,
                 const float& fontSize, const Render::Font& font = Render::Font("default"),
                 const float& spacing = 1.0f    
