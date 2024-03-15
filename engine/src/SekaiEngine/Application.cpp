@@ -9,9 +9,12 @@
 
 namespace SekaiEngine
 {
+    Application* Application::g_instance = nullptr;
+
     Application::Application()
         :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
     {
+        Application::g_instance = this;
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
         SekaiEngine::Render::initFonts();
@@ -100,5 +103,12 @@ namespace SekaiEngine
             (*it)->OnRender();
         }
         SekaiEngine::Render::RenderCommand::FinishDrawing();
+    }
+
+
+
+    Application* Application::Instance()
+    {
+        return g_instance;
     }
 } // namespace SekaiEngine

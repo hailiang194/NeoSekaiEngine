@@ -37,12 +37,12 @@ namespace Wrapper
             _pollEvent();
         }
 
-        int Window::GetHeight()
+        int Window::GetHeight() const
         {
             return GetScreenHeight();
         }
 
-        int Window::GetWidth()
+        int Window::GetWidth() const
         {
             return GetScreenWidth();
         }

@@ -8,12 +8,14 @@ public:
         :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(), 100, 50), font("Arial", "./Arial.ttf")
     {
 
+        std::cout << "Height=" <<
+        SekaiEngine::Application::Instance()->Window().GetHeight()
+        << ", Width=" << SekaiEngine::Application::Instance()->Window().GetWidth() << std::endl;
     }
 
     ExampleLayer(const ExampleLayer& layer)
         :Layer(layer), camera(layer.camera), rect(layer.rect), font(layer.font)
     {
-
     }
 
     ~ExampleLayer()

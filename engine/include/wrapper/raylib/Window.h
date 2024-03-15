@@ -18,8 +18,8 @@ namespace Wrapper
             virtual ~Window();  
 
             void OnUpdate() override;
-            int GetHeight() override;
-            int GetWidth() override;
+            int GetHeight() const override;
+            int GetWidth() const override;
             void setEventCallbackFn(const EventCallbackFn& fn) override;
 
             void SetVSync(bool enable) override;

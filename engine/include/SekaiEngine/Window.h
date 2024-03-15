@@ -31,8 +31,10 @@ namespace SekaiEngine
         virtual ~IWindow();
 
         virtual void OnUpdate() = 0;
-        virtual int GetHeight() = 0;
-        virtual int GetWidth() = 0;
+        virtual int GetHeight() const = 0;
+        int GetHeight();
+        virtual int GetWidth() const = 0;
+        int GetWidth();
         virtual void setEventCallbackFn(const EventCallbackFn& fn) = 0;
 
         virtual void SetVSync(bool enable) = 0;
@@ -40,6 +42,16 @@ namespace SekaiEngine
 
         static IWindow* Create(const WindowsProps& props = WindowsProps());
     };
+
+    inline int IWindow::GetHeight()
+    {
+        return static_cast<const IWindow&>(*this).GetHeight();
+    }
+
+    inline int IWindow::GetWidth()
+    {
+        return static_cast<const IWindow&>(*this).GetWidth();
+    }
 }
 
 #endif//!_SEKAI_ENGINE_WINDOW_H_
