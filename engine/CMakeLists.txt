@@ -2,6 +2,7 @@ project(SekaiEngine VERSION 1.2.0)
 set (CMAKE_CXX_STANDARD 11)
 
 include(cmake/import_engine.cmake)
+include(cmake/set_version_header.cmake)
 
 set(WRAPPER_RAYLIB_HEADERS
     ./include/wrapper/raylib/Window.h
@@ -106,4 +107,8 @@ target_include_directories(SekaiEngine
         $<INSTALL_INTERFACE:include>
         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
 
+)
+
+target_include_directories(SekaiEngine
+    PUBLIC ${CMAKE_BINARY_DIR}/config/
 )
