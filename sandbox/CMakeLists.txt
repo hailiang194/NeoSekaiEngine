@@ -10,8 +10,6 @@ target_link_libraries(Sandbox PUBLIC SekaiEngine)
 target_include_directories(Sandbox PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
 target_compile_definitions(Sandbox PRIVATE HAS_ENTRY_POINT)
 
-ImportEngine(Sandbox ${CMAKE_SOURCE_DIR}/engine)
-
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)
     target_link_libraries(Sandbox "-framework IOKit")
