@@ -7,7 +7,117 @@ import uuid
 import tempfile
 import shutil
 import zipfile
-import platform
+from string import Template
+
+TEMPLATE_FILES = {
+    "CMakeLists.txt": """
+cmake_minimum_required(VERSION 3.0)
+project(${app}_project)
+
+add_subdirectory(./NeoSekaiEngine/engine)
+add_subdirectory(./src)
+    """,
+    "src/CMakeLists.txt": """
+project(${app} VERSION 1.0.0)
+
+set(${app}_SOURCES
+    ./${app}App.cpp
+)
+
+add_executable($app $${${app}_SOURCES})
+target_link_libraries($app PUBLIC SekaiEngine)
+target_include_directories($app PUBLIC $${CMAKE_SOURCE_DIR}/NeoSekaiEngine/engine/include)
+target_compile_definitions($app PRIVATE HAS_ENTRY_POINT)
+
+# Checks if OSX and links appropriate frameworks (Only required on MacOS)
+if (APPLE)
+    target_link_libraries($app "-framework IOKit")
+    target_link_libraries($app "-framework Cocoa")
+    target_link_libraries($app "-framework OpenGL")
+endif()
+
+# Web Configuration
+if ($${PLATFORM} STREQUAL "Web")
+    # Tell Emscripten to build an example.html file.
+    set_target_properties($app PROPERTIES SUFFIX ".html")
+endif()
+
+if (EMSCRIPTEN)
+    set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY")
+    set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
+endif ()
+
+if (EMSCRIPTEN)
+    set(CMAKE_C_FLAGS "$${CMAKE_C_FLAGS} --preload-file $${CMAKE_SOURCE_DIR}/assets@")
+    set(CMAKE_CXX_FLAGS "$${CMAKE_CXX_FLAGS} --preload-file $${CMAKE_SOURCE_DIR}/assets@")
+else()
+add_custom_command(TARGET $${PROJECT_NAME} POST_BUILD
+    COMMAND $${CMAKE_COMMAND} -E copy_directory
+        "$${CMAKE_SOURCE_DIR}/assets"
+$$<TARGET_FILE_DIR:$${PROJECT_NAME}>)
+endif()
+    """,
+    "src/template_app.cpp": """
+#include "SekaiEngine.h"
+
+class $layer_class: public SekaiEngine::Layer::Layer
+{
+public:
+    $layer_class()
+        :Layer("$layer_class")
+    {
+
+    }
+
+    $layer_class(const $layer_class& layer)
+        :Layer(layer)
+    {
+
+    }
+
+    ~$layer_class()
+    {
+
+    }
+
+    void OnUpdate(const SekaiEngine::Timestep& elipse) override
+    {
+    }
+
+    void OnRender() override
+    {
+    }
+};
+
+
+class $app_class: public SekaiEngine::Application
+{
+public:
+    $app_class()
+        :Application()
+    {
+        PushLayer(new $layer_class());
+    }
+
+    $app_class(const $app_class& $app_class)
+        :Application($app_class)
+    {
+
+    }
+
+    ~$app_class()
+    {
+
+    }
+};
+
+SekaiEngine::Application* SekaiEngine::CreateApplication()
+{
+    return new $app_class();
+}
+    """ 
+}
 
 def get_all_version():
     result = []
@@ -96,6 +206,24 @@ def setup_project(project_name, version, is_yes, verbose, project_path):
     
     os.mkdir(project_source_path)
     
+    os.mkdir(os.path.join(project_source_path, "assets"))
+    with open(os.path.join(project_source_path, os.path.join("assets", "welcome.txt")), "w") as file:
+        file.write("Welcome to NeoSekaiEngine")
+    
+    if verbose:
+        print("Creating source project")
+    project_main_source_path = os.path.join(project_source_path, "src")
+    os.mkdir(project_main_source_path)
+
+    with open(os.path.join(project_main_source_path, "{}App.cpp".format(project_name)), "w") as file:
+        file.write(Template(TEMPLATE_FILES["src/template_app.cpp"]).safe_substitute(layer_class="{}Layer".format(project_name), app_class="{}Application".format(project_name)))
+
+    with open(os.path.join(project_main_source_path, "CMakeLists.txt"), "w") as file:
+        file.write(Template(TEMPLATE_FILES["src/CMakeLists.txt"]).substitute(app=project_name))    
+
+    with open(os.path.join(project_source_path, "CMakeLists.txt"), "w") as file:
+        file.write(Template(TEMPLATE_FILES["CMakeLists.txt"]).substitute(app=project_name))
+
     download_url_header = "https://github.com/hailiang194/NeoSekaiEngine/archive/refs/"
     download_surfix = "heads/development.zip" if version == "unstable" else "tags/{}.zip".format(version)
 
@@ -153,7 +281,6 @@ if __name__ == "__main__":
 
 
     args = parser.parse_args()
-
     if args.verbose:
         print("Fetching engine version...", end="")
 
