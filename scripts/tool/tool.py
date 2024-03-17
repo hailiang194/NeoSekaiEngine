@@ -7,6 +7,7 @@ import uuid
 import tempfile
 import shutil
 import zipfile
+import platform
 
 def get_all_version():
     result = []
@@ -118,17 +119,24 @@ def setup_project(project_name, version, is_yes, verbose, project_path):
         print("Failed to fetch engine")
         exit(-1)
 
-    # with zipfile.ZipFile(engine_zip_path, "r") as file:
-    #     if verbose:
-    #         file.printdir()
+    with zipfile.ZipFile(engine_zip_path, "r") as file:
+        if verbose:
+            file.printdir()
 
-    #     for names in file.namelist():
-    #         desc_path = os.path.join(project_source_path, os.path.join("NeoSekaiEngine", os.sep.join(names.split("/")[1:])))
-    #         if verbose:
-    #             print("Extracting {} to {}".format(names, desc_path))
+        for info in file.infolist():
+            
+            desc_path = os.path.join(project_source_path, os.path.join("NeoSekaiEngine", os.sep.join(info.filename.split("/")[1:])))
+            if info.is_dir():
+                os.mkdir(desc_path)
+                continue
 
-    #         file.extract(names, desc_path)
+            with file.open(info) as fin, open(desc_path, "wb") as fout:
+                while True:
+                    buf = fin.read(16 * 1024)
+                    if not buf:
+                        break
 
+                    fout.write(buf)
 
     if verbose:
         print("Delete {}".format(engine_zip_path))
