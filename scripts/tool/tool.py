@@ -8,6 +8,9 @@ import tempfile
 import shutil
 import zipfile
 from string import Template
+import platform
+import subprocess
+import stat
 
 TEMPLATE_FILES = {
     "CMakeLists.txt": """
@@ -269,6 +272,29 @@ def setup_project(project_name, version, is_yes, verbose, project_path):
     if verbose:
         print("Delete {}".format(engine_zip_path))
     os.remove(engine_zip_path)
+
+
+    if platform.system() == "Windows":
+        print("In order to build the project, please make sure you have CMake and a C++ compiler like MSVC, GCC, Emscripten(for Web platform),etc")
+    elif platform.system() == "Linux":
+        path_components = (project_source_path, "NeoSekaiEngine", "scripts", "pre-installer", "linux")
+        script_path = os.sep.join(path_components)
+        if os.path.exists("/etc/redhat-release"):
+            script_path = os.path.join(script_path, "redhat", "preinstaller.sh")
+        elif os.path.exists("/etc/debian_version"):
+            script_path = os.path.join(script_path, "debian", "preinstaller.sh")
+
+        if verbose:
+            print("Running installing script at {}...".format(script_path), end="")
+        
+        os.chmod(script_path, stat.S_IEXEC)
+        if subprocess.run(script_path, shell=False).returncode == 0:
+            if verbose:
+                print("DONE")
+        else:
+            if verbose:
+                print("Failed")
+                exit(-1)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="NeoSekaiEngine setup project")
