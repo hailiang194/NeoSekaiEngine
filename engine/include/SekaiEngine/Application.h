@@ -16,6 +16,8 @@ namespace SekaiEngine
         EXTENDAPI Application(const Application& app);
         EXTENDAPI virtual ~Application();
 
+        EXTENDAPI const IWindow& Window();
+
         EXTENDAPI void OnEvent(Event::Event& event);
 
         EXTENDAPI bool OnWindowClose(Event::Event& event);
@@ -26,13 +28,22 @@ namespace SekaiEngine
         EXTENDAPI void Run();
         
         EXTENDAPI void loop();
+
+        EXTENDAPI static Application* Instance();
+        
     private:
         IWindow* window;
         bool m_running;
         Timer m_timer;
         Layer::LayerStack m_layerStack;
 
+        static Application* g_instance;
     };
+
+    inline const IWindow& Application::Window()
+    {
+        return *window;
+    }
 
     //To be defined by CLIENT
     Application* CreateApplication();

@@ -6,12 +6,18 @@
 #include "SekaiEngine/Input.h"
 #include "SekaiEngine/Render/Texture.h"
 #include "SekaiEngine/Render/Font.h"
+#include <iostream>
+#include "version.h"
 
 namespace SekaiEngine
 {
+    Application* Application::g_instance = nullptr;
+
     Application::Application()
         :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
     {
+        std::cout << "You are using NeoSekaiEngine v" << SEKAI_ENGINE_VERSION << std::endl;
+        Application::g_instance = this;
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
         SekaiEngine::Render::initFonts();
@@ -100,5 +106,12 @@ namespace SekaiEngine
             (*it)->OnRender();
         }
         SekaiEngine::Render::RenderCommand::FinishDrawing();
+    }
+
+
+
+    Application* Application::Instance()
+    {
+        return g_instance;
     }
 } // namespace SekaiEngine
