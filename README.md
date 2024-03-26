@@ -2,7 +2,7 @@
 The template that implement SekaiEngine to develop game
 
 ## Libraries
-* raylib 4.0.0
+* raylib 4.2.0
 
 ## Requirements
 * git
@@ -32,6 +32,29 @@ Then run that script
 ```
 Which ```<os>``` is **```debian```** if you use **Debian** distro and **```redhat```** if you use **Fedora-based**
 ## Generate project
+### Setup project
+
+Download ```scripts/tool/tool.py```
+
+Run the script
+```sh
+python3 tool.py [-h] [--engine_versions] [-y] [-v] [-p PATH] project_name engine_version
+```
+```
+positional arguments:
+  project_name          Name of project
+  engine_version        set version of engine
+
+options:
+  -h, --help            show this help message and exit
+  --engine_versions     Show all engine versions
+  -y, --yes             Yes to all for every prompt
+  -v, --verbose         Show verbose
+  -p PATH, --path PATH  Project path
+```
+
+**Note**: You may need ```sudo``` for setup script in Linux. 
+
 ### Desktop platform
 Create ```build``` folder and go to this folder 
 ``` bash
