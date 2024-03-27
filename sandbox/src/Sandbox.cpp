@@ -34,6 +34,11 @@ public:
         else if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_S))
             rect.Position.Y() += (100 * elipse.ToSeconds());
 
+        if(SekaiEngine::Input::IsButtonPressed(SekaiEngine::Input::MouseKey::BUTTON_LEFT))
+        {
+            std::cout << "Mouse left clicked" << std::endl;
+        }
+
     }
 
     void OnRender() override

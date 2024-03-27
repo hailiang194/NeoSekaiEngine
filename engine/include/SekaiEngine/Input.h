@@ -124,6 +124,15 @@ namespace SekaiEngine
             KEY_VOLUME_DOWN     = 25        // Key: Android volume down button
         } KeyboardKey;
 
+        typedef enum { 
+            BUTTON_LEFT    = 0,       // Mouse button left
+            BUTTON_RIGHT   = 1,       // Mouse button right
+            BUTTON_MIDDLE  = 2,       // Mouse button middle (pressed wheel)
+            BUTTON_SIDE    = 3,       // Mouse button side (advanced mouse device)
+            BUTTON_EXTRA   = 4,       // Mouse button extra (advanced mouse device)
+            BUTTON_FORWARD = 5,       // Mouse button forward (advanced mouse device)
+            BUTTON_BACK    = 6,       // Mouse button back (advanced mouse device)
+        }MouseKey;
 
         EXTENDAPI bool IsKeyPressed(int key);
         EXTENDAPI bool IsButtonPressed(int key);
