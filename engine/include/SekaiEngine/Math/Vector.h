@@ -45,8 +45,10 @@ namespace SekaiEngine
         {
         public:
             Vector2D(const float& x = 0.0f, const float& y = 0.0f);
+            Vector2D(const CommonVector<2>& vt);
             Vector2D(const Vector2D& vt);
             Vector2D& operator=(const Vector2D& vt);
+            Vector2D& operator=(const CommonVector<2>& vt);
             ~Vector2D();
 
             const float& X() const;
@@ -60,8 +62,10 @@ namespace SekaiEngine
         {
         public:
             Vector3D(const float& x = 0.0f, const float& y = 0.0f, const float& z = 0.0f);
+            Vector3D(const CommonVector<3>& vt);
             Vector3D(const Vector3D& vt);
             Vector3D& operator=(const Vector3D& vt);
+            Vector3D& operator=(const CommonVector<3>& vt);
             ~Vector3D();
 
             const float& X() const;
@@ -78,8 +82,10 @@ namespace SekaiEngine
         {
         public:
             Vector4D(const float& x = 0.0f, const float& y = 0.0f, const float& z = 0.0f, const float& t = 0.0f);
+            Vector4D(const CommonVector<4>& vt);
             Vector4D(const Vector4D& vt);
             Vector4D& operator=(const Vector4D& vt);
+            Vector4D& operator=(const CommonVector<4>& vt);
             ~Vector4D();
 
             const float& X() const;
