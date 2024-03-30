@@ -29,7 +29,7 @@ jobs:
             tar xvf cmake-3.29.0.tar.gz
             cd cmake-3.29.0
             ./configure
-            sudo make install
+            sudo make install -j$(nproc)
       - run:
           name: build project with test for shared lib
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
@@ -60,12 +60,12 @@ jobs:
       - run:
           name: Update cmake v3.29.0
           command: |
-            sudo apt-get install -y wget libssl-dev
+            sudo apt-get install -y wget libssl-dev coreutils
             wget http://www.cmake.org/files/v3.29/cmake-3.29.0.tar.gz
             tar xvf cmake-3.29.0.tar.gz
             cd cmake-3.29.0
             ./configure
-            sudo make install
+            sudo make install -j$(nproc)
       - run:
           name: build project with test for shared lib
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=0 && cmake --build ./build
