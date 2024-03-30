@@ -20,7 +20,7 @@ jobs:
           command: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
       - run:
           name: build project with test for shared lib
-          command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1
+          command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
 workflows:
   test:
     jobs:
