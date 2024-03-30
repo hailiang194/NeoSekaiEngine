@@ -3,7 +3,7 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 jobs:
-  test-ubuntu:
+  test-ubuntu-shared-lib:
     docker:
       - image: ubuntu:20.04
     steps:
@@ -21,7 +21,12 @@ jobs:
       - run:
           name: build project with test for shared lib
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
+      - run:
+          name: run test
+          command: ctest --output-on-failure --output-junit test-results.xml --test-dir build
+      - store_test_results:
+              path: build/test-results.xml
 workflows:
   test:
     jobs:
-      - test-ubuntu
+      - test-ubuntu-shared-lib
