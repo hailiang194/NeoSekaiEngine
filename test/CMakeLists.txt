@@ -1,5 +1,8 @@
 project(test)
 
+set(PROJECT_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF)
+
 include(FetchContent)
 FetchContent_Declare(
 googletest
@@ -8,7 +11,6 @@ URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4b
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
-enable_testing()
 
 add_executable(engine_test
     src/vector.cpp
@@ -22,3 +24,5 @@ add_test(NAME Test COMMAND engine_test)
 
 include(GoogleTest)
 gtest_discover_tests(engine_test)
+
+set(BUILD_SHARED_LIBS ${PROJECT_BUILD_SHARED_LIBS})
