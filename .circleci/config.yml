@@ -6,6 +6,9 @@ jobs:
   test-ubuntu:
     docker:
       - image: ubuntu:20.04
+    environment:
+      DEBIAN_FRONTEND=noninteractive
+      TZ=Etc/UTC 
     steps:
       - checkout
       # Replace this with a real test runner invocation
@@ -15,7 +18,7 @@ jobs:
 
       - run: 
           name: setup library
-          command: DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
+          command: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
 workflows:
   test:
     jobs:
