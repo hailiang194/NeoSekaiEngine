@@ -23,7 +23,7 @@ jobs:
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
       - run:
           name: run test
-          command: ctest --output-on-failure --output-junit test-results.xml --test-dir ./build
+          command: cd build; ctest --output-on-failure --output-junit test-results.xml
       - store_test_results:
               path: build/test-results.xml
 workflows:
