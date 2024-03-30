@@ -16,7 +16,7 @@ jobs:
 
       - run: 
           name: setup library
-          command: chmod +w ./scripts/pre-installer/linux/debian/preinstaller.sh; ./scripts/pre-installer/linux/debian/preinstaller.sh 
+          command: ./scripts/pre-installer/linux/debian/preinstaller.sh 
 workflows:
   test:
     jobs:
