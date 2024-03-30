@@ -12,7 +12,11 @@ jobs:
       # Replace this with a real test runner invocation
       - run:
           name: setup ubuntu
-          command: sudo apt update & sudo apt upgrade
+          command: sudo apt update
+
+      - run: 
+          name: setup library
+          command: chmod +w ./scripts/pre-installer/linux/debian/preinstaller.sh; ./scripts/pre-installer/linux/debian/preinstaller.sh 
 workflows:
   test:
     jobs:
