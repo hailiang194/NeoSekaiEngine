@@ -27,8 +27,10 @@ jobs:
       - run:
           name: run test
           command: build/out/engine_test --gtest_output="xml:build/test-results.xml"
+      - store_artifacts:
+          path: build/test-results.xml
       - store_test_results:
-              path: build/test-results.xml
+          path: build/test-results.xml
   test-ubuntu-static-lib:
     docker:
       - image: ubuntu:20.04
@@ -53,8 +55,10 @@ jobs:
       - run:
           name: run test
           command: build/out/engine_test --gtest_output="xml:build/test-results.xml"
+      - store_artifacts:
+          path: build/test-results.xml
       - store_test_results:
-              path: build/test-results.xml
+          path: build/test-results.xml
 workflows:
   test:
     jobs:
