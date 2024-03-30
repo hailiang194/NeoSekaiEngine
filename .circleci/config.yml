@@ -11,7 +11,13 @@ jobs:
       # Replace this with a real test runner invocation
       - run:
           name: setup ubuntu
-          command: apt-get update; apt-get -y upgrade; apt install sudo
+          command: |
+            apt-get update 
+            apt-get -y upgrade 
+            apt install sudo
+            sudo apt-get install -y software-properties-common
+            sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
+            sudo apt-get -y update
       - run:
           name: config tzdata
           command: DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
@@ -23,7 +29,7 @@ jobs:
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
       - run:
           name: run test
-          command: cd build; ctest --output-on-failure --output-junit test-results.xml
+          command: ctest --output-on-failure --output-junit test-results.xml --test-dir ./build
       - store_test_results:
               path: build/test-results.xml
 workflows:
