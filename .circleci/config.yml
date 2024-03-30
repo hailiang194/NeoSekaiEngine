@@ -3,7 +3,7 @@
 # See: https://circleci.com/docs/configuration-reference
 version: 2.1
 jobs:
-  test-ubuntu-shared-lib:
+  build-ubuntu:
     docker:
       - image: ubuntu:20.04
     steps:
@@ -21,6 +21,11 @@ jobs:
       - run: 
           name: setup library
           command: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
+          
+  test-ubuntu-shared-lib:
+    docker:
+      - image: ubuntu:20.04
+    steps:
       - run:
           name: build project with test for shared lib
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build
@@ -35,20 +40,6 @@ jobs:
     docker:
       - image: ubuntu:20.04
     steps:
-      - checkout
-      # Replace this with a real test runner invocation
-      - run:
-          name: setup ubuntu
-          command: |
-            apt-get update 
-            apt-get -y upgrade 
-            apt install sudo
-      - run:
-          name: config tzdata
-          command: DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-      - run: 
-          name: setup library
-          command: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
       - run:
           name: build project with test for shared lib
           command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=0 && cmake --build ./build
@@ -60,7 +51,12 @@ jobs:
       - store_test_results:
           path: build/test-results.xml
 workflows:
-  test:
+  test-ubuntu:
     jobs:
-      - test-ubuntu-shared-lib
-      - test-ubuntu-static-lib
+      - build-ubuntu
+      - test-ubuntu-shared-lib:
+          requires:
+            - build-ubuntu
+      - test-ubuntu-static-lib:
+          requires:
+            - build-ubuntu
