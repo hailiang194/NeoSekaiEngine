@@ -98,7 +98,27 @@ jobs:
 workflows:
   test:
     jobs:
-      - test-ubuntu-shared-lib
-      - test-ubuntu-static-lib
-      - test-fedora-shared-lib
-      - test-fedora-static-lib
+      - test-ubuntu-shared-lib:
+          filters:
+            branches:
+              only:
+                - main
+                - development 
+      - test-ubuntu-static-lib:
+          filters:
+            branches:
+              only:
+                - main
+                - development 
+      - test-fedora-shared-lib:
+          filters:
+            branches:
+              only:
+                - main
+                - development 
+      - test-fedora-static-lib:
+          filters:
+            branches:
+              only:
+                - main
+                - development 
