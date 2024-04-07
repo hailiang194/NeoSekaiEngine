@@ -77,9 +77,28 @@ jobs:
           path: build/test-results.xml
       - store_test_results:
           path: build/test-results.xml
+  test-fedora-static-lib:
+    docker:
+      - image: fedora:39
+    steps:
+      - checkout
+      - run:
+          name: Install packages
+          command: /bin/bash ./scripts/pre-installer/linux/redhat/preinstaller.sh 
+      - run:
+          name: build project with test for shared lib
+          command: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=0 && cmake --build ./build
+      - run:
+          name: run test
+          command: build/out/engine_test --gtest_output="xml:build/test-results.xml"
+      - store_artifacts:
+          path: build/test-results.xml
+      - store_test_results:
+          path: build/test-results.xml
 workflows:
   test:
     jobs:
       - test-ubuntu-shared-lib
       - test-ubuntu-static-lib
       - test-fedora-shared-lib
+      - test-fedora-static-lib
