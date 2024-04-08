@@ -50,7 +50,7 @@ public:
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
         SekaiEngine::Render::RenderCommand::Render(params);
 
-        SekaiEngine::Render::API::DrawText("Hello friend", SekaiEngine::Math::Vector2D(500, 500), 0x00ff00ff, 20, font);
+        SekaiEngine::Render::API::DrawText("Hello friend", SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20, font);
 
         camera.unapplyCamera();
         

@@ -22,18 +22,21 @@ namespace SekaiEngine
             EXTENDAPI void DrawCircle(const Shape::Circle& circle, const Color& color,
                 const float& startAngle = 0.0f, const float& endAngle = 360.0f, const int& segment = 36
             );
-
+#ifdef _MSC_VER
             EXTENDAPI void DrawCircle(const Shape::Circle& circle, const uint32_t& color,
                 const float& startAngle = 0.0f, const float& endAngle = 360.0f, const int& segment = 36
             );
+#endif
             
             EXTENDAPI void DrawRect(const Shape::Rectangle& rect, const Color& color,
                 const Math::Vector2D& origin = Math::Vector2D(), const float& rotation = 0.0f
             );
 
+#ifdef _MSC_VER
             EXTENDAPI void DrawRect(const Shape::Rectangle& rect, const uint32_t& color,
                 const Math::Vector2D& origin = Math::Vector2D(), const float& rotation = 0.0f
             );
+#endif
 
             EXTENDAPI void DrawTexture(const Render::Texture& texture, 
                 const Color& color,
@@ -42,7 +45,7 @@ namespace SekaiEngine
                 const Math::Vector2D& origin = Math::Vector2D(),
                 const float rotation = 0.0f
             );
-
+#ifdef _MSC_VER
             EXTENDAPI void DrawTexture(const Render::Texture& texture, 
                 const uint32_t& color,
                 const Shape::Rectangle& source = FULL_RECTANGLE,
@@ -50,21 +53,23 @@ namespace SekaiEngine
                 const Math::Vector2D& origin = Math::Vector2D(),
                 const float rotation = 0.0f
             );
-
+#endif
             EXTENDAPI void DrawText(
                 const char* text,
                 const Math::Vector2D& postion, const Render::Color& color,
                 const float& fontSize, const Render::Font& font = Render::Font("default"),
                 const float& spacing = 1.0f    
             );
-
+#ifdef _MSC_VER
             EXTENDAPI void DrawText(
                 const char* text,
                 const Math::Vector2D& postion, const uint32_t& color,
                 const float& fontSize, const Render::Font& font = Render::Font("default"),
                 const float& spacing = 1.0f    
             );
+#endif
 
+#ifdef _MSC_VER
             inline void DrawCircle(const Shape::Circle& circle, const uint32_t& color,
                 const float& startAngle, const float& endAngle, const int& segment
             )
@@ -99,7 +104,7 @@ namespace SekaiEngine
             {
                 DrawText(text, postion, (SekaiEngine::Render::Color)color, fontSize, font, spacing);
             }
-
+#endif
         } // namespace API
         
     } // namespace Render
