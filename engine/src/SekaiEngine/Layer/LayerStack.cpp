@@ -36,11 +36,13 @@ namespace SekaiEngine
         void LayerStack::PushLayer(Layer* layer)
         {
             m_layerInsert = m_layers.emplace(m_layerInsert, layer);
+            layer->OnAttach();
         }
 
         void LayerStack::PushOverlay(Layer* overlay)
         {
             m_layers.emplace_back(overlay);
+            overlay->OnAttach();
         }
 
         void LayerStack::PopLayer(Layer* layer)
@@ -50,6 +52,7 @@ namespace SekaiEngine
             {
                 m_layers.erase(it);
                 --m_layerInsert;
+                layer->OnDetach();
             }
         }
 
@@ -59,6 +62,7 @@ namespace SekaiEngine
             if(it != m_layers.end())
             {
                 m_layers.erase(it);
+                overlay->OnDetach();
             }
         }
     } // namespace Layer
