@@ -1,4 +1,4 @@
-project(SekaiEngine VERSION 0.0.1)
+project(SekaiEngine VERSION 0.1.0)
 set (CMAKE_CXX_STANDARD 11)
 
 include(cmake/import_engine.cmake)

@@ -1,6 +1,8 @@
 # SekaiTemplate
 The template that implement SekaiEngine to develop game
 
+[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main)
+
 ## Libraries
 * raylib 4.2.0
 
