@@ -1,5 +1,5 @@
-# SekaiTemplate
-The template that implement SekaiEngine to develop game
+# NeoSekaiEngine
+Neo Sekai Game engine - my 2D game engine built base on what I know about game development. This game engine can run on Windows, Linux and Web platform
 
 [![CircleCI](https://dl.circleci.com/status-badge/img/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main)
 
@@ -17,7 +17,6 @@ The template that implement SekaiEngine to develop game
 ``` bash
 git clone https://github.com/hailiang194/SekaiEngine.git <project_name>
 ```
-**Note:** You can **NOT** use **SekaiEngine** for your project name
 
 ### Install SekaiEngine
 
