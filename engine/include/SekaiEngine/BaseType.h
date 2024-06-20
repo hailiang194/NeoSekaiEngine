@@ -1,5 +1,24 @@
+/**
+ * @file BaseType.h
+ * @author hailiang194 (hailuongthe2000@gmail.com)
+ * @brief Define the basic type for the whole engine
+ * @version 0.1
+ * @date 2024-04-14
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_BASE_TYPE_H_
 #define _SEKAI_ENGINE_BASE_TYPE_H_
+
+/**
+ * \def EXTENDAPI 
+ * Define the api for shared or static library
+ * \def ENGINE_TEXT 
+ * Safe initialise sequence of character(This one is recommend for Windows but currently not useful)
+ * \typedef EngineChar_t
+ * Default character type for engine(This one is not useful now)
+ */
 
 #if defined(_WIN32)
     #if defined(BUILD_LIBTYPE_SHARED)

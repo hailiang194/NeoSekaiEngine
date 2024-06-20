@@ -1,3 +1,13 @@
+/**
+ * @file Input.h
+ * @author hailiang194 (hailuongthe2000@gmail.com)
+ * @brief All the function related to input
+ * @version 0.1
+ * @date 2024-06-20
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_INPUT_H_
 #define _SEKAI_ENGINE_INPUT_H_
 
@@ -7,6 +17,10 @@ namespace SekaiEngine
 {
     namespace Input
     {
+        /**
+         * @brief Keyboard input flags
+         * 
+         */
         typedef enum {
             KEY_NULL            = 0,        // Key: NULL, used for no key pressed
             // Alphanumeric keys
@@ -124,6 +138,10 @@ namespace SekaiEngine
             KEY_VOLUME_DOWN     = 25        // Key: Android volume down button
         } KeyboardKey;
 
+        /**
+         * @brief Mouse key flags
+         * 
+         */
         typedef enum { 
             BUTTON_LEFT    = 0,       // Mouse button left
             BUTTON_RIGHT   = 1,       // Mouse button right
@@ -134,9 +152,34 @@ namespace SekaiEngine
             BUTTON_BACK    = 6,       // Mouse button back (advanced mouse device)
         }MouseKey;
 
+        /**
+         * @brief Check if keyboard key is pressed
+         * 
+         * @param key Keyboard input flag
+         * @return bool true if the key is pressed. Otherwise, false
+         */
         EXTENDAPI bool IsKeyPressed(int key);
+
+        /**
+         * @brief Check if mouse button is pressed
+         * 
+         * @param key Mouse button flag
+         * @return bool true if mouse button is pressed. Otherwise, false
+         */
         EXTENDAPI bool IsButtonPressed(int key);
+
+        /**
+         * @brief Get the Mouse X position
+         * 
+         * @return float the mouse position in X axis
+         */
         EXTENDAPI float GetMouseX();
+
+        /**
+         * @brief Get the Mouse Y position
+         * 
+         * @return float the mouse position in Y axis
+         */
         EXTENDAPI float GetMouseY();
     }
 } // namespace SekaiEngine

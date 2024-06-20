@@ -1,3 +1,13 @@
+/**
+ * @file Timer.h
+ * @author hailiang194 (hailuongthe2000@gmail.com)
+ * @brief All the classes related to time
+ * @version 0.1
+ * @date 2024-06-20
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_TICKER_H_
 #define _SEKAI_ENGINE_TICKER_H_
 
@@ -9,7 +19,13 @@ namespace SekaiEngine
     class EXTENDAPI Timestep
     {
     public:
+        /**
+         * @brief Construct a new Timestep object
+         * 
+         * @param time time step
+         */
         explicit Timestep(const float& time = 0.0f);
+
         Timestep(const Timestep& step);
         Timestep& operator=(const Timestep& step);
         Timestep& operator=(const float& time);
