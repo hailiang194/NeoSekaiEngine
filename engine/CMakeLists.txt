@@ -53,6 +53,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Render/Params/CircleRenderParams.h
     ./include/SekaiEngine/Math/Utility.h
     ./include/SekaiEngine/Render/Font.h
+    ./include/SekaiEngine/Math/Collision.h
 )
 
 set(ENGINE_SOURCES
@@ -79,6 +80,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Params/CircleRenderParams.cpp
     ./src/SekaiEngine/Math/Utility.cpp
     ./src/SekaiEngine/Render/Font.cpp
+    ./src/SekaiEngine/Math/Collision.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
