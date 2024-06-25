@@ -11,6 +11,8 @@ namespace SekaiEngine
     {
         EXTENDAPI bool isCollisionBetweenRectAndPoint(const Shape::Rectangle& rect, const Math::Vector2D& point);
         EXTENDAPI bool isCollisionBetweenCircleAndPoint(const Shape::Circle& circle, const Math::Vector2D& point);
+        EXTENDAPI bool isCollisionBetween2Rects(const Shape::Rectangle& rect1, const Shape::Rectangle& rect2);
+        EXTENDAPI bool isCollisionBetweenRectAndCircle(const Shape::Rectangle& rect, const Shape::Circle& circle);
     } // namespace Math
     
 } // namespace SekaiEngine
