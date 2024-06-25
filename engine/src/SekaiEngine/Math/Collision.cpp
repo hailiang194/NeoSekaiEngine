@@ -53,6 +53,13 @@ namespace SekaiEngine
 
             return Math::cmpFloat(closest.Distance(), circle.Radius) <= 0;
         }
+
+        bool isCollisionBetween2Circles(const Shape::Circle& circle1, const Shape::Circle& circle2)
+        {
+            Math::Vector2D centerDist = circle1.Center - circle2.Center;
+
+            return Math::cmpFloat(centerDist.Distance(), circle1.Radius + circle2.Radius) <= 0;
+        }
     } // namespace Math
     
 } // namespace SekaiEngine

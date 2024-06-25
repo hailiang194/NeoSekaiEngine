@@ -220,3 +220,24 @@ TEST(EngineTest, TestCollisionRectAndCircleInside)
     SekaiEngine::Shape::Circle circle(SekaiEngine::Math::Vector2D(20.0f, 20.0f), 5.0f);
     EXPECT_TRUE(SekaiEngine::Math::isCollisionBetweenRectAndCircle(rect, circle));
 }
+
+TEST(EngineTest, TestCollision2CircleOutside)
+{
+    SekaiEngine::Shape::Circle circle1(SekaiEngine::Math::Vector2D(5.0f, 5.0f), 10.0f);
+    SekaiEngine::Shape::Circle circle2(SekaiEngine::Math::Vector2D(30.0f, 30.0f), 5.0f);
+    EXPECT_FALSE(SekaiEngine::Math::isCollisionBetween2Circles(circle1, circle2));
+}
+
+TEST(EngineTest, TestCollision2CircleOverlap)
+{
+    SekaiEngine::Shape::Circle circle1(SekaiEngine::Math::Vector2D(5.0f, 5.0f), 10.0f);
+    SekaiEngine::Shape::Circle circle2(SekaiEngine::Math::Vector2D(7.0f, 7.0f), 10.0f);
+    EXPECT_TRUE(SekaiEngine::Math::isCollisionBetween2Circles(circle1, circle2));
+}
+
+TEST(EngineTest, TestCollision2CircleBorder)
+{
+    SekaiEngine::Shape::Circle circle1(SekaiEngine::Math::Vector2D(5.0f, 5.0f), 10.0f);
+    SekaiEngine::Shape::Circle circle2(SekaiEngine::Math::Vector2D(25.0f, 5.0f), 10.0f);
+    EXPECT_TRUE(SekaiEngine::Math::isCollisionBetween2Circles(circle1, circle2));
+}
