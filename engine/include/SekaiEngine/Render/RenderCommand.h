@@ -17,6 +17,10 @@ namespace SekaiEngine
             void StartDrawing(const Color& color);
             void FinishDrawing();
 
+            EXTENDAPI Shape::Rectangle GetBoundingBox(const CircleRenderParams& param);
+            EXTENDAPI Shape::Rectangle GetBoundingBox(const RectangleRenderParams& param);
+            EXTENDAPI Shape::Rectangle GetBoundingBox(const TextureRenderParams& param);
+
             void Render(const RenderParams& params);
             void Render(const CircleRenderParams& params);
             void Render(const RectangleRenderParams& params);

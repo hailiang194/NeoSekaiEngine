@@ -73,6 +73,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Shape/Shape.cpp
     ./src/SekaiEngine/Shape/Circle.cpp
     ./src/SekaiEngine/Shape/Rectangle.cpp
+    ./src/SekaiEngine/Render/RenderCommand.cpp
     ./src/SekaiEngine/Render/RenderProperties.cpp
     ./src/SekaiEngine/Render/Params/RenderParams.cpp
     ./src/SekaiEngine/Render/Params/TextureRenderParams.cpp

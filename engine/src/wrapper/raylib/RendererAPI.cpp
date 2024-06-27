@@ -101,6 +101,19 @@ namespace SekaiEngine
                 //     ::Vector2{ postion.X(), postion.Y() }, fontSize, spacing, parseToRaylibColor(color)
                 // );
             }
+
+            void DrawBounding(const Shape::Rectangle& bounding)
+            {
+                ::Rectangle rect = {
+                    bounding.Position.X(),
+                    bounding.Position.Y(),
+                    bounding.Width,
+                    bounding.Height
+                };
+                ::DrawRectangleLinesEx(
+                    rect, 5.0f, ::Color{ 230U, 41U, 55U, 255U }
+                );
+            }            
         } // namespace API
         
     } // namespace Render

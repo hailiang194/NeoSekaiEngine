@@ -15,6 +15,8 @@ namespace SekaiEngine
         /// @param epsilon epsilon distance between 2 numbers to consider they are equal
         /// @return 1 if first > second, -1 if first < second and 0 if first == second
         EXTENDAPI const int cmpFloat(const float& first, const float& second, const float& epsilon = DEFAULT_EPSILON);
+
+        EXTENDAPI const float DegreeToRadian(const float& degree);
     } // namespace Math
     
 } // namespace SekaiEngine
