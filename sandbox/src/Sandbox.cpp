@@ -5,8 +5,9 @@ class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     ExampleLayer()
-        :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(), 100, 50), font("Arial", "./Arial.ttf"),
-        circle(SekaiEngine::Math::Vector2D(100.0f, 100.0f), 50.0f)
+        :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(100, 100), 100, 50), 
+        font("Arial", "./Arial.ttf"),
+        circle(SekaiEngine::Math::Vector2D(100.0f, 100.0f), 5.0f), rotation(0.0f)
     {
         std::cout << "Height=" <<
         SekaiEngine::Application::Instance()->Window().GetHeight()
@@ -26,14 +27,16 @@ public:
     void OnUpdate(const SekaiEngine::Timestep& elipse) override
     {
         if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_A))
-            circle.Center.X() -= (100 * elipse.ToSeconds());
+            //rect.Position.X() -= (100 * elipse.ToSeconds());
+            rotation -= 0.1f;
         else if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_D))
-            circle.Center.X() += (100 * elipse.ToSeconds());
+            //rect.Position.X() += (100 * elipse.ToSeconds());
+            rotation += 0.1f;
 
         if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_W))
-            circle.Center.Y() -= (100 * elipse.ToSeconds());
+            rect.Position.Y() -= (100 * elipse.ToSeconds());
         else if(SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KEY_S))
-            circle.Center.Y() += (100 * elipse.ToSeconds());
+            rect.Position.Y() += (100 * elipse.ToSeconds());
 
         if(SekaiEngine::Input::IsButtonPressed(SekaiEngine::Input::MouseKey::BUTTON_LEFT))
         {
@@ -47,17 +50,18 @@ public:
         
         camera.applyCamera();
         SekaiEngine::Render::RenderProperties props;
-
-        
-
         props.Tint = 0x00ff00ff;
+        props.Rotation = rotation;
+        props.Origin = SekaiEngine::Math::Vector2D(rect.Width * 0.5f, rect.Height * 0.5f);
+        //props.Offset = props.Origin;
         SekaiEngine::Render::RectangleRenderParams params(props, rect);
         SekaiEngine::Render::RenderCommand::Render(params);
 
+        SekaiEngine::Shape::Rectangle bounding = SekaiEngine::Render::RenderCommand::GetBoundingBox(params);
+        SekaiEngine::Render::API::DrawBounding(bounding);
+
         SekaiEngine::Render::CircleRenderParams circleParmas(props, circle);
         SekaiEngine::Render::RenderCommand::Render(circleParmas);
-        SekaiEngine::Shape::Rectangle circleBound = SekaiEngine::Render::RenderCommand::GetBoundingBox(circleParmas);
-        SekaiEngine::Render::API::DrawBounding(circleBound);
 
         SekaiEngine::Render::API::DrawText("Hello friend", SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20, font);
 
@@ -69,6 +73,7 @@ private:
     SekaiEngine::Shape::Rectangle rect;
     SekaiEngine::Render::Font font;
     SekaiEngine::Shape::Circle circle;
+    float rotation;
 };
 
 

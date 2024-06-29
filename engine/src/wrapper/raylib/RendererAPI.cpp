@@ -48,7 +48,7 @@ namespace SekaiEngine
             )
             {
                 ::DrawRectanglePro(
-                    ::Rectangle{ rect.Position.X(), rect.Position.Y(), rect.Width, rect.Height },
+                    ::Rectangle{ rect.Position.X() + origin.X(), rect.Position.Y() + origin.Y(), rect.Width, rect.Height },
                     ::Vector2{ origin.X(), origin.Y() },
                     rotation, 
                     parseToRaylibColor(color)

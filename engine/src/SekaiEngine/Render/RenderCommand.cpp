@@ -15,6 +15,44 @@ SekaiEngine::Math::Vector2D RotateVector(const SekaiEngine::Math::Vector2D& rota
     );
 }
 
+SekaiEngine::Shape::Rectangle GetBoundRect(const float&width, const float& height, const SekaiEngine::Math::Vector2D& origin, const float& degree)
+{
+#define FOR_EACH_POINT_OF_BOUNDING \
+    for(std::array<SekaiEngine::Math::Vector2D, 4>::iterator iter = points.begin(); iter != points.end(); ++iter)
+
+
+    std::array<SekaiEngine::Math::Vector2D, 4> points = {
+        SekaiEngine::Math::Vector2D(0.0f, 0.0f),
+        SekaiEngine::Math::Vector2D(width, 0.0f),
+        SekaiEngine::Math::Vector2D(0.0f, height),
+        SekaiEngine::Math::Vector2D(width, height)
+    };
+
+    FOR_EACH_POINT_OF_BOUNDING
+    {
+        (*iter) = RotateVector((*iter) - origin, degree);
+    }
+
+    //get bounding
+    SekaiEngine::Math::Vector2D topLeft = *points.begin();
+    SekaiEngine::Math::Vector2D bottomRight = *points.begin();
+    FOR_EACH_POINT_OF_BOUNDING
+    {
+        //update topleft
+        if(topLeft.X() > iter->X())
+            topLeft.X() = iter->X();
+        if(topLeft.Y() > iter->Y())
+            topLeft.Y() = iter->Y();
+        //update bottomRight
+        if(bottomRight.X() < iter->X())
+            bottomRight.X() = iter->X();
+        if(bottomRight.Y() < iter->Y())
+            bottomRight.Y() = iter->Y();            
+    }
+
+    return SekaiEngine::Shape::Rectangle(topLeft, bottomRight.X() - topLeft.X(), bottomRight.Y() - topLeft.Y());
+}
+
 
 namespace SekaiEngine
 {
@@ -41,7 +79,11 @@ namespace SekaiEngine
                 if(Math::cmpFloat(param.Rotation(), 0.0f) == 0)
                     return param.DrawRect();
 
-                return Shape::Rectangle(Math::Vector2D(0.0f, 0.0f), 0.0f, 0.0f);
+
+                SekaiEngine::Shape::Rectangle bound = GetBoundRect(param.DrawRect().Width, param.DrawRect().Height, param.Origin(), param.Rotation());
+                bound.Position = bound.Position + param.DrawRect().Position;
+                bound.Position = bound.Position + param.Origin();
+                return bound;
             }
 
             Shape::Rectangle GetBoundingBox(const TextureRenderParams& param)
