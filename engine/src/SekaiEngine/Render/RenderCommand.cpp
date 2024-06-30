@@ -91,7 +91,10 @@ namespace SekaiEngine
                 if(Math::cmpFloat(param.Rotation(), 0.0f) == 0)
                     return param.Destination();
 
-                return Shape::Rectangle(Math::Vector2D(0.0f, 0.0f), 0.0f, 0.0f);
+                SekaiEngine::Shape::Rectangle bound = GetBoundRect(param.Destination().Width, param.Destination().Height, param.Origin(), param.Rotation());
+                bound.Position = bound.Position + param.Destination().Position;
+                bound.Position = bound.Position + param.Origin();
+                return bound;
             }
         } // namespace RenderCommand
         

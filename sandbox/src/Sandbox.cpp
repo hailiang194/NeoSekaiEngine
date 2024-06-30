@@ -7,7 +7,8 @@ public:
     ExampleLayer()
         :Layer("Hello friend"), camera(), rect(SekaiEngine::Math::Vector2D(100, 100), 100, 50), 
         font("Arial", "./Arial.ttf"),
-        circle(SekaiEngine::Math::Vector2D(100.0f, 100.0f), 5.0f), rotation(0.0f)
+        circle(SekaiEngine::Math::Vector2D(100.0f, 100.0f), 5.0f), rotation(0.0f),
+        texture("icon.png")
     {
         std::cout << "Height=" <<
         SekaiEngine::Application::Instance()->Window().GetHeight()
@@ -15,7 +16,7 @@ public:
     }
 
     ExampleLayer(const ExampleLayer& layer)
-        :Layer(layer), camera(layer.camera), rect(layer.rect), font(layer.font)
+        :Layer(layer), camera(layer.camera), rect(layer.rect), font(layer.font), texture(layer.texture)
     {
     }
 
@@ -50,18 +51,22 @@ public:
         
         camera.applyCamera();
         SekaiEngine::Render::RenderProperties props;
-        props.Tint = 0x00ff00ff;
+        // props.Tint = 0x00ff00ff;
         props.Rotation = rotation;
-        props.Origin = SekaiEngine::Math::Vector2D(rect.Width * 0.5f, rect.Height * 0.5f);
-        //props.Offset = props.Origin;
-        SekaiEngine::Render::RectangleRenderParams params(props, rect);
-        SekaiEngine::Render::RenderCommand::Render(params);
+        props.Origin = SekaiEngine::Math::Vector2D(texture.Width() * 0.5f, texture.Height() * 0.5f);
+        props.Offset = SekaiEngine::Math::Vector2D(100.0f, 100.0f);
+        // SekaiEngine::Render::RectangleRenderParams params(props, rect);
+        // SekaiEngine::Render::RenderCommand::Render(params);
 
-        SekaiEngine::Shape::Rectangle bounding = SekaiEngine::Render::RenderCommand::GetBoundingBox(params);
+
+        // SekaiEngine::Render::CircleRenderParams circleParmas(props, circle);
+        // SekaiEngine::Render::RenderCommand::Render(circleParmas);
+
+        SekaiEngine::Render::TextureRenderParams textureParam(props, texture);
+        SekaiEngine::Render::RenderCommand::Render(textureParam);
+
+        SekaiEngine::Shape::Rectangle bounding = SekaiEngine::Render::RenderCommand::GetBoundingBox(textureParam);
         SekaiEngine::Render::API::DrawBounding(bounding);
-
-        SekaiEngine::Render::CircleRenderParams circleParmas(props, circle);
-        SekaiEngine::Render::RenderCommand::Render(circleParmas);
 
         SekaiEngine::Render::API::DrawText("Hello friend", SekaiEngine::Math::Vector2D(500, 500), (SekaiEngine::Render::Color)0x00ff00ff, 20, font);
 
@@ -73,6 +78,7 @@ private:
     SekaiEngine::Shape::Rectangle rect;
     SekaiEngine::Render::Font font;
     SekaiEngine::Shape::Circle circle;
+    SekaiEngine::Render::Texture texture;
     float rotation;
 };
 

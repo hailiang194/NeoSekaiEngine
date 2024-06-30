@@ -70,8 +70,8 @@ namespace SekaiEngine
                 };
 
                 ::Rectangle realDest = ::Rectangle {
-                    dest.Position.X(),
-                    dest.Position.Y(),
+                    dest.Position.X() + origin.X(),
+                    dest.Position.Y() + origin.Y(),
                     dest.Width,
                     dest.Height
                 };
