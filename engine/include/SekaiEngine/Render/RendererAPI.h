@@ -69,6 +69,8 @@ namespace SekaiEngine
             );
 #endif
 
+            EXTENDAPI void DrawBounding(const Shape::Rectangle& bounding);
+
 #ifdef _MSC_VER
             inline void DrawCircle(const Shape::Circle& circle, const uint32_t& color,
                 const float& startAngle, const float& endAngle, const int& segment

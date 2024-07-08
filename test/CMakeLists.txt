@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(googletest)
 add_executable(engine_test
     src/vector.cpp
     src/color.cpp
+    src/collision.cpp
 )
 
 

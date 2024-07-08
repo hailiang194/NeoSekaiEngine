@@ -48,7 +48,7 @@ namespace SekaiEngine
             )
             {
                 ::DrawRectanglePro(
-                    ::Rectangle{ rect.Position.X(), rect.Position.Y(), rect.Width, rect.Height },
+                    ::Rectangle{ rect.Position.X() + origin.X(), rect.Position.Y() + origin.Y(), rect.Width, rect.Height },
                     ::Vector2{ origin.X(), origin.Y() },
                     rotation, 
                     parseToRaylibColor(color)
@@ -70,8 +70,8 @@ namespace SekaiEngine
                 };
 
                 ::Rectangle realDest = ::Rectangle {
-                    dest.Position.X(),
-                    dest.Position.Y(),
+                    dest.Position.X() + origin.X(),
+                    dest.Position.Y() + origin.Y(),
                     dest.Width,
                     dest.Height
                 };
@@ -101,6 +101,19 @@ namespace SekaiEngine
                 //     ::Vector2{ postion.X(), postion.Y() }, fontSize, spacing, parseToRaylibColor(color)
                 // );
             }
+
+            void DrawBounding(const Shape::Rectangle& bounding)
+            {
+                ::Rectangle rect = {
+                    bounding.Position.X(),
+                    bounding.Position.Y(),
+                    bounding.Width,
+                    bounding.Height
+                };
+                ::DrawRectangleLinesEx(
+                    rect, 5.0f, ::Color{ 230U, 41U, 55U, 255U }
+                );
+            }            
         } // namespace API
         
     } // namespace Render
