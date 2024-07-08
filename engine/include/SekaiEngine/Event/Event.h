@@ -1,3 +1,13 @@
+/**
+ * @file Event.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief Create and handle event
+ * @version 0.1
+ * @date 2024-07-08
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_EVENT_EVENT_H_
 #define _SEKAI_ENGINE_EVENT_EVENT_H_
 
@@ -33,32 +43,119 @@ namespace SekaiEngine
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
+        /**
+         * @brief Event base class
+         * 
+         */
         class EXTENDAPI Event
         {
         public:
+            /**
+             * @brief Construct a new Event object
+             * 
+             */
             Event();
+
+            /**
+             * @brief Construct a new Event object
+             * 
+             * @param event copied event
+             */
             Event(const Event& event);
+
+            /**
+             * @brief Copy assignment operator
+             * 
+             * @param event copied object
+             * @return Event& the reference of itself
+             */
             Event& operator=(const Event& event);
+
+            /**
+             * @brief Destroy the Event object
+             * 
+             */
             virtual ~Event();
 
+            /**
+             * @brief Get the Event Type of event
+             * 
+             * @return EventType the type of event
+             */
             virtual EventType GetEventType() const = 0;
+
+            /**
+             * @brief Get the Name of event
+             * 
+             * @return const char* the pointer of name
+             */
             virtual const char* GetName() const = 0;
+
+            /**
+             * @brief Get the Category Flags of event
+             * 
+             * @return int the category flag of event
+             */
             virtual int GetCategoryFlags() const = 0;
+
+            /**
+             * @brief Check if event is in the specific category
+             * 
+             * @param category event category
+             * @return true if the event is in
+             * @return false if the event is not in
+             */
             bool IsInCategory(EventCategory category);
 
             bool Handled;
         };
 
+        /**
+         * @brief The class is used to dispatch event
+         * 
+         */
         class EventDispatcher
         {
             template<typename T>
             using EventFn = std::function<bool(T&)>;
         public:
+            /**
+             * @brief Construct a new Event Dispatcher object
+             * 
+             * @param event dispatched event
+             */
             EventDispatcher(Event& event);
+
+            /**
+             * @brief Construct a new Event Dispatcher object
+             * 
+             * @param dispatcher copied object
+             */
             EventDispatcher(const EventDispatcher& dispatcher);
+
+            /**
+             * @brief Copy assignment object
+             * 
+             * @param dispatcher copied object
+             * @return EventDispatcher& the reference of itself
+             */
             EventDispatcher& operator=(const EventDispatcher& dispatcher);
+
+            /**
+             * @brief Destroy the Event Dispatcher object
+             * 
+             */
             ~EventDispatcher();
 
+            /**
+             * @brief dispatch the object
+             * 
+             * @tparam T Event type
+             * @tparam F dispatch function type
+             * @param func dispatch function
+             * @return true if event is handled
+             * @return false if event is not handled
+             */
             template<typename T, typename F>
             bool Dispatch(const F& func);
 

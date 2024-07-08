@@ -1,9 +1,9 @@
 /**
  * @file Input.h
- * @author hailiang194 (hailuongthe2000@gmail.com)
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief All the function related to input
  * @version 0.1
- * @date 2024-06-20
+ * @date 2024-07-08
  * 
  * @copyright Copyright (c) 2024
  * 

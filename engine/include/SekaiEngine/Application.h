@@ -1,9 +1,9 @@
 /**
  * @file Application.h
- * @author hailiang194 (hailuongthe2000@gmail.com)
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief Base Application file, which include the contructor of the whole game
  * @version 0.1
- * @date 2024-04-14
+ * @date 2024-07-08
  * 
  * @copyright Copyright (c) 2024
  * 
