@@ -1,3 +1,13 @@
+/**
+ * @file Utility.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief All utility mathematic functions
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_MATH_UTILITY_H_
 #define _SEKAI_ENGINE_MATH_UTILITY_H_
 

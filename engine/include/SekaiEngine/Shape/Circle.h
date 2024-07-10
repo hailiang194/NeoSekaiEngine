@@ -1,3 +1,13 @@
+/**
+ * @file Circle.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief The class represents circle
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_SHAPE_CIRCLE_H_
 #define _SEKAI_ENGINE_SHAPE_CIRCLE_H_
 

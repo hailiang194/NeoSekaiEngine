@@ -1,3 +1,13 @@
+/**
+ * @file CircleRenderParams.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief All the parameters for rendering a circle
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_RENDER_PARAMS_CIRCLE_RENDER_PARAMS_H_
 #define _SEKAI_ENGINE_RENDER_PARAMS_CIRCLE_RENDER_PARAMS_H_
 

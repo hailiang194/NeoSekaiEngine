@@ -1,3 +1,13 @@
+/**
+ * @file Window.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief Window class for Raylib library
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_WRAPPER_RAYLIB_WINDOW_H_
 #define _SEKAI_ENGINE_WRAPPER_RAYLIB_WINDOW_H_
 

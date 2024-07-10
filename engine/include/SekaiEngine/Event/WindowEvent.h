@@ -1,3 +1,13 @@
+/**
+ * @file WindowEvent.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief This header file includes all the event related to window
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_EVENT_WINDOW_H_
 #define _SEKAI_ENGINE_EVENT_WINDOW_H_
 
