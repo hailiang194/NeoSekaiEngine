@@ -148,4 +148,14 @@ workflows:
               only:
                 - main
                 - development 
-      - build-docs
+      - build-docs:
+          requires: 
+            - test-ubuntu-shared-lib
+            - test-ubuntu-static-lib
+            - test-fedora-shared-lib
+            - test-fedora-static-lib
+          filters:
+            branches:
+              only:
+                - main
+                - development
