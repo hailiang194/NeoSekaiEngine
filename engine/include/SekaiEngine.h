@@ -39,7 +39,7 @@
  * * [CMake](https://cmake.org/download/)
  * * [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
  * * **MSVC** or **Makefile**
- * Doxygen and Graphviz
+ * * Doxygen and Graphviz
  * \section install_sec Installation
  * \subsection install_sec_clone_subsec Clone this project
  * ``` bash
