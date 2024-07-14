@@ -11,11 +11,12 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 * [CMake](https://cmake.org/download/)
 * [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
 * **MSVC** or **Makefile**
+* Doxygen and Graphviz
 
 ## Installation
 ### Clone this project
 ``` bash
-git clone https://github.com/hailiang194/SekaiEngine.git <project_name>
+git clone https://github.com/hailiang194/NeoSekaiEngine.git <project_name>
 ```
 
 ### Install SekaiEngine

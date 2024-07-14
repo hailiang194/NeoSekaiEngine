@@ -22,92 +22,430 @@ namespace SekaiEngine
 {
     namespace Math
     {
+        /**
+         * @brief The base class of mathematics' vector
+         * 
+         * @tparam dimensions the number of dimesions
+         */
         template <std::size_t dimensions>
         class CommonVector
         {
         public:
+            /**
+             * @brief Construct a new Common Vector object
+             * 
+             * @param values list of the values of vector
+             */
             CommonVector(const std::initializer_list<float>& values);
+
+            /**
+             * @brief Construct a new Common Vector object
+             * 
+             * @param vector copied vector
+             */
             CommonVector(const CommonVector& vector);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vector copied object
+             * @return CommonVector& the reference of itself
+             */
             CommonVector& operator=(const CommonVector& vector);
+
+            /**
+             * @brief Destroy the Common Vector object
+             * 
+             */
             virtual ~CommonVector();
 
+            /**
+             * @brief Add 2 vectors
+             * 
+             * @param vector added vector
+             * @return const CommonVector the result 
+             */
             const CommonVector operator+(const CommonVector& vector) const;
+
+            /**
+             * @brief Add 2 vectors
+             * 
+             * @param vector added vector
+             * @return const CommonVector the result 
+             */
             const CommonVector operator+(const CommonVector& vector);
+
+            /**
+             * @brief get the scaled vector
+             * 
+             * @param scale scaled value
+             * @return const CommonVector the result 
+             */
             const CommonVector operator*(const float& scale) const;
+
+            /**
+             * @brief get the scaled vector
+             * 
+             * @param scale scaled value
+             * @return const CommonVector the result 
+             */
             const CommonVector operator*(const float& scale);
+
+            /**
+             * @brief Plus the negative direction of vector
+             * 
+             * @param vector added vector
+             * @return const CommonVector the result 
+             */
             const CommonVector operator-(const CommonVector& vector) const;
+
+            /**
+             * @brief Plus the negative direction of vecto
+             * 
+             * @param vector added vector
+             * @return const CommonVector the result 
+             */
             const CommonVector operator-(const CommonVector& vector);
+
+            /**
+             * @brief Check if 2 vectors are equal
+             * 
+             * @param vector compared vector
+             * @return true if 2 vectors are equal
+             * @return false if 2 vectors are not equal
+             */
             const bool operator==(const CommonVector& vector) const;
+
+            /**
+             * @brief Check if 2 vectors are equal
+             * 
+             * @param vector compared vector
+             * @return true if 2 vectors are equal
+             * @return false if 2 vectors are not equal
+             */
             const bool operator==(const CommonVector& vector);
-            //dot product
+            
+            /**
+             * @brief Get the dot product of 2 vectors
+             * 
+             * @param vector vector for dot product
+             * @return const float the result
+             */
             const float Dot(const CommonVector& vector) const;
+
+            /**
+             * @brief Get the dot product of 2 vectors
+             * 
+             * @param vector vector for dot product
+             * @return const float the result
+             */
             const float Dot(const CommonVector& vector);
 
+            /**
+             * @brief Get the distance from the vector to origin
+             * 
+             * @return const float the distance
+             */
             const float Distance() const;
+
+            /**
+             * @brief Get the distance from the vector to origin
+             * 
+             * @return const float the distance
+             */
             const float Distance();
 
         protected:
+            /**
+             * @brief Construct a new Common Vector object
+             * 
+             * @param values raw values
+             */
             CommonVector(const float values[dimensions]);
-            float m_values[dimensions];
+            float m_values[dimensions]; /*!< raw value of vector */
         };
 
+        /**
+         * @brief 2-dimension vector
+         * 
+         */
         class EXTENDAPI Vector2D: public CommonVector<2>
         {
         public:
+            /**
+             * @brief Construct a new Vector 2D object
+             * 
+             * @param x the initialized x axis value
+             * @param y the initialized y axis value
+             */
             Vector2D(const float& x = 0.0f, const float& y = 0.0f);
+
+            /**
+             * @brief Construct a new Vector 2D object
+             * 
+             * @param vt copied vector
+             */
             Vector2D(const CommonVector<2>& vt);
+
+            /**
+             * @brief Construct a new Vector 2D object
+             * 
+             * @param vt copied object
+             */
             Vector2D(const Vector2D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector2D& the reference of itself
+             */
             Vector2D& operator=(const Vector2D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector2D& the reference of itself
+             */
             Vector2D& operator=(const CommonVector<2>& vt);
+
+            /**
+             * @brief Destroy the Vector 2D object
+             * 
+             */
             ~Vector2D();
 
+            /**
+             * @brief get the value of x axis
+             * 
+             * @return const float& the value
+             */
             const float& X() const;
+
+            /**
+             * @brief get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& X();
 
+            /**
+             * @brief get the value of y axis
+             * 
+             * @return const float& the value
+             */
             const float& Y() const;
+
+            /**
+             * @brief get the value of y axis
+             * 
+             * @return const float& the value
+             */
             float& Y();
         };
 
+        /**
+         * @brief 3-dimenstion vector
+         * 
+         */
         class EXTENDAPI Vector3D: public CommonVector<3>
         {
         public:
+            /**
+             * @brief Construct a new Vector 3D object
+             * 
+             * @param x the initialized value of x axis
+             * @param y the initialized value of y axis
+             * @param z the initialized value of z axis
+             */
             Vector3D(const float& x = 0.0f, const float& y = 0.0f, const float& z = 0.0f);
+
+            /**
+             * @brief Construct a new Vector 3D object
+             * 
+             * @param vt copied object
+             */
             Vector3D(const CommonVector<3>& vt);
+
+            /**
+             * @brief Construct a new Vector 3D object
+             * 
+             * @param vt copied object
+             */
             Vector3D(const Vector3D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector3D& the reference of itself
+             */
             Vector3D& operator=(const Vector3D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector3D& the reference of itself
+             */
             Vector3D& operator=(const CommonVector<3>& vt);
+
+            /**
+             * @brief Destroy the Vector 3D object
+             * 
+             */
             ~Vector3D();
 
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             const float& X() const;
+
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& X();
 
+            /**
+             * @brief Get the value of y axis
+             * 
+             * @return const float& the value
+             */
             const float& Y() const;
-            float& Y();
 
+            /**
+             * @brief Get the value of y axis
+             * 
+             * @return const float& the value
+             */
+            float& Y();
+            /**
+             * @brief Get the value of z axis
+             * 
+             * @return const float& the value
+             */
             const float& Z() const;
+
+            /**
+             * @brief Get the value of z axis
+             * 
+             * @return const float& the value
+             */
             float& Z();
         };
 
+        /**
+         * @brief 4-dimension vector
+         * 
+         */
         class EXTENDAPI Vector4D: public CommonVector<4>
         {
         public:
+            /**
+             * @brief Construct a new Vector 4D object
+             * 
+             * @param x the initialized value of x axis
+             * @param y the initialized value of y axis
+             * @param z the initialized value of z axis
+             * @param t the initialized value of t axis
+             */
             Vector4D(const float& x = 0.0f, const float& y = 0.0f, const float& z = 0.0f, const float& t = 0.0f);
+
+            /**
+             * @brief Construct a new Vector 4D object
+             * 
+             * @param vt copied object
+             */
             Vector4D(const CommonVector<4>& vt);
+
+            /**
+             * @brief Construct a new Vector 4D object
+             * 
+             * @param vt copied object
+             */
             Vector4D(const Vector4D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector4D& the reference of itself
+             */
             Vector4D& operator=(const Vector4D& vt);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param vt copied object
+             * @return Vector4D& the reference of itself
+             */
             Vector4D& operator=(const CommonVector<4>& vt);
+
+            /**
+             * @brief Destroy the Vector 4D object
+             * 
+             */
             ~Vector4D();
 
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             const float& X() const;
+
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& X();
 
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             const float& Y() const;
+
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& Y();
 
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             const float& Z() const;
+
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& Z();
 
-            const float&T() const;
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
+            const float& T() const;
+
+            /**
+             * @brief Get the value of x axis
+             * 
+             * @return const float& the value
+             */
             float& T();
         };
 

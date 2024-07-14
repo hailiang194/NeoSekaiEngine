@@ -18,26 +18,65 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Camera for 2D world
+         * 
+         */
         class EXTENDAPI Camera2D
         {
         public:
+            /**
+             * @brief Construct a new Camera 2D object
+             * 
+             * @param postion initialized position
+             * @param offset initialized offset
+             * @param zoom initialized zoom value
+             * @param rotation initialized rotation in degree
+             */
             Camera2D(
                 const Math::Vector2D& postion = Math::Vector2D(), 
                 const Math::Vector2D& offset = Math::Vector2D(), 
                 const float& zoom = 1.0f,
                 const float& rotation = 0.0f
             );
+
+            /**
+             * @brief Construct a new Camera 2D object
+             * 
+             * @param camera copied object
+             */
             Camera2D(const Camera2D& camera);
+
+            /**
+             * @brief Copied assignement operator
+             * 
+             * @param camera copied object
+             * @return Camera2D& the reference of itself
+             */
             Camera2D& operator=(const Camera2D& camera);
+
+            /**
+             * @brief Destroy the Camera 2D object
+             * 
+             */
             virtual ~Camera2D();
 
+            /**
+             * @brief Start apply camera
+             * 
+             */
             void applyCamera();
+
+            /**
+             * @brief Finish apply camera
+             * 
+             */
             void unapplyCamera();
 
-            Math::Vector2D Position;
-            Math::Vector2D Offset;
-            float Zoom;
-            float Rotation;
+            Math::Vector2D Position; /*!< Camera position*/
+            Math::Vector2D Offset; /*!< Camera offset*/
+            float Zoom; /*!< Camera zoom value*/
+            float Rotation; /*!< Camera rotation in degree*/
         };
     } // namespace Render
     

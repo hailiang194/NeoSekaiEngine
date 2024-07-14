@@ -18,29 +18,57 @@ namespace SekaiEngine
 {
     namespace Event
     {
+        /**
+         * @brief Event type
+         * 
+         */
         enum class EventType
         {
-            None = 0,
-            WindowClose, WindowResize, WindowFocus, WindowLostFocus, WindowMoved,
-            AppTick, AppUpdate, AppRender,
-            KeyPressed, KeyRelease,
-            MouseButtonPressed, MouseButtonRelease, MouseMoved, MouseScrolled
+            None = 0, /*!< None*/
+            WindowClose, /*!< Close window*/
+            WindowResize, /*!< Resize Window*/
+            WindowFocus, /*!< Window in focus*/
+            WindowLostFocus, /*!< Window lost focus*/
+            WindowMoved, /*!< Window move*/
+            AppTick, /*!< App tick*/
+            AppUpdate,  /*!< App update*/
+            AppRender, /*!< App render*/
+            KeyPressed, /*!< Key is pressed*/
+            KeyRelease, /*!< Key is release*/
+            MouseButtonPressed, /*!< Mouse button is pressed*/
+            MouseButtonRelease, /*!< Mouse button is release*/
+            MouseMoved, /*!< Mouse button is moved*/
+            MouseScrolled /*!< Mouse button is scrolled*/
         };
 
+        /**
+         * @brief Event category
+         * 
+         */
         enum EventCategory
         {
-            None = 0,
-            EventCategoryApplication = 0x1,
-            EventCategoryInput = 0x2,
-            EventCategoryKeyboard = 0x4,
-            EventCategoryMouse = 0x8,
-            EventCategoryMouseButton = 0xf
+            None = 0, /*!< None or unknown category*/
+            EventCategoryApplication = 0x1, /*!< Event from the application*/
+            EventCategoryInput = 0x2, /*!< Event from the input*/
+            EventCategoryKeyboard = 0x4, /*!< Event from keyboard*/
+            EventCategoryMouse = 0x8, /*!< Event from mouse*/
+            EventCategoryMouseButton = 0xf /*!< Event from mouse button*/
         };
 
+/**
+ * \def EVENT_CLASS_TYPE(type)  
+ * Macro for getting the type of event
+ * 
+ */
 #define EVENT_CLASS_TYPE(type)  static EventType GetStaticType() { return type; } \
                                 virtual EventType GetEventType() const override { return GetStaticType(); } \
                                 virtual const char* GetName() const override { return #type; }
 
+/**
+ * \def EVENT_CLASS_CATEGORY(category) 
+ * Macro for getting event category
+ * 
+ */
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override { return category; }
 
         /**
@@ -107,7 +135,7 @@ namespace SekaiEngine
              */
             bool IsInCategory(EventCategory category);
 
-            bool Handled;
+            bool Handled; /*!< The boolean to check if the event is handled*/
         };
 
         /**

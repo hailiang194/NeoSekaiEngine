@@ -39,10 +39,11 @@
  * * [CMake](https://cmake.org/download/)
  * * [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
  * * **MSVC** or **Makefile**
+ * Doxygen and Graphviz
  * \section install_sec Installation
  * \subsection install_sec_clone_subsec Clone this project
  * ``` bash
- * git clone https://github.com/hailiang194/SekaiEngine.git <project_name>
+ * git clone https://github.com/hailiang194/NeoSekaiEngine.git <project_name>
  * ```
  * \subsection install_sec_install_subsec Install SekaiEngine
  * \subsubsection install_sec_install_subsec_linux Linux user
@@ -107,7 +108,7 @@
  * ```
  * make
  * ```
- * \subsection Web platform
+ * \subsection build_sec_web Web platform
  * Go to build folder
  * ``` bash
  * cd build

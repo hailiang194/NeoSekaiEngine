@@ -11,12 +11,6 @@
 #ifndef _SEKAI_ENGINE_ENTRY_POINT_H_
 #define _SEKAI_ENGINE_ENTRY_POINT_H_
 
-/**
- * \def HAS_ENTRY_POINT
- * This macro is defined in the App part, which self-implement the main function
- * 
- */
-
 #ifdef HAS_ENTRY_POINT
 
 extern SekaiEngine::Application* SekaiEngine::CreateApplication();

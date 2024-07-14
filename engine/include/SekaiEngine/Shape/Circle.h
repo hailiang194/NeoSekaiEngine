@@ -19,16 +19,44 @@ namespace SekaiEngine
 {
     namespace Shape
     {
+        /**
+         * @brief Circle class
+         * 
+         */
         class EXTENDAPI Circle: public IShape
         {
         public:
+            /**
+             * @brief Construct a new Circle object
+             * 
+             * @param center the center position of circle
+             * @param radius the radius of circle
+             */
             Circle(const Math::Vector2D& center = Math::Vector2D(), const float& radius = 0.0f);
+
+            /**
+             * @brief Construct a new Circle object
+             * 
+             * @param circle copied object
+             */
             Circle(const Circle& circle);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param circle copied object
+             * @return Circle& the reference of the object itself
+             */
             Circle& operator=(const Circle& circle);
+
+            /**
+             * @brief Destroy the Circle object
+             * 
+             */
             ~Circle();
 
-            Math::Vector2D Center;
-            float Radius;
+            Math::Vector2D Center; /*!< The center of the circle*/
+            float Radius; /*!< The radius of the circle*/
         };
     } // namespace Shape
     

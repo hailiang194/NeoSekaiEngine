@@ -121,7 +121,11 @@ namespace SekaiEngine
         return *window;
     }
 
-    //To be defined by CLIENT
+    /**
+     * @brief Create a Application object, it is defined by client which means game developer
+     * 
+     * @return Application* the pointer of the game application
+     */
     Application* CreateApplication();
 } // namespace SekaiEngine
 

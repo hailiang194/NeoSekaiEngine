@@ -19,34 +19,104 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Render parameters for rendering circle
+         * 
+         */
         class EXTENDAPI CircleRenderParams: public RenderParams
         {
         public:
+            /**
+             * @brief Construct a new Circle Render Params object
+             * 
+             * @param props render properties for rendering circle
+             * @param circle the circle which needs drawing
+             */
             CircleRenderParams(const RenderProperties& props, const Shape::Circle& circle);
             CircleRenderParams(const CircleRenderParams& params) = delete;
             CircleRenderParams& operator=(const CircleRenderParams& params) = delete;
+
+            /**
+             * @brief Destroy the Circle Render Params object
+             * 
+             */
             ~CircleRenderParams();
 
+            /**
+             * @brief The drawn circle
+             * 
+             * @return const Shape::Circle& the drawn circle
+             */
             const Shape::Circle& DrawCircle() const;
+
+            /**
+             * @brief the drawn circle
+             * 
+             * @return const Shape::Circle& the drawn circle
+             */
             const Shape::Circle& DrawCircle();
 
+            /**
+             * @brief the color of circle
+             * 
+             * @return const Render::Color& the color
+             */
             const Render::Color& Tint() const;
+            
+            /**
+             * @brief the color of circle
+             * 
+             * @return const Render::Color& the color
+             */
             const Render::Color& Tint();
 
-            const float& StartAngle() const;
-            const float& StartAngle();
 
+            /**
+             * @brief the start angle to render the circle in degree
+             * 
+             * @return const float& the start angle
+             */
+            const float& StartAngle() const;
+
+            /**
+             * @brief the start angle to render the circle in degree
+             * 
+             * @return const float& the start angle
+             */
+            const float& StartAngle();
+            /**
+             * @brief the end angle to render the circle in degree
+             * 
+             * @return const float& the end angle
+             */
             const float& EndAngle() const;
+
+            /**
+             * @brief the end angle to render the circle in degree
+             * 
+             * @return const float& the end angle
+             */
             const float& EndAngle();
 
+            /**
+             * @brief The segment of rendering circle
+             * 
+             * @return const int& the segment
+             */
             const int& Segment() const;
+
+            /**
+             * @brief the segment of rendering circle
+             * 
+             * @return const int& the segment
+             */
             const int& Segment();
 
         private:
-            Shape::Circle m_drawCircle;
-            float m_startAngle;
-            float m_endAngle;
-            int m_segment;
+            Shape::Circle m_drawCircle; /*!< the drawn circle*/
+            float m_startAngle; /*!< the start angle to render circle in degree*/
+            float m_endAngle; /*!< the end angle to render circle in degree*/
+            int m_segment; /*!< The segment of circle*/
         };
 
 

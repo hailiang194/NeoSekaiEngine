@@ -13,6 +13,10 @@
 
 #include "SekaiEngine/BaseType.h"
 
+/**
+ * @brief default epsilon for comparing 2 floats
+ * 
+ */
 #define DEFAULT_EPSILON 0.0001f
 
 namespace SekaiEngine
@@ -26,6 +30,12 @@ namespace SekaiEngine
         /// @return 1 if first > second, -1 if first < second and 0 if first == second
         EXTENDAPI const int cmpFloat(const float& first, const float& second, const float& epsilon = DEFAULT_EPSILON);
 
+        /**
+         * @brief Convert degree to radian
+         * 
+         * @param degree degree value
+         * @return const the radian value
+         */
         EXTENDAPI const float DegreeToRadian(const float& degree);
     } // namespace Math
     

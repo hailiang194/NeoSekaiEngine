@@ -18,15 +18,29 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Base class of the collection of all parameters for rendering
+         * 
+         */
         class EXTENDAPI RenderParams
         {
         public:
+            /**
+             * @brief Construct a new Render Params object
+             * 
+             * @param props the properties for rendering
+             */
             RenderParams(const RenderProperties& props);
             RenderParams(const RenderParams& params) = delete;
             RenderParams& operator=(const RenderParams& params) = delete;
+
+            /**
+             * @brief Destroy the Render Params object
+             * 
+             */
             virtual ~RenderParams();
         protected:
-            const RenderProperties& m_props; 
+            const RenderProperties& m_props; /*!< the rendering parameters*/
         };
     } // namespace Render
     

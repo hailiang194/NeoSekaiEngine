@@ -21,9 +21,19 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Render class (not yet useful)
+         * 
+         */
         class EXTENDAPI Renderer
         {
         public:
+            /**
+             * @brief handle event for window resize
+             * 
+             * @param width new width
+             * @param height new height
+             */
             static void OnWindowResize(const int& width, const int& height);
         };
     } // namespace Render

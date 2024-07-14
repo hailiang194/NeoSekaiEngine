@@ -18,45 +18,149 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Union for parsing color code to RGBA value
+         * 
+         */
         union ColorParser
         {
-            uint32_t code;
+            uint32_t code; /*!< Color code*/
+            /**
+             * @brief parser struct
+             * 
+             */
             struct parser
             {
-                uint8_t a;
-                uint8_t b;
-                uint8_t g;
-                uint8_t r;
-            } value;
+                uint8_t a; /*!< alpha value */
+                uint8_t b; /*!< blue value*/
+                uint8_t g; /*!< green value */
+                uint8_t r; /*!< red value*/
+            } value; /*!< struct hold the data */
         };
 
+        /**
+         * @brief Color class
+         * 
+         */
         class EXTENDAPI Color
         {
         public:
-            //Code: RRGGBBAA
+            /**
+             * @brief Construct a new Color object
+             * 
+             * @param code color code whose format is RRGGBBAA
+             */
             explicit Color(const uint32_t& code = 0x0);
+
+            /**
+             * @brief Construct a new Color object
+             * 
+             * @param color copied object
+             */
             explicit Color(const Color& color);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param color copied object
+             * @return Color& the reference of object itself
+             */
             Color& operator=(const Color& color);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param code the color code whose format is RRGGBBAA 
+             * @return Color& the reference of object itself
+             */
             Color& operator=(const uint32_t& code);
+
+            /**
+             * @brief Check if 2 colors are the same
+             * 
+             * @param color checked color
+             * @return true if 2 colors are the same
+             * @return false if 2 colors are not the same
+             */
             const bool operator==(const Color& color);
+
+            /**
+             * @brief Destroy the Color object
+             * 
+             */
             ~Color();
 
+            /**
+             * @brief Get color code
+             * 
+             * @return const uint32_t& the color code
+             */
             const uint32_t& code() const;
+
+            /**
+             * @brief get color code
+             * 
+             * @return const uint32_t& the color code
+             */
             const uint32_t& code();
 
+            /**
+             * @brief get the red value color
+             * 
+             * @return const uint8_t the red value
+             */
             const uint8_t r() const;
+
+            /**
+             * @brief get the red value of color
+             * 
+             * @return const uint8_t the red value
+             */
             const uint8_t r();
 
+            /**
+             * @brief get the green value of color
+             * 
+             * @return const uint8_t the green value
+             */
             const uint8_t g() const;
+
+            /**
+             * @brief get the green value of color
+             * 
+             * @return const uint8_t the green value
+             */
             const uint8_t g();
 
+            /**
+             * @brief get the blue value of color
+             * 
+             * @return const uint8_t the clue value
+             */
             const uint8_t b() const;
+
+            /**
+             * @brief get the blue value of color
+             * 
+             * @return const uint8_t the blue value
+             */
             const uint8_t b();
 
+            /**
+             * @brief get the alpha value of color
+             * 
+             * @return const uint8_t the alpha value
+             */
             const uint8_t a() const;
+
+            /**
+             * @brief get the alpha value of color
+             * 
+             * @return const uint8_t the alpha value
+             */
             const uint8_t a(); 
         private:
-            uint32_t m_code;
+            uint32_t m_code; /*!< color code whose format as RRGGBBAA*/
         };
 
         inline const uint32_t& Color::code() const

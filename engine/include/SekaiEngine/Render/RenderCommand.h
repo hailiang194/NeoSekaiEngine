@@ -24,16 +24,69 @@ namespace SekaiEngine
         namespace RenderCommand
         {
 
+            /**
+             * @brief Startup rendering for a frame
+             * 
+             * @param color background color
+             */
             void StartDrawing(const Color& color);
+
+            /**
+             * @brief Finish rendering for a frame
+             * 
+             */
             void FinishDrawing();
 
+            /**
+             * @brief Get the Bounding Box object
+             * 
+             * @param param the parameters for rendering a circle
+             * @return Shape::Rectangle the bounding box of circle
+             */
             EXTENDAPI Shape::Rectangle GetBoundingBox(const CircleRenderParams& param);
+
+            /**
+             * @brief Get the Bounding Box object
+             * 
+             * @param param the paramters for rendering the rectangle
+             * @return Shape::Rectangle the bounding box of rectangle
+             */
             EXTENDAPI Shape::Rectangle GetBoundingBox(const RectangleRenderParams& param);
+
+            /**
+             * @brief Get the Bounding Box object
+             * 
+             * @param param the parameters for rendering the texture
+             * @return Shape::Rectangle the bounding box of texture
+             */
             EXTENDAPI Shape::Rectangle GetBoundingBox(const TextureRenderParams& param);
 
+            /**
+             * @brief Render the parameters
+             * 
+             * @param params the parameters
+             */
             void Render(const RenderParams& params);
+
+            /**
+             * @brief Render the circle
+             * 
+             * @param params the parameters for rendering circle
+             */
             void Render(const CircleRenderParams& params);
+
+            /**
+             * @brief Render the rectangle
+             * 
+             * @param params the parameters for rendering rectangle
+             */
             void Render(const RectangleRenderParams& params);
+
+            /**
+             * @brief Render the texture
+             * 
+             * @param params the paramters for rendering texture
+             */
             void Render(const TextureRenderParams& params);
 
             inline void StartDrawing(const Color& color)

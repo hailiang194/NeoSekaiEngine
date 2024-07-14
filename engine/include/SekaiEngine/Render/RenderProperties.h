@@ -19,19 +19,45 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Render properties
+         * 
+         */
         class EXTENDAPI RenderProperties
         {
         public:
+            /**
+             * @brief Construct a new Render Properties object
+             * 
+             */
             RenderProperties();
+
+            /**
+             * @brief Construct a new Render Properties object
+             * 
+             * @param props copied object
+             */
             RenderProperties(const RenderProperties& props);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param props copied object
+             * @return RenderProperties& the reference of the object itself
+             */
             RenderProperties& operator=(const RenderProperties& props);
+
+            /**
+             * @brief Destroy the Render Properties object
+             * 
+             */
             virtual ~RenderProperties();
 
-            Math::Vector2D Offset;
-            Math::Vector2D Scale;
-            Render::Color Tint;
-            Math::Vector2D Origin;
-            float Rotation;
+            Math::Vector2D Offset; /*!< Offset position*/
+            Math::Vector2D Scale; /*!< Scale value*/
+            Render::Color Tint; /*!< Tint color*/
+            Math::Vector2D Origin; /*!< Rotation origin*/
+            float Rotation; /*!< The rotation angle in degree*/
         };
     } // namespace Render
     

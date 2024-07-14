@@ -54,9 +54,9 @@ namespace SekaiEngine
          */
         virtual ~WindowsProps();
 
-        const char* Title;
-        int Height;
-        int Width;
+        const char* Title; /*!< the title of game*/
+        int Height; /*!< the window height*/
+        int Width; /*!< the width width*/
     };
 
     /**
@@ -66,6 +66,10 @@ namespace SekaiEngine
     class EXTENDAPI IWindow
     {
     public:
+        /**
+         * @brief Callback event function type
+         * 
+         */
         using EventCallbackFn = std::function<void(Event::Event&)>;
 
         /**
