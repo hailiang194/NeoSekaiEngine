@@ -127,6 +127,120 @@ namespace SekaiEngine
             EVENT_CLASS_CATEGORY(EventCategoryApplication)
         };
 
+        /**
+         * @brief Event of window focus
+         * 
+         */
+        class WindowFocusEvent: public Event
+        {
+        public:
+            /**
+             * @brief Construct a new Window Focus Event object
+             * 
+             */
+            WindowFocusEvent() = default;
+
+            /**
+             * @brief Construct a new Window Focus Event object
+             * 
+             * @param event copied object
+             */
+            WindowFocusEvent(const WindowFocusEvent& event) = default;
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param event copied object
+             * @return WindowFocusEvent& the reference of the object itself
+             */
+            WindowFocusEvent& operator=(const WindowFocusEvent& event) = default;
+
+            /**
+             * @brief Destroy the Window Focus Event object
+             * 
+             */
+            ~WindowFocusEvent() {}
+
+            EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowFocus)
+            EVENT_CLASS_CATEGORY(EventCategoryApplication)
+        };
+
+        /**
+         * @brief Event of lost focus of window
+         * 
+         */
+        class WindowLostFocusEvent: public Event
+        {
+        public:
+            /**
+             * @brief Construct a new Window Lost Focus Event object
+             * 
+             */
+            WindowLostFocusEvent() = default;
+
+            /**
+             * @brief Construct a new Window Lost Focus Event object
+             * 
+             * @param event copied object
+             */
+            WindowLostFocusEvent(const WindowLostFocusEvent& event) = default;
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param event copied object
+             * @return WindowLostFocusEvent& the reference of the object itself
+             */
+            WindowLostFocusEvent& operator=(const WindowLostFocusEvent& event) = default;
+
+            /**
+             * @brief Destroy the Window Lost Focus Event object
+             * 
+             */
+            ~WindowLostFocusEvent() {}
+
+            EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowLostFocus)
+            EVENT_CLASS_CATEGORY(EventCategoryApplication)
+        };
+
+        /**
+         * @brief Event of window moved
+         * 
+         */
+        class WindowMovedEvent: public Event
+        {
+public:
+            /**
+             * @brief Construct a new Window Moved Event object
+             * 
+             */
+            WindowMovedEvent() = default;
+
+            /**
+             * @brief Construct a new Window Moved Event object
+             * 
+             * @param event copied object
+             */
+            WindowMovedEvent(const WindowMovedEvent& event) = default;
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param event copied object
+             * @return WindowMovedEvent& the reference of the object itself
+             */
+            WindowMovedEvent& operator=(const WindowMovedEvent& event) = default;
+
+            /**
+             * @brief Destroy the Window Moved Event object
+             * 
+             */
+            ~WindowMovedEvent() {}
+
+            EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowMoved)
+            EVENT_CLASS_CATEGORY(EventCategoryApplication)
+        };
+
         inline const int& WindowResizeEvent::Width() const
         {
             return m_width;

@@ -14,6 +14,7 @@
 #ifdef USE_RAYLIB
 
 #include "SekaiEngine/Window.h"
+#include "SekaiEngine/Math/Vector.h"
 
 namespace Wrapper
 {
@@ -37,6 +38,8 @@ namespace Wrapper
         private:
             unsigned int m_flag;
             IWindow::EventCallbackFn m_eventCallbackFn;
+            bool m_isFocus;
+            SekaiEngine::Math::Vector2D m_windowPosition;
 
             void _pollEvent();
         };

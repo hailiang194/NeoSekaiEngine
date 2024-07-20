@@ -75,6 +75,33 @@ namespace SekaiEngine
         EXTENDAPI bool OnWindowResize(Event::Event& event);
 
         /**
+         * @brief Handle window is getting focus
+         * 
+         * @param event Window focus event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handled successfully
+         */
+        EXTENDAPI bool OnWindowFocus(Event::Event& event);
+
+        /**
+         * @brief Handle window lost focus
+         * 
+         * @param event Window lost focus event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handleed successfully
+         */
+        EXTENDAPI bool OnWindowLostFocus(Event::Event& event);
+
+        /**
+         * @brief Handle window move
+         * 
+         * @param event Window move event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handled successully
+         */
+        EXTENDAPI bool OnWindowMove(Event::Event& event);
+
+        /**
          * @brief Add layer at the background of stack
          * 
          * @param layer added layer

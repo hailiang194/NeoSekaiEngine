@@ -45,6 +45,15 @@ namespace SekaiEngine
         dispatcher.Dispatch<Event::WindowResizeEvent>(
             std::bind(&Application::OnWindowResize, this, std::placeholders::_1)
         );
+        dispatcher.Dispatch<Event::WindowFocusEvent>(
+            std::bind(&Application::OnWindowFocus, this, std::placeholders::_1)
+        );
+        dispatcher.Dispatch<Event::WindowLostFocusEvent>(
+            std::bind(&Application::OnWindowLostFocus, this, std::placeholders::_1)
+        );
+        dispatcher.Dispatch<Event::WindowMovedEvent>(
+            std::bind(&Application::OnWindowMove, this, std::placeholders::_1)
+        );
 
         for(auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
@@ -64,7 +73,22 @@ namespace SekaiEngine
     {
         Event::WindowResizeEvent& resizeEvt = dynamic_cast<Event::WindowResizeEvent&>(event);
         Render::Renderer::OnWindowResize(resizeEvt.Width(), resizeEvt.Height());
-        return false;
+        return true;
+    }
+
+    bool Application::OnWindowFocus(Event::Event& event)
+    {
+        return true;
+    }
+
+    bool Application::OnWindowLostFocus(Event::Event& event)
+    {
+        return true;
+    }
+
+    bool Application::OnWindowMove(Event::Event& event)
+    {
+        return true;
     }
 
     void Application::PushLayer(Layer::Layer* layer)

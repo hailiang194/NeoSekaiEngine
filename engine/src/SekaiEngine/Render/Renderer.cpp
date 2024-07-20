@@ -9,7 +9,7 @@ namespace SekaiEngine
     {
         void Renderer::OnWindowResize(const int& width, const int& height)
         {
-
+            //Do nothing here
         }
     } // namespace Render
     
