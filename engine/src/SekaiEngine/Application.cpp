@@ -1,5 +1,6 @@
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Event/WindowEvent.h"
+#include "SekaiEngine/Event/ApplicationEvent.h"
 #include "SekaiEngine/Application.h"
 #include "SekaiEngine/Render/Renderer.h"
 #include "SekaiEngine/Render/RenderCommand.h"
@@ -55,6 +56,10 @@ namespace SekaiEngine
             std::bind(&Application::OnWindowMove, this, std::placeholders::_1)
         );
 
+        dispatcher.Dispatch<Event::ApplicationTickEvent>(
+            std::bind(&Application::OnApplicationTick, this, std::placeholders::_1)
+        );
+
         for(auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
             (*--it)->OnEvent(event);
@@ -91,6 +96,21 @@ namespace SekaiEngine
         return true;
     }
 
+    bool Application::OnApplicationTick(Event::Event& event)
+    {
+        return true;
+    }
+
+    bool Application::OnApplicationUpdate(Event::Event& event)
+    {
+        return true;
+    }
+
+    bool Application::OnApplicationRender(Event::Event& event)
+    {
+        return true;
+    }
+
     void Application::PushLayer(Layer::Layer* layer)
     {
         m_layerStack.PushLayer(layer);
@@ -114,16 +134,22 @@ namespace SekaiEngine
 
     void Application::loop()
     {
+        Event::ApplicationTickEvent tickEvent;
+        OnEvent(tickEvent);
         Timestep elipse = m_timer.update();
         window->OnUpdate();
         if(!m_running)
             return;
         
-        
+        Event::ApplicationUpdateEvent updateEvent(elipse);
+        OnEvent(updateEvent);
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {
             (*it)->OnUpdate(elipse);
         }
+
+        Event::ApplicationRenderEvent renderEvent;
+        OnEvent(renderEvent);
         SekaiEngine::Render::RenderCommand::StartDrawing((SekaiEngine::Render::Color)0x000000ff);
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {

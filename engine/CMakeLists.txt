@@ -32,6 +32,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Window.h
     ./include/SekaiEngine/Event/Event.h
     ./include/SekaiEngine/Event/WindowEvent.h
+    ./include/SekaiEngine/Event/ApplicationEvent.h
     ./include/SekaiEngine/Layer/Layer.h
     ./include/SekaiEngine/Layer/LayerStack.h
     ./include/SekaiEngine/Input.h
@@ -62,6 +63,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Window.cpp
     ./src/SekaiEngine/Event/Event.cpp
     ./src/SekaiEngine/Event/WindowEvent.cpp
+    ./src/SekaiEngine/Event/ApplicationEvent.cpp
     ./src/SekaiEngine/Layer/Layer.cpp
     ./src/SekaiEngine/Layer/LayerStack.cpp
     ./src/SekaiEngine/Math/Vector.cpp

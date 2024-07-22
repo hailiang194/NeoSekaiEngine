@@ -102,6 +102,33 @@ namespace SekaiEngine
         EXTENDAPI bool OnWindowMove(Event::Event& event);
 
         /**
+         * @brief Handle when application tick
+         * 
+         * @param event Applcation tick event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handled successfullt
+         */
+        EXTENDAPI bool OnApplicationTick(Event::Event& event);
+
+        /**
+         * @brief Handle when application update
+         * 
+         * @param event Application update event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handled successfully
+         */
+        EXTENDAPI bool OnApplicationUpdate(Event::Event& event);
+
+        /**
+         * @brief Handle when application render
+         * 
+         * @param event Application render event
+         * @return true if the event is handled successfully
+         * @return false if the event is not handled successfully
+         */
+        EXTENDAPI bool OnApplicationRender(Event::Event& event);
+
+        /**
          * @brief Add layer at the background of stack
          * 
          * @param layer added layer
