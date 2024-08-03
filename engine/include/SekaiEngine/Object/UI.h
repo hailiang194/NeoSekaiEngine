@@ -23,30 +23,103 @@ namespace SekaiEngine
          * @brief UI core object
          * 
          */
-        class UI
+        class EXTENDAPI UI
         {
         public:
+            /**
+             * @brief Construct a new UI object
+             * 
+             * @param parent parent UI object
+             * @param self the properties of UI object
+             */
             UI(UI* parent = nullptr, Render::RenderProperties self = Render::RenderProperties());
+            
+            /**
+             * @brief Construct a new UI object
+             * 
+             * @param ui Copied object
+             */
             UI(const UI& ui);
+
+            /**
+             * @brief Copied assignment operator
+             * 
+             * @param ui Copied object
+             * @return UI& the reference of the object itself
+             */
             UI& operator=(const UI& ui);
+
+            /**
+             * @brief Destroy the UI object
+             * 
+             */
             virtual ~UI();
 
+            /**
+             * @brief Handle update
+             * 
+             * @param elipse the elipse time of last frame
+             */
             virtual void OnUpdate(const Timestep& elipse) = 0;
+
+            /**
+             * @brief Handle render
+             * 
+             */
             virtual void OnRender();
+
+            /**
+             * @brief Handle event
+             * 
+             * @param event event need to be handled
+             */
             virtual void OnEvent(Event::Event& event) = 0;
 
+            /**
+             * @brief Get the pointer of parent UI
+             * 
+             * @return const UI* the poiner of parent UI
+             */
             const UI* Parent() const;
+            
+            /**
+             * @brief Get the pointer of parent UI
+             * 
+             * @return const UI* the poiner of parent UI
+             */            
             const UI* Parent();
 
+            /**
+             * @brief Get the render properties of the object
+             * 
+             * @return const Render::RenderProperties& the reference of render properties
+             */
             const Render::RenderProperties& Self() const;
+
+            /**
+             * @brief Get the render properties of the object
+             * 
+             * @return const Render::RenderProperties& the reference of render properties
+             */
             Render::RenderProperties& Self();
 
+            /**
+             * @brief Get the render properties for rendering
+             * 
+             * @return const Render::RenderProperties& the refernce of render properties
+             */
             const Render::RenderProperties& Render() const;
+            
+            /**
+             * @brief Get the render properties for rendering
+             * 
+             * @return const Render::RenderProperties& the refernce of render properties
+             */
             const Render::RenderProperties& Render();
         protected:
-            UI* m_parent;
-            Render::RenderProperties m_self;
-            Render::RenderProperties m_render;
+            UI* m_parent; /*!< the pointer of parent UI*/
+            Render::RenderProperties m_self; /*!< the properties of the object*/
+            Render::RenderProperties m_render; /*!< the properties of rendering object */
         };
 
         inline const UI* UI::Parent() const

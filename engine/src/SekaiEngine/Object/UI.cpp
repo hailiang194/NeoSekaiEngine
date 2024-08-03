@@ -30,6 +30,11 @@ namespace SekaiEngine
 
         void UI::OnRender()
         {
+            if(m_parent == nullptr)
+            {
+                m_render = m_self;
+                return;
+            }
             //@Todo: Compute render properties
 
         }
