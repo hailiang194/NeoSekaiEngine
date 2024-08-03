@@ -44,3 +44,12 @@ jobs:
     steps:
       - name: install doxygen and graphviz
         run: sudo apt-get -y install doxygen graphviz
+      - name: setup library
+        run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
+      - name: build project with test for shared lib
+        run: cmake -S ./ -B ./build -DBUILD_DOC=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build --target EngineDoc
+      - name: Upload test result
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: build/html
