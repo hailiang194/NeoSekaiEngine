@@ -55,6 +55,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Math/Utility.h
     ./include/SekaiEngine/Render/Font.h
     ./include/SekaiEngine/Math/Collision.h
+    ./include/SekaiEngine/Object/UI.h
 )
 
 set(ENGINE_SOURCES
@@ -84,6 +85,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Math/Utility.cpp
     ./src/SekaiEngine/Render/Font.cpp
     ./src/SekaiEngine/Math/Collision.cpp
+    ./src/SekaiEngine/Object/UI.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
