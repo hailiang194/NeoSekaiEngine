@@ -43,4 +43,4 @@ jobs:
     needs: Build-Engine
     steps:
       - name: install doxygen and graphviz
-        run: apt-get -y install doxygen graphviz
+        run: sudo apt-get -y install doxygen graphviz
