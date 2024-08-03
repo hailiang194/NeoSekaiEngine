@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: install doxygen and graphviz
         run: sudo apt-get -y install doxygen graphviz
+      - name: Check out the repository code
+        uses: actions/checkout@v4
       - name: setup library
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
       - name: build project with test for shared lib
