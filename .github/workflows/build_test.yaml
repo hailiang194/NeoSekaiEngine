@@ -1,6 +1,6 @@
 name: Build and Test Engine
 run-name: ${{ github.ref }} on ${{ github.repository }} is being built and tested out Github actions
-on: [ push ]
+on: [ push, pull_request ]
 jobs:
   Build-Engine:
     strategy:
@@ -39,6 +39,7 @@ jobs:
           path: build/test-results.xml
   
   Generate-Docs:
+    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development'
     runs-on: "ubuntu-latest"
     needs: Build-Engine
     steps:
