@@ -209,7 +209,7 @@ namespace SekaiEngine
          */
         class WindowMovedEvent: public Event
         {
-public:
+        public:
             /**
              * @brief Construct a new Window Moved Event object
              * 

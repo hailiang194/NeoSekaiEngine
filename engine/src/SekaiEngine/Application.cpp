@@ -60,6 +60,14 @@ namespace SekaiEngine
             std::bind(&Application::OnApplicationTick, this, std::placeholders::_1)
         );
 
+        dispatcher.Dispatch<Event::ApplicationUpdateEvent>(
+            std::bind(&Application::OnApplicationUpdate, this, std::placeholders::_1)
+        );
+
+        dispatcher.Dispatch<Event::ApplicationRenderEvent>(
+            std::bind(&Application::OnApplicationRender, this, std::placeholders::_1)
+        );
+
         for(auto it = m_layerStack.end(); it != m_layerStack.begin();)
         {
             (*--it)->OnEvent(event);
