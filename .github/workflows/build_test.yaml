@@ -23,12 +23,12 @@ jobs:
         if: ${{ matrix.build_shared == 0 }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-ubuntu-static.xml
+          name: test-results-${{matrix.os}}-static.xml
           path: build/test-results.xml
 
       - name: Upload test result
         if: ${{ matrix.build_shared == 1 }}
         uses: actions/upload-artifact@v4
         with:
-          name: test-results-ubuntu-shared.xml
+          name: test-results-${{matrix.os}}-shared.xml
           path: build/test-results.xml
