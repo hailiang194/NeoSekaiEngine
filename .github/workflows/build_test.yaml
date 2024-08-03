@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
       - name: setup library
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
-      - name: build project with test for static lib
+      - name: build project with test for BUILD_SHARED_LIBS=${{ matrix.build_shared }}
         run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} && cmake --build ./build 
       - name: run test
         run: build/out/engine_test --gtest_output="xml:build/test-results.xml"
