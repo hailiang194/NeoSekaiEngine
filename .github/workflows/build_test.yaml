@@ -6,12 +6,14 @@ jobs:
     strategy:
       matrix:
         build_shared: [0, 1]
-    runs-on: ubuntu-latest
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
       - name: Check out the repository code
         uses: actions/checkout@v4
       - name: setup library
+        if: ${{ matrix.os != 'windows-latest' }}
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
       - name: build project with test for BUILD_SHARED_LIBS=${{ matrix.build_shared }}
         run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} && cmake --build ./build 
