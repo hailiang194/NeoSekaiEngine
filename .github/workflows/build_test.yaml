@@ -1,0 +1,8 @@
+name: Build and Test Engine
+run-name: ${{ github.actor }} is testing out Github actions
+on: [ push ]
+jobs:
+  Build-Engine:
+    run-ons: ubuntu-latest
+    steps:
+      - run: echo "Hello World"
