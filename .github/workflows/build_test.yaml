@@ -3,6 +3,9 @@ run-name: ${{ github.ref }} on ${{ github.repository }} is being built and teste
 on: [ push ]
 jobs:
   Build-Engine:
+    strategy:
+      matrix:
+        build_shared: [0, 1]
     runs-on: ubuntu-latest
     steps:
       - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
@@ -11,7 +14,7 @@ jobs:
       - name: setup library
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
       - name: build project with test for static lib
-        run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=0 && cmake --build ./build 
+        run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} && cmake --build ./build 
       - name: run test
         run: build/out/engine_test --gtest_output="xml:build/test-results.xml"
       - name: Upload test result
