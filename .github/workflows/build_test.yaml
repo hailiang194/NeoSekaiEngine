@@ -37,3 +37,10 @@ jobs:
         with:
           name: test-results-${{matrix.os}}-shared.xml
           path: build/test-results.xml
+  
+  Generate-Docs:
+    runs-on: "ubuntu-latest"
+    needs: Build-Engine
+    steps:
+      - name: install doxygen and graphviz
+        run: apt-get -y install doxygen graphviz
