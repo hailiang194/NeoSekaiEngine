@@ -60,7 +60,7 @@ namespace SekaiEngine
              * 
              * @param elipse the elipse time of last frame
              */
-            virtual void OnUpdate(const Timestep& elipse);
+            virtual void OnUpdate(const Timestep& elipse) override;
 
             /**
              * @brief Handle render
