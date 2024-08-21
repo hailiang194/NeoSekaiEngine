@@ -1,7 +1,7 @@
 # NeoSekaiEngine
 Neo Sekai Game engine - my 2D game engine built base on what I know about game development. This game engine can run on Windows, Linux and Web platform
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/circleci/9pD66vX23amDSKgoigg7fW/730e2aaf-863d-4832-a190-ca8aa0380ee2/tree/main)
+[![GithubAction](https://github.com/hailiang194/NeoSekaiEngine/actions/workflows/build_test.yaml/badge.svg?branch=main)](https://github.com/hailiang194/NeoSekaiEngine/actions/workflows/build_test.yaml/badge.svg?branch=main)
 
 ## Libraries
 * raylib 4.2.0
