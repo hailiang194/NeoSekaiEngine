@@ -38,6 +38,16 @@ namespace SekaiEngine
             //@Todo: Compute render properties
 
         }
+
+        void UI::SetPosition(const Math::Vector2D& position)
+        {
+            m_self.Offset = position;
+        }
+
+        void UI::SetScale(const Math::Vector2D& scale)
+        {
+            m_self.Scale = scale;
+        }
     } // namespace Object
     
 } // namespace SekaiEngine

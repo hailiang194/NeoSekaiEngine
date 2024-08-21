@@ -76,6 +76,20 @@ namespace SekaiEngine
             virtual void OnEvent(Event::Event& event) = 0;
 
             /**
+             * @brief Set the Position of the object
+             * 
+             * @param position new position
+             */
+            virtual void SetPosition(const Math::Vector2D& position);
+
+            /**
+             * @brief Set the Scale of the object
+             * 
+             * @param scale new scale
+             */
+            virtual void SetScale(const Math::Vector2D& scale);
+
+            /**
              * @brief Get the pointer of parent UI
              * 
              * @return const UI* the poiner of parent UI
@@ -101,7 +115,7 @@ namespace SekaiEngine
              * 
              * @return const Render::RenderProperties& the reference of render properties
              */
-            Render::RenderProperties& Self();
+            const Render::RenderProperties& Self();
 
             /**
              * @brief Get the render properties for rendering
@@ -138,9 +152,9 @@ namespace SekaiEngine
             return m_self;
         }
 
-        inline Render::RenderProperties& UI::Self()
+        inline const Render::RenderProperties& UI::Self()
         {
-            return const_cast<Render::RenderProperties&>(static_cast<const UI&>(*this).Self());
+            return static_cast<const UI&>(*this).Self();
         }
 
         inline const Render::RenderProperties& UI::Render() const

@@ -1,4 +1,6 @@
 #include "SekaiEngine/Object/TextureUI.h"
+#include "SekaiEngine/Render/Params/TextureRenderParams.h"
+#include "SekaiEngine/Render/RenderCommand.h"
 
 namespace SekaiEngine
 {
@@ -20,6 +22,7 @@ namespace SekaiEngine
             m_texture = ui.m_texture;
             return (*this);
         }
+
         TextureUI::~TextureUI()
         {
         }
@@ -31,10 +34,22 @@ namespace SekaiEngine
         void TextureUI::OnRender()
         {
             UI::OnRender();
+            SekaiEngine::Render::TextureRenderParams param(m_render, m_texture);
+            SekaiEngine::Render::RenderCommand::Render(param);
         }
 
         void TextureUI::OnEvent(Event::Event &event)
         {
+        }
+
+        void TextureUI::SetPosition(const Math::Vector2D& position)
+        {
+            UI::SetPosition(position);
+        }
+
+        void TextureUI::SetScale(const Math::Vector2D& scale)
+        {
+            UI::SetScale(scale);
         }
 
     } // namespace Object

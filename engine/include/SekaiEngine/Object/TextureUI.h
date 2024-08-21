@@ -75,7 +75,19 @@ namespace SekaiEngine
              */
             virtual void OnEvent(Event::Event& event) override;
 
+            /**
+             * @brief Set the Position of the object
+             * 
+             * @param position new position
+             */
+            void SetPosition(const Math::Vector2D& position) override;
 
+            /**
+             * @brief Set the Scale of the object
+             * 
+             * @param scale new scale
+             */
+            void SetScale(const Math::Vector2D& scale) override;
 
         private:
             Render::Texture m_texture; /*!< texture of UI object*/
