@@ -90,6 +90,27 @@ namespace SekaiEngine
             virtual void SetScale(const Math::Vector2D& scale);
 
             /**
+             * @brief Set the Tint for object
+             * 
+             * @param tint new tint
+             */
+            virtual void SetTint(const Render::Color& tint);
+
+            /**
+             * @brief Set the Origin rotation for object
+             * 
+             * @param origin new origin
+             */
+            virtual void SetOrigin(const Math::Vector2D& origin);
+
+            /**
+             * @brief Set the Rotation in degree for object
+             * 
+             * @param rotation new rotation in degree
+             */
+            virtual void SetRotation(const float& rotation);
+
+            /**
              * @brief Get the pointer of parent UI
              * 
              * @return const UI* the poiner of parent UI

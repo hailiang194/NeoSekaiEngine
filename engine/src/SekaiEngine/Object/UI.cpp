@@ -48,6 +48,21 @@ namespace SekaiEngine
         {
             m_self.Scale = scale;
         }
+
+        void UI::SetTint(const Render::Color& tint)
+        {
+            m_self.Tint = tint;
+        }
+
+        void UI::SetOrigin(const Math::Vector2D& origin)
+        {
+            m_self.Origin = origin;
+        }
+
+        void UI::SetRotation(const float& rotation)
+        {
+            m_self.Rotation = rotation;
+        }
     } // namespace Object
     
 } // namespace SekaiEngine

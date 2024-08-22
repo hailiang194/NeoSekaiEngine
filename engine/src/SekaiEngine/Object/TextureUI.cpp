@@ -52,6 +52,20 @@ namespace SekaiEngine
             UI::SetScale(scale);
         }
 
+        void TextureUI::SetTint(const Render::Color& tint)
+        {
+            UI::SetTint(tint);
+        }
+
+        void TextureUI::SetOrigin(const Math::Vector2D& origin)
+        {
+            UI::SetOrigin(origin);
+        }
+
+        void TextureUI::SetRotation(const float& rotation)
+        {
+            UI::SetRotation(rotation);
+        }
     } // namespace Object
 
 } // namespace SekaiEngine

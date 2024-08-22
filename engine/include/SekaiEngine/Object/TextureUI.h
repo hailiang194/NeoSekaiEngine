@@ -89,6 +89,26 @@ namespace SekaiEngine
              */
             void SetScale(const Math::Vector2D& scale) override;
 
+            /**
+             * @brief Set the Tint for object
+             * 
+             * @param tint new tint
+             */
+            void SetTint(const Render::Color& tint) override;
+
+            /**
+             * @brief Set the Origin rotation for object
+             * 
+             * @param origin new origin
+             */
+            void SetOrigin(const Math::Vector2D& origin) override;
+
+            /**
+             * @brief Set the Rotation in degree for object
+             * 
+             * @param rotation new rotation in degree
+             */
+            void SetRotation(const float& rotation) override;
         private:
             Render::Texture m_texture; /*!< texture of UI object*/
         };
