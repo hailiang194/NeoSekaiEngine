@@ -1,0 +1,144 @@
+digraph LifeCycle {
+	fontname="Helvetica,Arial,sans-serif"
+	node [fontname="Helvetica,Arial,sans-serif"]
+	edge [fontname="Helvetica,Arial,sans-serif"]
+
+    start_game -> init_start;
+    init_end -> check_game_run;
+    check_game_run -> game_start[label="True"];
+    game_end -> check_game_run;
+    check_game_run -> destroy_start[label="False"];
+    destroy_end -> exit_game;
+
+	subgraph cluster_0 {
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		init_start 
+        -> init_window
+        -> init_layer_stack 
+        -> init_textures 
+        -> init_fonts
+        -> init_add_custom_layer
+        -> init_end;
+		label = "Initialize application";
+        labeljust="l"
+        init_start [
+            shape=circle
+            style=filled
+            color=black
+            label=""
+        ];
+        init_end [
+            shape=doublecircle
+            style=filled
+            color=black
+            label=""
+        ];
+        init_window[
+            label="Initialize window"
+        ];
+        init_layer_stack[
+            label="Initialize layer stack"
+        ]
+        init_textures[
+            label="Initialize textures configuration"
+        ]
+        init_fonts[
+            label="Initialize font configuration"
+        ]
+        init_add_custom_layer [
+            label="Your layer is added here"
+        ]
+	}
+
+	subgraph cluster_1 {
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		destroy_start 
+        -> destroy_fonts 
+        -> destroy_textures 
+        -> destroy_layer_stack 
+        -> destroy_window 
+        -> destroy_end;
+		label = "Destroy application";
+        labeljust="l"
+        destroy_start [
+            shape=circle
+            style=filled
+            color=black
+            label=""
+        ];
+        destroy_end [
+            shape=doublecircle
+            style=filled
+            color=black
+            label=""
+        ];
+        destroy_fonts [
+            label="Unload fonts and font configuration"
+        ];
+        destroy_textures [
+            label="Unload texture and texture configuration"
+        ];
+        destroy_layer_stack [
+            label="Unload layer stack"
+        ]
+        destroy_window [
+            label="Unload window"
+        ]
+	}
+
+    subgraph cluster_2 {
+		style=filled;
+		color=lightgrey;
+		node [style=filled,color=white];
+		game_start
+        -> game_update_elipse
+        -> game_update_window
+        -> update_layer
+        -> render_layer
+        -> game_end;
+		label = "Game loop";
+        labeljust="l"
+        game_start [
+            shape=circle
+            style=filled
+            color=black
+            label=""
+        ];
+        game_end [
+            shape=doublecircle
+            style=filled
+            color=black
+            label=""
+        ];
+        game_update_elipse [
+            label="Update \ngame timer and elipse"
+        ];
+        game_update_window [
+            label="Update window \nand handle window event"
+        ];
+        update_layer [
+            label="Update game layer stack";
+        ];
+        render_layer [
+            label="Render game layer stack"
+        ]
+	}
+
+    check_game_run [
+        shape=diamond
+        label="Game is running"
+    ]
+
+    start_game [
+        label="Start game"
+    ]
+
+    exit_game [
+        label="Exit game"
+    ]
+
+}
