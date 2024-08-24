@@ -35,7 +35,7 @@ namespace SekaiEngine
                 m_render = m_self;
                 return;
             }
-            //@Todo: Compute render properties
+            Render::UpdateRenderProperies(m_parent->m_render, m_self, m_render);
 
         }
 
