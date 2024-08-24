@@ -1,0 +1,5 @@
+/** \page NeoSekaiEngine Lifecycle
+\section main_lifecycle The lifecycle of whole game
+Here is the life cycle of whole game
+\dotfile lifecycle/lifecycle.dot
+*/
