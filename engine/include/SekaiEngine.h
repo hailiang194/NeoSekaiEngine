@@ -45,6 +45,7 @@
 #include "SekaiEngine/Object/CircleUI.h"
 #include "SekaiEngine/Object/RectangleUI.h"
 #include "SekaiEngine/Object/GroupUI.h"
+#include "SekaiEngine/Audio/Device.h"
 
 #include "version.h"
 

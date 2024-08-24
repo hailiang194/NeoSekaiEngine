@@ -21,6 +21,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Texture.cpp
     ./src/wrapper/raylib/Timer.cpp
     ./src/wrapper/raylib/Font.cpp
+    ./src/wrapper/raylib/AudioDevice.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -59,6 +60,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/CircleUI.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/RectangleUI.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/GroupUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Device.h
 )
 
 include(cmake/set_include_all_header.cmake)
@@ -95,6 +97,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Object/CircleUI.cpp
     ./src/SekaiEngine/Object/RectangleUI.cpp
     ./src/SekaiEngine/Object/GroupUI.cpp
+
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

@@ -15,7 +15,7 @@ namespace SekaiEngine
     Application* Application::g_instance = nullptr;
 
     Application::Application()
-        :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
+        :window(IWindow::Create()), m_audioDevice(), m_running(true), m_layerStack(), m_timer()
     {
         std::cout << "You are using NeoSekaiEngine v" << SEKAI_ENGINE_VERSION << std::endl;
         Application::g_instance = this;

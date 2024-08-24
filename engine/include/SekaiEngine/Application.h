@@ -16,6 +16,7 @@
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Layer/LayerStack.h"
 #include "SekaiEngine/Timer.h"
+#include "SekaiEngine/Audio/Device.h"
 
 namespace SekaiEngine
 {
@@ -50,6 +51,13 @@ namespace SekaiEngine
          * @return const IWindow& The Window object
          */
         EXTENDAPI const IWindow& Window();
+
+        /**
+         * @brief Get the reference of AudioDevice
+         * 
+         * @return Device& Audio device object
+         */
+        EXTENDAPI SekaiEngine::Audio::Device& AudioDevice();
 
         /**
          * @brief Handle events
@@ -166,6 +174,8 @@ namespace SekaiEngine
         bool m_running;
         Timer m_timer;
         Layer::LayerStack m_layerStack;
+        SekaiEngine::Audio::Device m_audioDevice;
+
 
         static Application* g_instance;
     };
@@ -173,6 +183,11 @@ namespace SekaiEngine
     inline const IWindow& Application::Window()
     {
         return *window;
+    }
+
+    inline SekaiEngine::Audio::Device& Application::AudioDevice()
+    {
+        return m_audioDevice;
     }
 
     /**
