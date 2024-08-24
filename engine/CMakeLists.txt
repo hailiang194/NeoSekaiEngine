@@ -54,6 +54,11 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Font.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Collision.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/EntryPoint.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/UI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/TextureUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/CircleUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/RectangleUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/GroupUI.h
 )
 
 include(cmake/set_include_all_header.cmake)
@@ -85,6 +90,11 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Math/Utility.cpp
     ./src/SekaiEngine/Render/Font.cpp
     ./src/SekaiEngine/Math/Collision.cpp
+    ./src/SekaiEngine/Object/UI.cpp
+    ./src/SekaiEngine/Object/TextureUI.cpp
+    ./src/SekaiEngine/Object/CircleUI.cpp
+    ./src/SekaiEngine/Object/RectangleUI.cpp
+    ./src/SekaiEngine/Object/GroupUI.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

@@ -3,7 +3,7 @@
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
  * @version 0.2
- * @date 2024-08-21
+ * @date 2024-08-24
  * 
  * @copyright Copyright (c) 2024
  * 
@@ -40,6 +40,11 @@
 #include "SekaiEngine/Render/Font.h"
 #include "SekaiEngine/Math/Collision.h"
 #include "SekaiEngine/EntryPoint.h"
+#include "SekaiEngine/Object/UI.h"
+#include "SekaiEngine/Object/TextureUI.h"
+#include "SekaiEngine/Object/CircleUI.h"
+#include "SekaiEngine/Object/RectangleUI.h"
+#include "SekaiEngine/Object/GroupUI.h"
 
 #include "version.h"
 
