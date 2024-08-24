@@ -59,6 +59,15 @@ namespace SekaiEngine
             Math::Vector2D Origin; /*!< Rotation origin*/
             float Rotation; /*!< The rotation angle in degree*/
         };
+        
+        /**
+         * @brief Update render properties for group UI object
+         * 
+         * @param parent Render properties of parent
+         * @param self Render properties of the object
+         * @param render Render properties for rendering
+         */
+        void UpdateRenderProperies(const RenderProperties& parent, const RenderProperties& self, RenderProperties render);
     } // namespace Render
     
 } // namespace SekaiEngine

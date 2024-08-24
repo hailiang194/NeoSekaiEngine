@@ -1,5 +1,6 @@
 #include "SekaiEngine/Render/RenderProperties.h"
 
+
 namespace SekaiEngine
 {
     namespace Render
@@ -31,6 +32,29 @@ namespace SekaiEngine
         {
 
         }
+
+        void UpdateRenderProperies(const RenderProperties &parent, const RenderProperties &self, RenderProperties render)
+        {
+            render.Offset.X() = parent.Offset.X() + parent.Scale.X() * self.Offset.X();
+            render.Offset.Y() = parent.Offset.Y() + parent.Scale.Y() * self.Offset.Y();
+
+            render.Scale.X() = parent.Scale.X() * self.Scale.X();
+            render.Scale.Y() = parent.Scale.Y() * self.Scale.Y();
+
+            ColorParser parser;
+            parser.value.r = static_cast<uint8_t>(parent.Tint.r() * self.Tint.r() / 255);
+            parser.value.g = static_cast<uint8_t>(parent.Tint.g() * self.Tint.g() / 255);
+            parser.value.b = static_cast<uint8_t>(parent.Tint.b() * self.Tint.b() / 255);
+            parser.value.a = static_cast<uint8_t>(parent.Tint.a() * self.Tint.a() / 255);
+
+            render.Tint = (Render::Color)parser.code;
+
+            render.Origin.X() = parent.Origin.X() + parent.Scale.X() * self.Origin.X();
+            render.Origin.Y() = parent.Origin.Y() + parent.Scale.Y() * self.Origin.Y();
+
+            render.Rotation = parent.Rotation + self.Rotation;
+        }
     } // namespace Render
+
     
 } // namespace SekaiEngine
