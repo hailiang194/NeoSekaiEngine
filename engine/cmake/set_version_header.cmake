@@ -1,2 +1,2 @@
 message(STATUS "Configure version")
-configure_file(./config/version.h.cmake ${CMAKE_BINARY_DIR}/config/version.h)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config/version.h.cmake ${CMAKE_BINARY_DIR}/config/version.h)

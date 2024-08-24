@@ -5,10 +5,10 @@ include(cmake/import_engine.cmake)
 include(cmake/set_version_header.cmake)
 
 set(WRAPPER_RAYLIB_HEADERS
-    ./include/wrapper/raylib/Window.h
-    ./include/wrapper/raylib/Parser.h
-    ./include/wrapper/raylib/Texture.h
-    ./include/wrapper/raylib/Font.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Window.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Parser.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Texture.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Font.h
 )
 
 set(WRAPPER_RAYLIB_SOURCES
@@ -25,42 +25,43 @@ set(WRAPPER_RAYLIB_SOURCES
 
 set(ENGINE_PUBLIC_HEADERS
     ${WRAPPER_RAYLIB_HEADERS}
-    ./include/SekaiEngine.h
-    ./include/SekaiEngine/EntryPoint.h
-    ./include/SekaiEngine/BaseType.h
-    ./include/SekaiEngine/Application.h
-    ./include/SekaiEngine/Window.h
-    ./include/SekaiEngine/Event/Event.h
-    ./include/SekaiEngine/Event/WindowEvent.h
-    ./include/SekaiEngine/Event/ApplicationEvent.h
-    ./include/SekaiEngine/Layer/Layer.h
-    ./include/SekaiEngine/Layer/LayerStack.h
-    ./include/SekaiEngine/Input.h
-    ./include/SekaiEngine/Math/Vector.h
-    ./include/SekaiEngine/Render/RendererAPI.h
-    ./include/SekaiEngine/Render/Color.h
-    ./include/SekaiEngine/Render/RenderCommand.h
-    ./include/SekaiEngine/Render/Renderer.h
-    ./include/SekaiEngine/Render/Camera.h
-    ./include/SekaiEngine/Timer.h
-    ./include/SekaiEngine/Render/Texture.h
-    ./include/SekaiEngine/Shape/Shape.h
-    ./include/SekaiEngine/Shape/Circle.h
-    ./include/SekaiEngine/Shape/Rectangle.h
-    ./include/SekaiEngine/Render/RenderProperties.h
-    ./include/SekaiEngine/Render/Params/RenderParams.h
-    ./include/SekaiEngine/Render/Params/TextureRenderParams.h
-    ./include/SekaiEngine/Render/Params/RectangleRenderParams.h
-    ./include/SekaiEngine/Render/Params/CircleRenderParams.h
-    ./include/SekaiEngine/Math/Utility.h
-    ./include/SekaiEngine/Render/Font.h
-    ./include/SekaiEngine/Math/Collision.h
-    ./include/SekaiEngine/Object/UI.h
-    ./include/SekaiEngine/Object/TextureUI.h
-    ./include/SekaiEngine/Object/CircleUI.h
-    ./include/SekaiEngine/Object/RectangleUI.h
-    ./include/SekaiEngine/Object/GroupUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/BaseType.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Application.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Window.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Event/Event.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Event/WindowEvent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Event/ApplicationEvent.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Layer/Layer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Layer/LayerStack.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Input.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Vector.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/RendererAPI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Color.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/RenderCommand.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Renderer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Camera.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Timer.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Texture.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Shape/Shape.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Shape/Circle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Shape/Rectangle.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/RenderProperties.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/RenderParams.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/TextureRenderParams.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/RectangleRenderParams.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/CircleRenderParams.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Utility.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Font.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Collision.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/EntryPoint.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/UI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/TextureUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/CircleUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/RectangleUI.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/GroupUI.h
 )
+
+include(cmake/set_include_all_header.cmake)
 
 set(ENGINE_SOURCES
     ${WRAPPER_RAYLIB_SOURCES}
