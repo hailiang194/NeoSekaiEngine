@@ -1,59 +1,59 @@
 /**
- * @file TextureUI.h
+ * @file CircleUI.h
  * @author Luong The Hai (hailuongthe2000@gmail.com)
- * @brief the UI object of texture
+ * @brief UI for circle
  * @version 0.1
- * @date 2024-08-03
+ * @date 2024-08-24
  * 
  * @copyright Copyright (c) 2024
  * 
  */
-#ifndef _SEKAI_ENGINE_OBJECT_TEXTURE_UI_H_
-#define _SEKAI_ENGINE_OBJECT_TEXTURE_UI_H_
+#ifndef _SEKAI_ENGINE_OBJECT_CIRCLE_UI_H_
+#define _SEKAI_ENGINE_OBJECT_CIRCLE_UI_H_
 
-#include "./UI.h"
-#include "SekaiEngine/Render/Texture.h"
+#include "UI.h"
+#include "SekaiEngine/Shape/Circle.h"
 
 namespace SekaiEngine
 {
     namespace Object
     {
         /**
-         * @brief UI object for texture
+         * @brief UI object for circle
          * 
          */
-        class EXTENDAPI TextureUI: public UI
+        class EXTENDAPI CircleUI: public UI 
         {
         public:
             /**
              * @brief Construct a new Texture UI object
              * 
-             * @param texture the texture of UI
+             * @param circle the circle of UI
              * @param parent the pointer of parent UI
              * @param self the render properties of the object
              */
-            TextureUI(const Render::Texture& texture, UI* parent = nullptr, Render::RenderProperties self = Render::RenderProperties());
+            CircleUI(const Shape::Circle& circle, UI* parent = nullptr, Render::RenderProperties self = Render::RenderProperties());
             
             /**
              * @brief Construct a new Texture UI object
              * 
              * @param ui copied object
              */
-            TextureUI(const TextureUI& ui);
+            CircleUI(const CircleUI& ui);
 
             /**
              * @brief Copied assignment operator
              * 
              * @param ui Copied object
-             * @return TextureUI& the reference of the object itself
+             * @return CircleUI& the reference of the object itself
              */
-            TextureUI& operator=(const TextureUI& ui);
+            CircleUI& operator=(const CircleUI& ui);
 
             /**
              * @brief Destroy the Texture UI object
              * 
              */
-            virtual ~TextureUI();
+            virtual ~CircleUI();
 
             /**
              * @brief Handle update
@@ -110,11 +110,11 @@ namespace SekaiEngine
              */
             void SetRotation(const float& rotation) override;
         protected:
-            Render::Texture m_texture; /*!< texture of UI object*/
+            Shape::Circle m_circle;
         };
     } // namespace Object
     
 } // namespace SekaiEngine
 
 
-#endif //!_SEKAI_ENGINE_OBJECT_TEXTURE_UI_H_
+#endif//!#define _SEKAI_ENGINE_OBJECT_CIRCLE_UI_H_

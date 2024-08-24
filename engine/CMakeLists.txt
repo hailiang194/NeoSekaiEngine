@@ -57,6 +57,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Math/Collision.h
     ./include/SekaiEngine/Object/UI.h
     ./include/SekaiEngine/Object/TextureUI.h
+    ./include/SekaiEngine/Object/CircleUI.h
 )
 
 set(ENGINE_SOURCES
@@ -88,6 +89,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Math/Collision.cpp
     ./src/SekaiEngine/Object/UI.cpp
     ./src/SekaiEngine/Object/TextureUI.cpp
+    ./src/SekaiEngine/Object/CircleUI.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
