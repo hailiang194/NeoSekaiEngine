@@ -1,17 +1,17 @@
 #include "SekaiEngine.h"
-#include "SekaiEngine/Object/CircleUI.h"
+#include "SekaiEngine/Object/RectangleUI.h"
 #include <iostream>
 
 class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     ExampleLayer()
-        :circleUI(SekaiEngine::Shape::Circle(SekaiEngine::Math::Vector2D(10.0f, 10.0f), 10.0f))
+        :rectangleUI(SekaiEngine::Shape::Rectangle(SekaiEngine::Math::Vector2D(10.0f, 10.0f), 10.0f, 20.0f))
     {
     }
 
     ExampleLayer(const ExampleLayer& layer)
-        :circleUI(layer.circleUI)
+        :rectangleUI(layer.rectangleUI)
     {
     }
 
@@ -22,24 +22,24 @@ public:
 
     void OnEvent(SekaiEngine::Event::Event& event) override
     {
-        circleUI.OnEvent(event);
+        rectangleUI.OnEvent(event);
     }
 
     void OnUpdate(const SekaiEngine::Timestep& elipse) override
     {
-        circleUI.OnUpdate(elipse);
-        static SekaiEngine::Math::Vector2D temp;
-        temp.X()  += (0.01 * elipse.ToMiliseconds());
-        circleUI.SetScale(temp);
+        rectangleUI.OnUpdate(elipse);
+        static SekaiEngine::Math::Vector2D temp(10.0f, 10.0f);
+        //temp.X()  += (10.0f * elipse.ToMiliseconds());
+        rectangleUI.SetScale(temp);
         //textureUI.Self().Offset.X() += (0.01 * elipse.ToMiliseconds());
     }
 
     void OnRender() override
     {
-        circleUI.OnRender();
+        rectangleUI.OnRender();
     }
 private:
-    SekaiEngine::Object::CircleUI circleUI;
+    SekaiEngine::Object::RectangleUI rectangleUI;
 };
 
 

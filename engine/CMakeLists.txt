@@ -58,6 +58,7 @@ set(ENGINE_PUBLIC_HEADERS
     ./include/SekaiEngine/Object/UI.h
     ./include/SekaiEngine/Object/TextureUI.h
     ./include/SekaiEngine/Object/CircleUI.h
+    ./include/SekaiEngine/Object/RectangleUI.h
 )
 
 set(ENGINE_SOURCES
@@ -90,6 +91,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Object/UI.cpp
     ./src/SekaiEngine/Object/TextureUI.cpp
     ./src/SekaiEngine/Object/CircleUI.cpp
+    ./src/SekaiEngine/Object/RectangleUI.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
