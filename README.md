@@ -71,7 +71,7 @@ After that, It's going to generate a project for you
 ### Web platform
 At the root project folder run
 ``` bash
-emcmake cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0
+emcmake cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 "-DCMAKE_EXE_LINKER_FLAGS=-s USE_GLFW=3"
 ```
 ## Build project
 ### Desktop platform
