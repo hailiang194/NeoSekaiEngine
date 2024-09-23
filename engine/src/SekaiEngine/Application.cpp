@@ -7,6 +7,7 @@
 #include "SekaiEngine/Input.h"
 #include "SekaiEngine/Render/Texture.h"
 #include "SekaiEngine/Render/Font.h"
+#include "SekaiEngine/Audio/Sound.h"
 #include <iostream>
 #include "version.h"
 
@@ -22,6 +23,7 @@ namespace SekaiEngine
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
         SekaiEngine::Render::initFonts();
+        SekaiEngine::Sound::initSounds();
         m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
@@ -32,6 +34,7 @@ namespace SekaiEngine
 
     Application::~Application()
     {
+        SekaiEngine::Sound::unloadSounds();
         SekaiEngine::Render::unloadFonts();
         SekaiEngine::Render::destroyTextures();
         delete window;

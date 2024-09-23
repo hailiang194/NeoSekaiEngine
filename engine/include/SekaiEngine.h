@@ -3,7 +3,7 @@
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
  * @version 0.2
- * @date 2024-08-24
+ * @date 2024-09-23
  * 
  * @copyright Copyright (c) 2024
  * 
@@ -46,6 +46,7 @@
 #include "SekaiEngine/Object/RectangleUI.h"
 #include "SekaiEngine/Object/GroupUI.h"
 #include "SekaiEngine/Audio/Device.h"
+#include "SekaiEngine/Audio/Sound.h"
 
 #include "version.h"
 
