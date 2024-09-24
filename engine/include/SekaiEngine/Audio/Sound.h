@@ -2,6 +2,7 @@
 #define _SEKAI_ENGINE_AUDIO_SOUND_H_
 
 #include "SekaiEngine/BaseType.h"
+#include <cstddef>
 
 namespace SekaiEngine
 {

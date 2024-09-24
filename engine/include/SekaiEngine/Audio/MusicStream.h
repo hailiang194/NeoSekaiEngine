@@ -3,6 +3,7 @@
 
 #include "SekaiEngine/BaseType.h"
 #include "SekaiEngine/Timer.h"
+#include <cstddef>
 
 namespace SekaiEngine
 {
