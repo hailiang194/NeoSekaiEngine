@@ -8,6 +8,7 @@
 #include "SekaiEngine/Render/Texture.h"
 #include "SekaiEngine/Render/Font.h"
 #include "SekaiEngine/Audio/Sound.h"
+#include "SekaiEngine/Audio/MusicStream.h"
 #include <iostream>
 #include "version.h"
 
@@ -24,6 +25,7 @@ namespace SekaiEngine
         SekaiEngine::Render::initTextures();
         SekaiEngine::Render::initFonts();
         SekaiEngine::Sound::initSounds();
+        SekaiEngine::Sound::initMusicStreams();
         m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
@@ -34,6 +36,7 @@ namespace SekaiEngine
 
     Application::~Application()
     {
+        SekaiEngine::Sound::unloadMusicStreams();
         SekaiEngine::Sound::unloadSounds();
         SekaiEngine::Render::unloadFonts();
         SekaiEngine::Render::destroyTextures();

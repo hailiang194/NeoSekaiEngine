@@ -17,7 +17,7 @@ namespace SekaiEngine
             sounds.clear();
         }
 
-        int loadSound(const char* filename)
+        size_t loadSound(const char* filename)
         {
             ::Sound sound = ::LoadSound(filename);
             if(!IsSoundReady(sound))

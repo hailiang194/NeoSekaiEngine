@@ -23,6 +23,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Font.cpp
     ./src/wrapper/raylib/AudioDevice.cpp
     ./src/wrapper/raylib/Sound.cpp
+    ./src/wrapper/raylib/MusicStream.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -63,6 +64,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Object/GroupUI.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Device.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Sound.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/MusicStream.h
 )
 
 include(cmake/set_include_all_header.cmake)
@@ -100,7 +102,7 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Object/RectangleUI.cpp
     ./src/SekaiEngine/Object/GroupUI.cpp
     ./src/SekaiEngine/Audio/Sound.cpp
-
+    ./src/SekaiEngine/Audio/MusicStream.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)

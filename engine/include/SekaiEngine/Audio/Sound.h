@@ -11,7 +11,7 @@ namespace SekaiEngine
         {
         public:
             Sound(const char* filename);
-            Sound(const int& id);
+            Sound(const size_t& id);
             Sound(const Sound& sound);
             Sound& operator=(const Sound& sound);
             ~Sound();
@@ -19,8 +19,8 @@ namespace SekaiEngine
             const bool IsValid() const;
             const bool IsValid();
 
-            const int& Id() const;
-            const int& Id();
+            const size_t& Id() const;
+            const size_t& Id();
 
             void Play();
             void Stop();
@@ -30,11 +30,11 @@ namespace SekaiEngine
             const bool IsPlaying() const;
             const bool IsPlaying();
         private:
-            int m_id;
+            size_t m_id;
         };
 
         void initSounds();
-        int loadSound(const char* filename);
+        size_t loadSound(const char* filename);
         void unloadSounds();
 
         inline const bool Sound::IsValid()
@@ -42,12 +42,12 @@ namespace SekaiEngine
             return static_cast<const Sound&>(*this).IsValid();
         }
 
-        inline const int& Sound::Id() const
+        inline const size_t& Sound::Id() const
         {
             return m_id;
         }
 
-        inline const int& Sound::Id()
+        inline const size_t& Sound::Id()
         {
             return static_cast<const Sound&>(*this).Id();
         }

@@ -9,7 +9,7 @@ namespace SekaiEngine
                 m_id = loadSound(filename);
             }
 
-            Sound::Sound(const int& id)
+            Sound::Sound(const size_t& id)
                 :m_id(id)
             {
 
