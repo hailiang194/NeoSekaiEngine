@@ -30,6 +30,14 @@ namespace SekaiEngine
 
         }
 
+        void updateMusicStream()
+        {
+            for(std::vector<::Music>::const_iterator iter = musics.cbegin(); iter != musics.cend(); ++iter)
+            {
+                ::UpdateMusicStream(*iter);
+            }
+        }
+
         void unloadMusicStreams()
         {
             for(std::vector<::Music>::const_iterator iter = musics.cbegin(); iter != musics.cend(); ++iter)

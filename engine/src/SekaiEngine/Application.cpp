@@ -117,6 +117,7 @@ namespace SekaiEngine
 
     bool Application::OnApplicationUpdate(Event::Event& event)
     {
+        Sound::updateMusicStream();
         return true;
     }
 

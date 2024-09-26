@@ -44,6 +44,7 @@ namespace SekaiEngine
 
         void initMusicStreams();
         size_t loadMusicStream(const char* filename);
+        void updateMusicStream();
         void unloadMusicStreams();
 
         inline const size_t& MusicStream::Id() const
