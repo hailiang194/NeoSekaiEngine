@@ -6,12 +6,14 @@ class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     ExampleLayer()
-        :rectangleUI(SekaiEngine::Shape::Rectangle(SekaiEngine::Math::Vector2D(10.0f, 10.0f), 10.0f, 20.0f))
+        :m_sound("./Mission Completed.wav"),
+        m_music("./Stream Loops 2023-11-29.ogg")
     {
+        m_music.Play();
     }
 
     ExampleLayer(const ExampleLayer& layer)
-        :rectangleUI(layer.rectangleUI)
+        :m_sound(layer.m_sound), m_music(layer.m_music)
     {
     }
 
@@ -22,24 +24,27 @@ public:
 
     void OnEvent(SekaiEngine::Event::Event& event) override
     {
-        rectangleUI.OnEvent(event);
     }
 
     void OnUpdate(const SekaiEngine::Timestep& elipse) override
     {
-        rectangleUI.OnUpdate(elipse);
-        static SekaiEngine::Math::Vector2D temp(10.0f, 10.0f);
-        //temp.X()  += (10.0f * elipse.ToMiliseconds());
-        rectangleUI.SetScale(temp);
-        //textureUI.Self().Offset.X() += (0.01 * elipse.ToMiliseconds());
+        if(m_sound.IsValid() && SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KeyboardKey::KEY_SPACE))
+        {
+            m_sound.Play();
+        }
     }
 
     void OnRender() override
     {
-        rectangleUI.OnRender();
+        SekaiEngine::Render::API::DrawText("Press Space to play sound", 
+            SekaiEngine::Math::Vector2D(200.0f, 180.0f), 
+            (SekaiEngine::Render::Color)0xff0000ff,
+            20
+        );
     }
 private:
-    SekaiEngine::Object::RectangleUI rectangleUI;
+    SekaiEngine::Sound::Sound m_sound;
+    SekaiEngine::Sound::MusicStream m_music;
 };
 
 

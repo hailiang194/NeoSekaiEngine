@@ -7,6 +7,8 @@
 #include "SekaiEngine/Input.h"
 #include "SekaiEngine/Render/Texture.h"
 #include "SekaiEngine/Render/Font.h"
+#include "SekaiEngine/Audio/Sound.h"
+#include "SekaiEngine/Audio/MusicStream.h"
 #include <iostream>
 #include "version.h"
 
@@ -15,13 +17,15 @@ namespace SekaiEngine
     Application* Application::g_instance = nullptr;
 
     Application::Application()
-        :window(IWindow::Create()), m_running(true), m_layerStack(), m_timer()
+        :window(IWindow::Create()), m_audioDevice(), m_running(true), m_layerStack(), m_timer()
     {
         std::cout << "You are using NeoSekaiEngine v" << SEKAI_ENGINE_VERSION << std::endl;
         Application::g_instance = this;
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
         SekaiEngine::Render::initFonts();
+        SekaiEngine::Sound::initSounds();
+        SekaiEngine::Sound::initMusicStreams();
         m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
@@ -32,6 +36,8 @@ namespace SekaiEngine
 
     Application::~Application()
     {
+        SekaiEngine::Sound::unloadMusicStreams();
+        SekaiEngine::Sound::unloadSounds();
         SekaiEngine::Render::unloadFonts();
         SekaiEngine::Render::destroyTextures();
         delete window;
@@ -111,6 +117,7 @@ namespace SekaiEngine
 
     bool Application::OnApplicationUpdate(Event::Event& event)
     {
+        Sound::updateMusicStream();
         return true;
     }
 
