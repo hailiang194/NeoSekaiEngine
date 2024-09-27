@@ -39,7 +39,6 @@ jobs:
           path: build/test-results.xml
   
   Generate-Docs:
-    if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/development'
     runs-on: "ubuntu-latest"
     needs: Build-Engine
     steps:
@@ -55,4 +54,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: html-docs
-          path: build/html
+          path: build/doc/html
