@@ -5,6 +5,7 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 
 ## Libraries
 * raylib 4.2.0
+* GoogleTest 1.12.1 (For testing)
 
 **Note:** See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for third party notices
 
