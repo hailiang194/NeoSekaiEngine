@@ -1,4 +1,5 @@
 #include "SekaiEngine/Timer.h"
+#include "SekaiEngine/Math/Utility.h"
 
 namespace SekaiEngine
 {
@@ -27,6 +28,38 @@ namespace SekaiEngine
         return (*this);
     }
 
+#define TIMESTEP_COMPARE_VALUE Math::cmpFloat(m_time, cmpTimestep.m_time)
+    
+    bool Timestep::operator==(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE == 0; 
+    }
+
+    bool Timestep::operator!=(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE != 0;
+    }
+
+    bool Timestep::operator<(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE < 0;
+    }
+
+    bool Timestep::operator<=(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE <= 0;
+    }
+
+    bool Timestep::operator>(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE > 0;
+    }
+
+    bool Timestep::operator>=(const Timestep& cmpTimestep)
+    {
+        return TIMESTEP_COMPARE_VALUE >= 0;
+    }
+
     Timestep::~Timestep()
     {
 
@@ -49,6 +82,7 @@ namespace SekaiEngine
         m_latestFrameTime = timer.m_latestFrameTime;
         return (*this);
     }
+
 
     Timer::~Timer()
     {
