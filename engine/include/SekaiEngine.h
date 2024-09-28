@@ -2,8 +2,8 @@
  * @file SekaiEngine.h
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
- * @version 0.2
- * @date 2024-09-26
+ * @version 0.3
+ * @date 2024-09-28
  * 
  * @copyright Copyright (c) 2024
  * 
