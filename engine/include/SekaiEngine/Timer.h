@@ -38,9 +38,9 @@ namespace SekaiEngine
         Timestep(const Timestep& step);
 
         /**
-         * @brief Copied assignment operator
+         * @brief Assign the content of one Timestep to other
          * 
-         * @param step copied object
+         * @param step the object copy from
          * @return Timestep& the reference of the object itself
          */
         Timestep& operator=(const Timestep& step);
@@ -52,6 +52,60 @@ namespace SekaiEngine
          * @return Timestep& the reference of the object itself
          */
         Timestep& operator=(const float& time);
+
+        /**
+         * @brief Equal comparation operator
+         * 
+         * @param cmpTimestep compared timestep
+         * @return true 2 timesteps is equal
+         * @return false 2 timesteps is not equal
+         */
+        bool operator==(const Timestep& cmpTimestep);
+
+        /**
+         * @brief Not equal comparator operator
+         * 
+         * @param cmpTimestep compared timestep
+         * @return true 2 timesteps is not equal
+         * @return false 2 timesteps is equal
+         */
+        bool operator!=(const Timestep& cmpTimestep);
+
+        /**
+         * @brief Less than comparation operator
+         * 
+         * @param cmpTimestep the right-hand side timestep in comparation
+         * @return true the timestep is less than cmpTimestep
+         * @return false the timestep is not less than cmpTimestep
+         */
+        bool operator<(const Timestep& cmpTimestep);
+
+        /**
+         * @brief Less than or equal comparation operator
+         * 
+         * @param cmpTimestep the right-hand side timestep in comparation
+         * @return true the timestep is less than or equal to cmpTimestep
+         * @return false the timestep is not less than or equal to cmpTimestep
+         */
+        bool operator<=(const Timestep& cmpTimestep);
+
+        /**
+         * @brief Greater than comparation operator
+         * 
+         * @param cmpTimestep the right-hand side timestep in comparation
+         * @return true the timestep is greater than cmpTimestep
+         * @return false the timestep is not greater than cmpTimestep
+         */
+        bool operator>(const Timestep& cmpTimestep);
+
+        /**
+         * @brief Greater than or equal comparation operator
+         * 
+         * @param cmpTimestep the right-hand side timestep in comparation
+         * @return true the timestep is greater than or equal to cmpTimestep
+         * @return false the timestep is not greater than or equal to cmpTimestep
+         */
+        bool operator>=(const Timestep& cmpTimestep);
 
         /**
          * @brief Destroy the Timestep object
