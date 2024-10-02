@@ -44,22 +44,22 @@ private:
 };
 
 
-class InputMouse: public SekaiEngine::Application
+class Shapes: public SekaiEngine::Application
 {
 public:
-    InputMouse()
+    Shapes()
         :Application()
     {
         PushLayer(new ExampleLayer());
     }
 
-    InputMouse(const InputMouse& InputMouse)
-        :Application(InputMouse)
+    Shapes(const Shapes& Shapes)
+        :Application(Shapes)
     {
 
     }
 
-    ~InputMouse()
+    ~Shapes()
     {
 
     }
@@ -67,5 +67,5 @@ public:
 
 SekaiEngine::Application* SekaiEngine::CreateApplication()
 {
-    return new InputMouse();
+    return new Shapes();
 }
