@@ -84,6 +84,8 @@ jobs:
       - name: setup library
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
       - name: Generate project with test for BUILD_SHARED_LIBS=0 
-        run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -G Ninja -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+        run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
       - name: Build project
         run: cmake --build ./build     
+      - name: List build directory
+        run: ls ./build
