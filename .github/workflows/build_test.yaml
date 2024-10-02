@@ -76,7 +76,14 @@ jobs:
     steps:
       - name: Check out the repository code
         uses: actions/checkout@v4
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.25
+          actions-cache-folder: 'emsdk-cache'
       - name: setup library
         run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
-      - name: build project with test for BUILD_SHARED_LIBS=0 
-        run: emcmake cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 && cmake --build ./build -- PLATFORM=PLATFORM_WEB -B      
+      - name: Generate project with test for BUILD_SHARED_LIBS=0 
+        run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -G Ninja -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+      - name: Build project
+        run: cmake --build ./build     
