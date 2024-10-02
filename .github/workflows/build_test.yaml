@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: examples-${{matrix.os}}
-          path: build/Debug/out
+          path: build/out/Debug
   
   Generate-Docs:
     runs-on: "ubuntu-latest"
