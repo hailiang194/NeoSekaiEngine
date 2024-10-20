@@ -1,0 +1,70 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "Desktop-shared",
+            "displayName": "Desktop platform with shared library",
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": {
+                    "type": "BOOL",
+                    "value": "TRUE"
+                }
+            }
+        },
+        {
+            "name": "Desktop-static",
+            "displayName": "Desktop platform with static library",
+            "cacheVariables": {
+                "BUILD_SHARED_LIBS": {
+                    "type": "BOOL",
+                    "value": "FALSE"
+                }
+            }
+        },
+        {
+            "name": "Web",
+            "displayName": "Web platform",
+            "cacheVariables": {
+                "PLATFORM": {
+                    "type": "STRING",
+                    "value": "Web"
+                },
+                "BUILD_SHARED_LIBS": {
+                    "type": "BOOL",
+                    "value": "FALSE"
+                }
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "Debug-shared",
+            "displayName": "Debug-shared",
+            "configuration": "Debug",
+            "configurePreset": "Desktop-shared"
+        },
+        {
+            "name": "Release-shared",
+            "displayName": "Release-shared",
+            "configuration": "Release",
+            "configurePreset": "Desktop-shared"
+        },
+        {
+            "name": "Debug-static",
+            "displayName": "Debug-static",
+            "configuration": "Debug",
+            "configurePreset": "Desktop-static"
+        },
+        {
+            "name": "Release-static",
+            "displayName": "Release-static",
+            "configuration": "Release",
+            "configurePreset": "Desktop-static"
+        }
+    ]
+}

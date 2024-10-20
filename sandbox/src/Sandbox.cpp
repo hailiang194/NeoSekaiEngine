@@ -1,19 +1,17 @@
 #include "SekaiEngine.h"
 #include "SekaiEngine/Object/RectangleUI.h"
+#include "SekaiEngine/Input.h"
+
 #include <iostream>
 
 class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     ExampleLayer()
-        :m_sound("./Mission Completed.wav"),
-        m_music("./Stream Loops 2023-11-29.ogg")
     {
-        m_music.Play();
     }
 
     ExampleLayer(const ExampleLayer& layer)
-        :m_sound(layer.m_sound), m_music(layer.m_music)
     {
     }
 
@@ -28,23 +26,22 @@ public:
 
     void OnUpdate(const SekaiEngine::Timestep& elipse) override
     {
-        if(m_sound.IsValid() && SekaiEngine::Input::IsKeyPressed(SekaiEngine::Input::KeyboardKey::KEY_SPACE))
-        {
-            m_sound.Play();
-        }
     }
 
     void OnRender() override
     {
-        SekaiEngine::Render::API::DrawText("Press Space to play sound", 
-            SekaiEngine::Math::Vector2D(200.0f, 180.0f), 
-            (SekaiEngine::Render::Color)0xff0000ff,
-            20
-        );
+        // std::cout << SekaiEngine::Input::GetTotalTouchPoints() << std::endl;
+        for(size_t i = 0; i < SekaiEngine::Input::GetTotalTouchPoints(); ++i)
+        {
+            SekaiEngine::Shape::Circle c(SekaiEngine::Input::GetTouchPointPosition(i), 10.0f);
+            
+            SekaiEngine::Render::RenderProperties props;
+            props.Tint = 0xffffffff;
+            SekaiEngine::Render::CircleRenderParams params(props, c);
+            SekaiEngine::Render::RenderCommand::Render(params);
+        }
     }
-private:
-    SekaiEngine::Sound::Sound m_sound;
-    SekaiEngine::Sound::MusicStream m_music;
+    
 };
 
 
