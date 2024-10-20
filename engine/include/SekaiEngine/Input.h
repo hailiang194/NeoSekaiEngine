@@ -12,6 +12,7 @@
 #define _SEKAI_ENGINE_INPUT_H_
 
 #include "SekaiEngine/BaseType.h"
+#include "SekaiEngine/Math/Vector.h"
 
 namespace SekaiEngine
 {
@@ -181,6 +182,21 @@ namespace SekaiEngine
          * @return float the mouse position in Y axis
          */
         EXTENDAPI float GetMouseY();
+
+        /**
+         * @brief Get the Total touch points
+         * 
+         * @return size_t total touch point
+         */
+        EXTENDAPI size_t GetTotalTouchPoints();
+
+        /**
+         * @brief Get the Touch point position
+         * 
+         * @param index the index of touch point
+         * @return Math::Vector2D the position of the touch point
+         */
+        EXTENDAPI Math::Vector2D GetTouchPointPosition(const size_t& index);
     }
 } // namespace SekaiEngine
 
