@@ -1,0 +1,12 @@
+name: Pipeline
+run-name: ${{ github.ref }} on ${{ github.repository }} is being built and tested out Github actions
+on: [ push, pull_request ]
+jobs:
+    Test-Engine:
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest, windows-latest]
+        runs-on: ${{ matrix.os }}
+        steps:
+            - run: echo "The job was automatically triggered by a ${{ github.event_name }} event."
