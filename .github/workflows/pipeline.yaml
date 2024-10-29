@@ -61,4 +61,4 @@ jobs:
               run: .\build\out\${{ matrix.config }}\engine_test.exe --gtest_output="xml:build/test-results.xml"
             - name: run test for Unix makefile
               if: ${{ matrix.compiler != 'MSVC' }}
-              run: .\build\out\engine_test.exe --gtest_output="xml:build\test-results.xml"
+              run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
