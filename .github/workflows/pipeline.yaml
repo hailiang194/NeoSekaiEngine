@@ -40,6 +40,6 @@ jobs:
             - name: Generate project for Visual Studio
               if: ${{ matrix.compiler == 'MSVC' }}
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
-            - name: Generate project for Ninja
+            - name: Generate project for Mingw
               if: ${{ matrix.compiler != 'MSVC' }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -GNinja
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "MinGW Makefiles"
