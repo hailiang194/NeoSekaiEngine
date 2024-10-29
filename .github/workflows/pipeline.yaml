@@ -1,6 +1,12 @@
 name: Pipeline
 run-name: ${{ github.ref }} on ${{ github.repository }} is being built and tested out Github actions
-on: [ push, pull_request ]
+on: 
+    push:
+        branches:
+            - 'main'
+            - 'development'
+            - "add/**"
+    pull_request:
 jobs:
     Test-Engine:
         strategy:
@@ -26,6 +32,14 @@ jobs:
             - name: Check Clang version
               if: ${{ matrix.compiler == 'Clang' }}
               run: clang --version
-            - name: Check MSVC
+            - name: Checkout code
+              uses: actions/checkout@v4
+            - name: Install packages for Ubuntu
+              if: ${{ matrix.os == 'ubuntu-latest' }}
+              run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
+            - name: Generate project for Visual Studio
               if: ${{ matrix.compiler == 'MSVC' }}
-              run: msbuild --version
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
+            - name: Generate project for Ninja
+              if: ${{ matrix.compiler != 'MSVC' }}
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -GNinja
