@@ -56,3 +56,9 @@ jobs:
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
+            - name: run test for MSVC
+              if: ${{ matrix.compiler == 'MSVC' }}
+              run: .\build\out\${{ matrix.config }}\engine_test.exe --gtest_output="xml:build/test-results.xml"
+            - name: run test for Unix makefile
+              if: ${{ matrix.compiler != 'MSVC' }}
+              run: .\build\out\engine_test.exe --gtest_output="xml:build\test-results.xml"
