@@ -6,9 +6,13 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                compiler: ["MSVC", "GCC", "Clang"]
                 build-shared: [0, 1]
                 os: [ubuntu-latest, windows-latest]
+                include:
+                    - os: windows-latest
+                      compiler: ["MSVC", "GCC", "Clang"]
+                    - os: ubuntu-latest
+                      compiler: ["GCC", "Clang"]
         runs-on: ${{ matrix.os }}
         steps:
             - name: build on ${{ matrix.os }} with compiler is ${{ matrix.build-shared }} and BUILD_SHARED_LIBS=${{ matrix.build-shared }}
