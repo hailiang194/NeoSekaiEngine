@@ -108,6 +108,7 @@ set(ENGINE_SOURCES
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
 
 add_subdirectory(./vendors/raylib)
+add_subdirectory(./vendors/freetype)
 
 add_library(SekaiEngine ${ENGINE_PUBLIC_HEADERS} ${ENGINE_SOURCES})
 target_link_libraries(SekaiEngine PRIVATE raylib)
