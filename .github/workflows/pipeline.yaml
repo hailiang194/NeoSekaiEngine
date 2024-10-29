@@ -13,19 +13,30 @@ jobs:
             fail-fast: false
             matrix:
                 compiler: ["GCC", "Clang"]
+                config: ["Debug", "Release"]
                 build_shared: [0, 1]
                 os: [ubuntu-latest, windows-latest]
                 include: 
                     - os: windows-latest
                       build_shared: 0
+                      config: "Debug"
+                      compiler: "MSVC"
+                    - os: windows-latest
+                      build_shared: 0
+                      config: "Release"
                       compiler: "MSVC"
                     - os: windows-latest
                       build_shared: 1
+                      config: "Debug"
+                      compiler: "MSVC"
+                    - os: windows-latest
+                      build_shared: 1
+                      config: "Release"
                       compiler: "MSVC"
         runs-on: ${{ matrix.os }}
         steps:
-            - name: build on ${{ matrix.os }} with compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build_shared }}
-              run: echo "information os=${{ matrix.os }} compiler=${{ matrix.compiler }} build_shared=${{ matrix.build_shared }}"
+            - name: build on ${{ matrix.os }} with compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build_shared }} in config=${{ matrix.config }}
+              run: echo "information os=${{ matrix.os }} compiler=${{ matrix.compiler }} build_shared=${{ matrix.build_shared }} config=${{ matrix.config }}"
             - name: Check GCC version
               if: ${{ matrix.compiler == 'GCC' }}
               run: gcc --version
@@ -43,3 +54,5 @@ jobs:
             - name: Generate project for Unix makefile
               if: ${{ matrix.compiler != 'MSVC' }}
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
+            - name: Build project
+              run: cmake --build build --config ${{ matrix.config }}
