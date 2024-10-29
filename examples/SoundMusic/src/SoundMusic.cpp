@@ -91,22 +91,22 @@ private:
 };
 
 
-class Texture: public SekaiEngine::Application
+class SoundMusic: public SekaiEngine::Application
 {
 public:
-    Texture()
+    SoundMusic()
         :Application()
     {
         PushLayer(new ExampleLayer());
     }
 
-    Texture(const Texture& Texture)
-        :Application(Texture)
+    SoundMusic(const SoundMusic& SoundMusic)
+        :Application(SoundMusic)
     {
 
     }
 
-    ~Texture()
+    ~SoundMusic()
     {
 
     }
@@ -114,5 +114,5 @@ public:
 
 SekaiEngine::Application* SekaiEngine::CreateApplication()
 {
-    return new Texture();
+    return new SoundMusic();
 }
