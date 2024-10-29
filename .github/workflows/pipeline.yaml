@@ -7,12 +7,18 @@ jobs:
             fail-fast: false
             matrix:
                 compiler: ["GCC", "Clang"]
-                build-shared: [0, 1]
+                build-shared: ["0", "1"]
                 os: [ubuntu-latest, windows-latest]
                 include: 
                     - os: windows-latest
                       compiler: "MSVC"
         runs-on: ${{ matrix.os }}
         steps:
-            - name: build on ${{ matrix.os }} with compiler is ${{ matrix.build-shared }} and BUILD_SHARED_LIBS=${{ matrix.build-shared }}
+            - name: build on ${{ matrix.os }} with compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build-shared }}
               run: echo "information os=${{ matrix.os }} compiler=${{ matrix.compiler }} build_shared=${{ matrix.build-shared }}"
+            - name: Check GCC version
+              if: ${{ matrix.compiler == 'GCC' }}
+              run: gcc --version
+            - name: Check Clang version
+              if: ${{ matrix.compiler == 'Clang' }}
+              run: clang --version
