@@ -8,7 +8,7 @@ on:
             - "add/**"
     pull_request:
 jobs:
-    Test-Engine:
+    Test-Engine-And-Generate-Desktop-Examples:
         strategy:
             fail-fast: false
             matrix:
@@ -50,10 +50,10 @@ jobs:
               run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
             - name: Generate project for Visual Studio
               if: ${{ matrix.compiler == 'MSVC' }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
             - name: Generate project for Unix makefile
               if: ${{ matrix.compiler != 'MSVC' }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for MSVC
@@ -67,3 +67,15 @@ jobs:
               with:
                 name: test-results-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}.xml
                 path: build/test-results.xml
+            - name: Upload examples for Unix makefile
+              if: ${{ matrix.compiler != 'MSVC' }}
+              uses: actions/upload-artifact@v4
+              with:
+                name: examples-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+                path: build/out
+            - name: Upload examples for Unix makefile
+              if: ${{ matrix.compiler != 'MSVC' }}
+              uses: actions/upload-artifact@v4
+              with:
+                name: examples-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+                path: build/out/${{ matrix.config }}
