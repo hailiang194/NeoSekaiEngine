@@ -50,12 +50,12 @@ jobs:
               run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
             - name: Generate project for Visual Studio
               if: ${{ matrix.compiler == 'MSVC' }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
             - name: Generate project for Unix makefile
               if: ${{ matrix.compiler != 'MSVC' }}
               env:
                 CC: ${{ matrix.compiler }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for MSVC
