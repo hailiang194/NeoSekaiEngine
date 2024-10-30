@@ -51,10 +51,17 @@ jobs:
             - name: Generate project for Visual Studio
               if: ${{ matrix.compiler == 'MSVC' }}
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
-            - name: Generate project for Unix makefile
-              if: ${{ matrix.compiler != 'MSVC' }}
+            - name: Generate project for Unix makefile for GNU
+              if: ${{ matrix.compiler == 'gcc' }}
               env:
-                CC: ${{ matrix.compiler }}
+                CC: gcc
+                CXX: g++
+              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
+            - name: Generate project for Unix makefile for Clang
+              if: ${{ matrix.compiler == 'clang' }}
+              env:
+                CC: clang
+                CXX: clang++
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
