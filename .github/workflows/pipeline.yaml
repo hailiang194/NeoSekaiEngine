@@ -37,9 +37,6 @@ jobs:
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
-            - name: run test for MSVC
-              if: ${{ matrix.compiler == 'MSVC' }}
-              run: .\build\out\${{ matrix.config }}\engine_test.exe --gtest_output="xml:build/test-results.xml"
             - name: run test for Unix makefile
               run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
             - name: Upload test result
@@ -57,7 +54,7 @@ jobs:
       strategy:
           fail-fast: false
           matrix:
-              compiler: ["gcc", "clang"]
+              compiler: ["MSVC", "gcc", "clang"]
               config: ["Debug", "Release"]
               build_shared: [0, 1]
               include: 
@@ -67,33 +64,43 @@ jobs:
                 - compiler: "clang"
                   C: clang-cl
                   CXX: clang-cl
-      runs-on: ubuntu-latest
+      runs-on: windows-latest
       steps:
           - name: build onwith compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build_shared }} in config=${{ matrix.config }}
             run: echo "information os=ubuntu-latest compiler=${{ matrix.compiler }} build_shared=${{ matrix.build_shared }} config=${{ matrix.config }}"
           - name: Checkout code
             uses: actions/checkout@v4
-          - name: Install packages for Ubuntu
-            run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
           - name: Generate project for Unix makefile
             env:
               CC: ${{ matrix.compiler.C }}
               CXX: ${{ matrix.compiler.CXX }}
+            if: ${{ matrix.compiler != 'MSVC' }}
             run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
+          - name: Generate project for Visual Studio
+            if: ${{ matrix.compiler == 'MSVC' }}
+            run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
           - name: Build project
             run: cmake --build build --config ${{ matrix.config }}
           - name: run test for MSVC
             if: ${{ matrix.compiler == 'MSVC' }}
             run: .\build\out\${{ matrix.config }}\engine_test.exe --gtest_output="xml:build/test-results.xml"
           - name: run test for Unix makefile
+            if: ${{ matrix.compiler != 'MSVC' }}
             run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
           - name: Upload test result
             uses: actions/upload-artifact@v4
             with:
-              name: test-results-ubuntu-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}.xml
+              name: test-results-window-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}.xml
               path: build/test-results.xml
+          - name: Upload examples for MSVC
+            uses: actions/upload-artifact@v4
+            if: ${{ matrix.compiler == 'MSVC' }}
+            with:
+              name: examples-window-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+              path: build/out    
           - name: Upload examples for Unix makefile
             uses: actions/upload-artifact@v4
+            if: ${{ matrix.compiler != 'MSVC' }}
             with:
-              name: examples-ubuntu-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
-              path: build/out
+              name: examples-window-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+              path: build/out/${{ matrix.config }}
