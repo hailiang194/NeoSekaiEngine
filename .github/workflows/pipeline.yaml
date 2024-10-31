@@ -122,7 +122,7 @@ jobs:
         - name: setup library
           run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
         - name: Generate project
-          run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+          run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_ENGINE_EXAMPLES=1 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
         - name: Build project
           run: cmake --build ./build --config ${{ matrix.config }}     
         - name: Upload WebAssembly
@@ -130,3 +130,21 @@ jobs:
           with:
             name: build-webassembly
             path: build/out
+
+    Generate-Docs:
+      runs-on: "ubuntu-latest"
+      needs: [Pipeline-Ubuntu, Pipeline-Windows, Build-WebAssembly]
+      steps:
+        - name: install doxygen and graphviz
+          run: sudo apt-get -y install doxygen graphviz
+        - name: Check out the repository code
+          uses: actions/checkout@v4
+        - name: setup library
+          run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh 
+        - name: build project with test for shared lib
+          run: cmake -S ./ -B ./build -DBUILD_DOC=1 -DBUILD_SHARED_LIBS=1 && cmake --build ./build --target EngineDoc
+        - name: Upload test result
+          uses: actions/upload-artifact@v4
+          with:
+            name: html-docs
+            path: build/doc/html
