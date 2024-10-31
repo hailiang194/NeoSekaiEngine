@@ -8,83 +8,47 @@ on:
             - "add/**"
     pull_request:
 jobs:
-    Test-Engine-And-Generate-Desktop-Examples:
+    Pipeline-Ubuntu:
         strategy:
             fail-fast: false
             matrix:
                 compiler: ["gcc", "clang"]
                 config: ["Debug", "Release"]
                 build_shared: [0, 1]
-                os: [ubuntu-latest, windows-latest]
                 include: 
-                    - os: windows-latest
-                      build_shared: 0
-                      config: "Debug"
-                      compiler: "MSVC"
-                    - os: windows-latest
-                      build_shared: 0
-                      config: "Release"
-                      compiler: "MSVC"
-                    - os: windows-latest
-                      build_shared: 1
-                      config: "Debug"
-                      compiler: "MSVC"
-                    - os: windows-latest
-                      build_shared: 1
-                      config: "Release"
-                      compiler: "MSVC"
-        runs-on: ${{ matrix.os }}
+                  - compiler: "gcc"
+                    C: gcc
+                    CXX: g++
+                  - compiler: "clang"
+                    C: clang
+                    CXX: clang++
+        runs-on: ubuntu-latest
         steps:
-            - name: build on ${{ matrix.os }} with compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build_shared }} in config=${{ matrix.config }}
-              run: echo "information os=${{ matrix.os }} compiler=${{ matrix.compiler }} build_shared=${{ matrix.build_shared }} config=${{ matrix.config }}"
-            - name: Check GCC version
-              if: ${{ matrix.compiler == 'gcc' }}
-              run: gcc --version
-            - name: Check Clang version
-              if: ${{ matrix.compiler == 'clang' }}
-              run: clang --version
+            - name: build onwith compiler is ${{ matrix.compiler }} and BUILD_SHARED_LIBS=${{ matrix.build_shared }} in config=${{ matrix.config }}
+              run: echo "information os=ubuntu-latest compiler=${{ matrix.compiler }} build_shared=${{ matrix.build_shared }} config=${{ matrix.config }}"
             - name: Checkout code
               uses: actions/checkout@v4
             - name: Install packages for Ubuntu
-              if: ${{ matrix.os == 'ubuntu-latest' }}
               run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
-            - name: Generate project for Visual Studio
-              if: ${{ matrix.compiler == 'MSVC' }}
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }}
-            - name: Generate project for Unix makefile for GNU
-              if: ${{ matrix.compiler == 'gcc' }}
+            - name: Generate project for Unix makefile
               env:
-                CC: gcc
-                CXX: g++
+                CC: ${{ matrix.compiler.C }}
+                CXX: ${{ matrix.compiler.CXX }}
               run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles"
-            - name: Generate project for Unix makefile for Clang
-              if: ${{ matrix.compiler == 'clang' }}
-              env:
-                CC: clang
-                CXX: clang++
-              run: cmake -S ./ -B ./build -DRUN_TEST=1 -DBUILD_ENGINE_EXAMPLES=1 -DBUILD_SHARED_LIBS=${{ matrix.build_shared }} -G "Unix Makefiles" -DCMAKE_LINKER=lld-link
             - name: Build project
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for MSVC
               if: ${{ matrix.compiler == 'MSVC' }}
               run: .\build\out\${{ matrix.config }}\engine_test.exe --gtest_output="xml:build/test-results.xml"
             - name: run test for Unix makefile
-              if: ${{ matrix.compiler != 'MSVC' }}
               run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
             - name: Upload test result
               uses: actions/upload-artifact@v4
               with:
-                name: test-results-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}.xml
+                name: test-results-ubuntu-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}.xml
                 path: build/test-results.xml
             - name: Upload examples for Unix makefile
-              if: ${{ matrix.compiler != 'MSVC' }}
               uses: actions/upload-artifact@v4
               with:
-                name: examples-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
-                path: build/out
-            - name: Upload examples for Unix makefile
-              if: ${{ matrix.compiler != 'MSVC' }}
-              uses: actions/upload-artifact@v4
-              with:
-                name: examples-${{ matrix.os }}-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+                name: examples-ubuntu-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
                 path: build/out/${{ matrix.config }}
