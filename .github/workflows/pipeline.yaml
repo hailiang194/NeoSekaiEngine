@@ -128,7 +128,7 @@ jobs:
         - name: Upload WebAssembly
           uses: actions/upload-artifact@v4
           with:
-            name: build-webassembly
+            name: webassembly-${{ matrix.config }}
             path: build/out
 
     Generate-Docs:
