@@ -94,13 +94,39 @@ jobs:
               path: build/test-results.xml
           - name: Upload examples for MSVC
             uses: actions/upload-artifact@v4
-            if: ${{ matrix.compiler == 'MSVC' }}
+            if: ${{ matrix.compiler != 'MSVC' }}
             with:
               name: examples-window-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
               path: build/out    
           - name: Upload examples for Unix makefile
             uses: actions/upload-artifact@v4
-            if: ${{ matrix.compiler != 'MSVC' }}
+            if: ${{ matrix.compiler == 'MSVC' }}
             with:
               name: examples-window-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
               path: build/out/${{ matrix.config }}
+
+    Build-WebAssembly:
+      strategy:
+        fail-fast: false
+        matrix: 
+          config: ["Debug", "Release"]
+      runs-on: "ubuntu-latest"
+      steps:
+        - name: Check out the repository code
+          uses: actions/checkout@v4
+        - name: Setup emsdk
+          uses: mymindstorm/setup-emsdk@v14
+          with:
+            version: 3.1.25
+            actions-cache-folder: 'emsdk-cache'
+        - name: setup library
+          run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
+        - name: Generate project
+          run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+        - name: Build project
+          run: cmake --build ./build --config ${{ matrix.config }}     
+        - name: Upload WebAssembly
+          uses: actions/upload-artifact@v4
+          with:
+            name: build-webassembly
+            path: build/out
