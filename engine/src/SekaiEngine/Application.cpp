@@ -29,7 +29,7 @@ namespace SekaiEngine
         m_timer.SetTargetFPS(60);
     }
     Application::Application(const Application& app)
-        :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack), m_timer()
+        :window(app.window), m_running(app.m_running), m_layerStack(app.m_layerStack), m_timer(), m_textEngine()
     {
 
     }

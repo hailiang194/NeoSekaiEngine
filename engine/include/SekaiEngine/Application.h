@@ -17,6 +17,7 @@
 #include "SekaiEngine/Layer/LayerStack.h"
 #include "SekaiEngine/Timer.h"
 #include "SekaiEngine/Audio/Device.h"
+#include "SekaiEngine/TextEngine/TextEngine.h"
 
 namespace SekaiEngine
 {
@@ -58,6 +59,8 @@ namespace SekaiEngine
          * @return Device& Audio device object
          */
         EXTENDAPI SekaiEngine::Audio::Device& AudioDevice();
+
+        EXTENDAPI SekaiEngine::TextEngine::TextEngine& TextEngine();
 
         /**
          * @brief Handle events
@@ -175,6 +178,7 @@ namespace SekaiEngine
         Timer m_timer;
         Layer::LayerStack m_layerStack;
         SekaiEngine::Audio::Device m_audioDevice;
+        SekaiEngine::TextEngine::TextEngine m_textEngine;
 
 
         static Application* g_instance;
@@ -188,6 +192,11 @@ namespace SekaiEngine
     inline SekaiEngine::Audio::Device& Application::AudioDevice()
     {
         return m_audioDevice;
+    }
+
+    inline SekaiEngine::TextEngine::TextEngine& Application::TextEngine()
+    {
+        return m_textEngine;
     }
 
     /**
