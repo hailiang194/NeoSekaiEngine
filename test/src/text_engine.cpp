@@ -1,3 +1,4 @@
+#include <gtest/gtest.h>
 #include <vector>
 #include "SekaiEngine/TextEngine/TextEngine.h"
 
