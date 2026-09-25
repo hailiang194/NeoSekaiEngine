@@ -21,6 +21,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Texture.cpp
     ./src/wrapper/raylib/Timer.cpp
     ./src/wrapper/raylib/Font.cpp
+    ./src/wrapper/raylib/TextEngine.cpp
     ./src/wrapper/raylib/AudioDevice.cpp
     ./src/wrapper/raylib/Sound.cpp
     ./src/wrapper/raylib/MusicStream.cpp
@@ -65,6 +66,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Device.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Sound.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/MusicStream.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/TextEngine/TextEngine.h
 )
 
 include(cmake/set_include_all_header.cmake)
@@ -103,14 +105,17 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Object/GroupUI.cpp
     ./src/SekaiEngine/Audio/Sound.cpp
     ./src/SekaiEngine/Audio/MusicStream.cpp
+    ./src/SekaiEngine/TextEngine/TextEngine.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
 
 add_subdirectory(./vendors/raylib)
+add_subdirectory(./vendors/freetype)
 
 add_library(SekaiEngine ${ENGINE_PUBLIC_HEADERS} ${ENGINE_SOURCES})
-target_link_libraries(SekaiEngine PRIVATE raylib)
+target_link_libraries(SekaiEngine PRIVATE raylib freetype)
+target_include_directories(SekaiEngine PUBLIC ./vendors/freetype/include)
 target_compile_definitions(SekaiEngine PRIVATE USE_RAYLIB)
 
 if(BUILD_SHARED_LIBS)
