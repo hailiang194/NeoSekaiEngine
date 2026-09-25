@@ -18,11 +18,15 @@ add_executable(engine_test
     src/color.cpp
     src/collision.cpp
     src/timestep.cpp
+    src/text_engine.cpp
 )
 
 
 target_link_libraries(engine_test GTest::gtest_main SekaiEngine)
 target_include_directories(engine_test PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
+target_compile_definitions(engine_test PRIVATE
+    FONT_PATH_NOTO="${CMAKE_CURRENT_SOURCE_DIR}/../examples/UnicodeText/assets/NotoSansTC-VariableFont_wght.ttf"
+)
 
 add_test(NAME Test COMMAND engine_test)
 

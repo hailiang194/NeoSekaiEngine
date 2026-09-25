@@ -11,4 +11,8 @@ target_link_libraries(UnicodeText PUBLIC SekaiEngine)
 target_include_directories(UnicodeText PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
 target_compile_definitions(UnicodeText PRIVATE HAS_ENTRY_POINT)
 
+if(MSVC)
+    target_compile_options(UnicodeText PRIVATE /utf-8)
+endif()
+
 configure_platform_and_web(UnicodeText "${PROJECT_SOURCE_DIR}/assets")

@@ -21,6 +21,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Texture.cpp
     ./src/wrapper/raylib/Timer.cpp
     ./src/wrapper/raylib/Font.cpp
+    ./src/wrapper/raylib/TextEngine.cpp
     ./src/wrapper/raylib/AudioDevice.cpp
     ./src/wrapper/raylib/Sound.cpp
     ./src/wrapper/raylib/MusicStream.cpp
