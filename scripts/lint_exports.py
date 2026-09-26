@@ -224,7 +224,7 @@ def scan_header(text):
                 continue
             if scope["access"] != "public":
                 continue
-            if re.match(r"^(class|struct|interface|enum|union|typedef|using)\b", flat):
+            if re.match(r"^(class|struct|interface|enum|union|typedef|using|static_assert)\b", flat):
                 continue
             if TEMPLATE_RE.search(flat):
                 continue
@@ -240,7 +240,7 @@ def scan_header(text):
                 findings.append((line_of(text, decl_index), f"{scope['name']}::{flat[:48]}", verdict))
         else:
             flat = " ".join(stmt.split())
-            if re.match(r"^(class|struct|interface|enum|union)\b", flat):
+            if re.match(r"^(class|struct|interface|enum|union|static_assert)\b", flat):
                 continue
             verdict, _ = classify(stmt, has_body, False)
             if verdict == "MISSING":
