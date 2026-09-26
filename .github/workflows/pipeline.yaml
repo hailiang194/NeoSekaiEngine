@@ -117,7 +117,7 @@ jobs:
         - name: Setup emsdk
           uses: mymindstorm/setup-emsdk@v14
           with:
-            version: 3.1.25
+            version: 4.0.7
             actions-cache-folder: 'emsdk-cache'
         - name: setup library
           run: /bin/bash ./scripts/pre-installer/linux/debian/preinstaller.sh
