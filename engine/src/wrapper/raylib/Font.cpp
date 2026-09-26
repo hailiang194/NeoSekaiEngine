@@ -26,7 +26,7 @@ namespace SekaiEngine
         bool loadFont(const char* id, const char* filename)
         {
             ::Font font = LoadFont(filename);
-            if(!IsFontReady(font))
+            if(!IsFontValid(font))
                 return false;
 
             if(fonts.find(std::string(id)) != fonts.end())

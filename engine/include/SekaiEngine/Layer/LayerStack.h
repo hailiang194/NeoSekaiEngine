@@ -35,7 +35,7 @@ namespace SekaiEngine
              * 
              * @param stack copied stack
              */
-            LayerStack(const LayerStack& stack);
+            EXTENDAPI LayerStack(const LayerStack& stack);
 
             /**
              * @brief Copied assignment operator
@@ -43,7 +43,7 @@ namespace SekaiEngine
              * @param stack copied stack
              * @return LayerStack& the reference of itself
              */
-            LayerStack& operator=(const LayerStack& stack);
+            EXTENDAPI LayerStack& operator=(const LayerStack& stack);
 
             /**
              * @brief Destroy the Layer Stack object
@@ -84,14 +84,14 @@ namespace SekaiEngine
              * 
              * @return std::vector<Layer*>::iterator the iterator
              */
-            std::vector<Layer*>::iterator begin();
+            EXTENDAPI std::vector<Layer*>::iterator begin();
 
             /**
              * @brief get the iterator of the end of stack
              * 
              * @return std::vector<Layer*>::iterator the iterator
              */
-            std::vector<Layer*>::iterator end();
+            EXTENDAPI std::vector<Layer*>::iterator end();
         private:
             std::vector<Layer*> m_layers; /*!< the layer stack*/
             std::vector<Layer*>::iterator m_layerInsert; /*!< the inserted layer iterator*/

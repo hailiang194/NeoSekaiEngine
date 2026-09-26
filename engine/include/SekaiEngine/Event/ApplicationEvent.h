@@ -68,14 +68,14 @@ namespace SekaiEngine
              * 
              * @param eplise the eplise time, the time for doing last frame
              */
-            ApplicationUpdateEvent(const Timestep& eplise);
+            EXTENDAPI ApplicationUpdateEvent(const Timestep& eplise);
 
             /**
              * @brief Construct a new Application Update Event object
              * 
              * @param event copied object
              */
-            ApplicationUpdateEvent(const ApplicationUpdateEvent& event);
+            EXTENDAPI ApplicationUpdateEvent(const ApplicationUpdateEvent& event);
 
             /**
              * @brief Copied assignement operator
@@ -83,27 +83,27 @@ namespace SekaiEngine
              * @param event copied object
              * @return ApplicationUpdateEvent& the reference of the object itself
              */
-            ApplicationUpdateEvent& operator=(const ApplicationUpdateEvent& event);
+            EXTENDAPI ApplicationUpdateEvent& operator=(const ApplicationUpdateEvent& event);
 
             /**
              * @brief Destroy the Application Update Event object
              * 
              */
-            ~ApplicationUpdateEvent();
+            EXTENDAPI ~ApplicationUpdateEvent();
 
             /**
              * @brief Get elipse time, the time for doing in last frame
              * 
              * @return const Timestep& the elipse time
              */
-            const Timestep& Elipse() const;
+            EXTENDAPI const Timestep& Elipse() const;
 
             /**
              * @brief Get elipse time, the time for doing in last frame
              * 
              * @return const Timestep& the elipse time
              */
-            const Timestep& Elipse();
+            EXTENDAPI const Timestep& Elipse();
 
             EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::AppUpdate)
             EVENT_CLASS_CATEGORY(EventCategoryApplication)

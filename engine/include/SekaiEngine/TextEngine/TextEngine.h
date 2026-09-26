@@ -34,15 +34,15 @@ namespace SekaiEngine
          * @param text the UTF-8 encoded string
          * @return std::vector<uint32_t> the decoded codepoints
          */
-        std::vector<uint32_t> Utf8ToCodepoints(const char* text);
+        EXTENDAPI std::vector<uint32_t> Utf8ToCodepoints(const char* text);
 
         class TextEngine
         {
         public:
-            TextEngine();
+            EXTENDAPI TextEngine();
             TextEngine(const TextEngine& engine) = delete;
             TextEngine& operator=(const TextEngine& engine) = delete;
-            ~TextEngine();
+            EXTENDAPI ~TextEngine();
 
             EXTENDAPI const bool& IsAvaiable() const;
             EXTENDAPI const bool& IsAvaiable();
@@ -72,12 +72,12 @@ namespace SekaiEngine
         /**
          * @brief Initialize the glyph texture cache
          */
-        void initTextEngine();
+        EXTENDAPI void initTextEngine();
 
         /**
          * @brief Free all glyph textures held by the text engine
          */
-        void unloadTextEngine();
+        EXTENDAPI void unloadTextEngine();
 
         inline const bool& TextEngine::IsAvaiable() const
         {

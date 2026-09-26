@@ -67,7 +67,7 @@ namespace SekaiEngine
          * @param self Render properties of the object
          * @param render Render properties for rendering
          */
-        void UpdateRenderProperies(const RenderProperties& parent, const RenderProperties& self, RenderProperties render);
+        EXTENDAPI void UpdateRenderProperies(const RenderProperties& parent, const RenderProperties& self, RenderProperties render);
     } // namespace Render
     
 } // namespace SekaiEngine

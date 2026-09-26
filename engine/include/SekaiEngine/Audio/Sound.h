@@ -34,9 +34,9 @@ namespace SekaiEngine
             size_t m_id;
         };
 
-        void initSounds();
-        size_t loadSound(const char* filename);
-        void unloadSounds();
+        EXTENDAPI void initSounds();
+        EXTENDAPI size_t loadSound(const char* filename);
+        EXTENDAPI void unloadSounds();
 
         inline const bool Sound::IsValid()
         {

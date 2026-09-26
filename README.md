@@ -4,7 +4,7 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 [![GithubAction](https://github.com/hailiang194/NeoSekaiEngine/actions/workflows/build_test.yaml/badge.svg?branch=main)](https://github.com/hailiang194/NeoSekaiEngine/actions/workflows/build_test.yaml/badge.svg?branch=main)
 
 ## Libraries
-* raylib 4.2.0
+* raylib 6.0
 * freetype 2.13.3
 * GoogleTest 1.12.1 (For testing)
 
@@ -12,7 +12,7 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 
 ## Requirements
 * git
-* [CMake](https://cmake.org/download/)
+* [CMake](https://cmake.org/download/) 3.25 or newer
 * [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
 * **MSVC** or **Makefile**
 * Doxygen and Graphviz

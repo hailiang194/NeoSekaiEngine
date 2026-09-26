@@ -69,6 +69,17 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/TextEngine/TextEngine.h
 )
 
+find_package(Python3 COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+    add_custom_target(check_public_header_exports ALL
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_SOURCE_DIR}/scripts/lint_exports.py ${ENGINE_PUBLIC_HEADERS}
+        COMMENT "Checking public headers for missing EXTENDAPI"
+        VERBATIM
+    )
+else()
+    message(WARNING "Python3 interpreter not found: the public header EXTENDAPI check will not run.")
+endif()
+
 include(cmake/set_include_all_header.cmake)
 
 set(ENGINE_SOURCES

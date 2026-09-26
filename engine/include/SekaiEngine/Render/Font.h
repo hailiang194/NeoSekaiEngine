@@ -97,7 +97,7 @@ namespace SekaiEngine
          * @brief Initilized fonts
          * 
          */
-        void initFonts();
+        EXTENDAPI void initFonts();
 
         /**
          * @brief Core function to load font
@@ -107,13 +107,13 @@ namespace SekaiEngine
          * @return true if font is loaded
          * @return false if font is not loaded
          */
-        bool loadFont(const char* id, const char* filename);
+        EXTENDAPI bool loadFont(const char* id, const char* filename);
 
         /**
          * @brief Unload all the fonts
          * 
          */
-        void unloadFonts();
+        EXTENDAPI void unloadFonts();
 
         inline const char* Font::Id() const
         {
