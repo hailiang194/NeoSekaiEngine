@@ -43,7 +43,7 @@ namespace SekaiEngine
              * 
              * @param vector copied vector
              */
-            CommonVector(const CommonVector& vector);
+            CommonVector(const CommonVector& vector) = default;
 
             /**
              * @brief Copied assignment operator
@@ -51,13 +51,13 @@ namespace SekaiEngine
              * @param vector copied object
              * @return CommonVector& the reference of itself
              */
-            CommonVector& operator=(const CommonVector& vector);
+            CommonVector& operator=(const CommonVector& vector) = default;
 
             /**
              * @brief Destroy the Common Vector object
              * 
              */
-            virtual ~CommonVector();
+            ~CommonVector() = default;
 
             /**
              * @brief Add 2 vectors
@@ -192,7 +192,7 @@ namespace SekaiEngine
              * 
              * @param vt copied object
              */
-            Vector2D(const Vector2D& vt);
+            Vector2D(const Vector2D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -200,7 +200,7 @@ namespace SekaiEngine
              * @param vt copied object
              * @return Vector2D& the reference of itself
              */
-            Vector2D& operator=(const Vector2D& vt);
+            Vector2D& operator=(const Vector2D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -214,7 +214,7 @@ namespace SekaiEngine
              * @brief Destroy the Vector 2D object
              * 
              */
-            ~Vector2D();
+            ~Vector2D() = default;
 
             /**
              * @brief get the value of x axis
@@ -273,7 +273,7 @@ namespace SekaiEngine
              * 
              * @param vt copied object
              */
-            Vector3D(const Vector3D& vt);
+            Vector3D(const Vector3D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -281,7 +281,7 @@ namespace SekaiEngine
              * @param vt copied object
              * @return Vector3D& the reference of itself
              */
-            Vector3D& operator=(const Vector3D& vt);
+            Vector3D& operator=(const Vector3D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -295,7 +295,7 @@ namespace SekaiEngine
              * @brief Destroy the Vector 3D object
              * 
              */
-            ~Vector3D();
+            ~Vector3D() = default;
 
             /**
              * @brief Get the value of x axis
@@ -368,7 +368,7 @@ namespace SekaiEngine
              * 
              * @param vt copied object
              */
-            Vector4D(const Vector4D& vt);
+            Vector4D(const Vector4D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -376,7 +376,7 @@ namespace SekaiEngine
              * @param vt copied object
              * @return Vector4D& the reference of itself
              */
-            Vector4D& operator=(const Vector4D& vt);
+            Vector4D& operator=(const Vector4D& vt) = default;
 
             /**
              * @brief Copied assignment operator
@@ -390,7 +390,7 @@ namespace SekaiEngine
              * @brief Destroy the Vector 4D object
              * 
              */
-            ~Vector4D();
+            ~Vector4D() = default;
 
             /**
              * @brief Get the value of x axis
@@ -461,30 +461,6 @@ namespace SekaiEngine
             }
 
         }
-        template <std::size_t dimensions>
-        CommonVector<dimensions>::CommonVector(const CommonVector<dimensions>& vector)
-        {
-            for(std::size_t i = 0; i < dimensions; ++i)
-            {
-                m_values[i] = vector.m_values[i];
-            }
-        }
-
-        template <std::size_t dimensions>
-        CommonVector<dimensions>& CommonVector<dimensions>::operator=(const CommonVector<dimensions>& vector)
-        {
-            for(std::size_t i = 0; i < dimensions; ++i)
-            {
-                m_values[i] = vector.m_values[i];
-            }
-            return (*this);
-        }
-
-        template <std::size_t dimensions>
-        CommonVector<dimensions>::~CommonVector()
-        {
-        }
-
         template <std::size_t dimensions>
         CommonVector<dimensions>::CommonVector(const float values[dimensions])
         {

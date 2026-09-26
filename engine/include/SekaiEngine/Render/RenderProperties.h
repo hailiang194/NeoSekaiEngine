@@ -37,7 +37,7 @@ namespace SekaiEngine
              * 
              * @param props copied object
              */
-            RenderProperties(const RenderProperties& props);
+            RenderProperties(const RenderProperties& props) = default;
 
             /**
              * @brief Copied assignment operator
@@ -45,13 +45,13 @@ namespace SekaiEngine
              * @param props copied object
              * @return RenderProperties& the reference of the object itself
              */
-            RenderProperties& operator=(const RenderProperties& props);
+            RenderProperties& operator=(const RenderProperties& props) = default;
 
             /**
              * @brief Destroy the Render Properties object
              * 
              */
-            virtual ~RenderProperties();
+            ~RenderProperties() = default;
 
             Math::Vector2D Offset; /*!< Offset position*/
             Math::Vector2D Scale; /*!< Scale value*/

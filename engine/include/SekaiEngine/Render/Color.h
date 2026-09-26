@@ -57,7 +57,7 @@ namespace SekaiEngine
              * 
              * @param color copied object
              */
-            explicit Color(const Color& color);
+            explicit Color(const Color& color) = default;
 
             /**
              * @brief Copied assignment operator
@@ -65,7 +65,7 @@ namespace SekaiEngine
              * @param color copied object
              * @return Color& the reference of object itself
              */
-            Color& operator=(const Color& color);
+            Color& operator=(const Color& color) = default;
 
             /**
              * @brief Copied assignment operator
@@ -88,7 +88,7 @@ namespace SekaiEngine
              * @brief Destroy the Color object
              * 
              */
-            ~Color();
+            ~Color() = default;
 
             /**
              * @brief Get color code

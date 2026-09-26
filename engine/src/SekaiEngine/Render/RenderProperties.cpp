@@ -11,28 +11,6 @@ namespace SekaiEngine
 
         }
 
-        RenderProperties::RenderProperties(const RenderProperties& props)
-            :Offset(props.Offset), Scale(props.Scale), Tint(props.Tint), Origin(props.Origin), Rotation(props.Rotation)
-        {
-
-        }
-
-        RenderProperties& RenderProperties::operator=(const RenderProperties& props)
-        {
-            Offset = props.Offset;
-            Scale = props.Scale;
-            Tint = props.Tint;
-            Origin = props.Origin;
-            Rotation = props.Rotation;
-
-            return (*this);
-        }
-
-        RenderProperties::~RenderProperties()
-        {
-
-        }
-
         void UpdateRenderProperies(const RenderProperties &parent, const RenderProperties &self, RenderProperties render)
         {
             render.Offset.X() = parent.Offset.X() + parent.Scale.X() * self.Offset.X();

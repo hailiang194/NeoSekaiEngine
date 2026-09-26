@@ -10,25 +10,6 @@ namespace SekaiEngine
 
         }
 
-        Rectangle::Rectangle(const Rectangle& rect)
-            :Position(rect.Position), Width(rect.Width), Height(rect.Height)
-        {
-
-        }
-
-        Rectangle& Rectangle::operator=(const Rectangle& rect)
-        {
-            Position = rect.Position;
-            Width = rect.Width;
-            Height = rect.Height;
-
-            return (*this);
-        }
-
-        Rectangle::~Rectangle()
-        {
-
-        }
     } // namespace Shape
     
 } // namespace SekaiEngine

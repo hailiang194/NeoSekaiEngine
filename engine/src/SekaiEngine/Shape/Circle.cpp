@@ -10,24 +10,6 @@ namespace SekaiEngine
 
         }
 
-        Circle::Circle(const Circle& circle)
-            :Center(circle.Center), Radius(circle.Radius)
-        {
-
-        }
-
-        Circle& Circle::operator=(const Circle& circle)
-        {
-            Center = circle.Center;
-            Radius = circle.Radius;
-
-            return (*this);
-        }
-
-        Circle::~Circle()
-        {
-
-        }
     } // namespace Shape
     
 } // namespace SekaiEngine

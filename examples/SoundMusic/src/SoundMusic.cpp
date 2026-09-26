@@ -74,14 +74,12 @@ public:
         SekaiEngine::Shape::Rectangle totalLength(SekaiEngine::Math::Vector2D(200, 500), 700, 20);
         SekaiEngine::Render::RenderProperties totalLengthProps;
         totalLengthProps.Tint = 0x00ffffff;
-        SekaiEngine::Render::RectangleRenderParams totalLengthParams(totalLengthProps, totalLength);
-        SekaiEngine::Render::RenderCommand::Render(totalLengthParams);
+        SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeRectCmd(totalLengthProps, totalLength));
 
         SekaiEngine::Shape::Rectangle playingLength(SekaiEngine::Math::Vector2D(200, 500), 700 * m_music.Played().ToMiliseconds() / m_music.Length().ToMiliseconds(), 20);
         SekaiEngine::Render::RenderProperties playingLengthProps;
         playingLengthProps.Tint = 0xff00ffff;
-        SekaiEngine::Render::RectangleRenderParams playingLengthParams(playingLengthProps, playingLength);
-        SekaiEngine::Render::RenderCommand::Render(playingLengthParams);
+        SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeRectCmd(playingLengthProps, playingLength));
         
     }
 private:

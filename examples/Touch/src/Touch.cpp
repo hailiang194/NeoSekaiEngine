@@ -32,8 +32,7 @@ public:
 
             SekaiEngine::Render::RenderProperties props;
             props.Tint = 0xffffffff;
-            SekaiEngine::Render::CircleRenderParams params(props, c);
-            SekaiEngine::Render::RenderCommand::Render(params);
+            SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeCircleCmd(props, c));
         }
     }
 private:

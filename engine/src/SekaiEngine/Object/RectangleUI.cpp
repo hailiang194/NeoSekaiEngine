@@ -33,9 +33,7 @@ namespace SekaiEngine
         void RectangleUI::OnRender()
         {
             UI::OnRender();
-            //SekaiEngine::Render::TextureRenderParams param(m_render, m_texture);
-            SekaiEngine::Render::RectangleRenderParams param(m_render, m_rectangle);
-            SekaiEngine::Render::RenderCommand::Render(param);
+            SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeRectCmd(m_render, m_rectangle));
         }
 
         void RectangleUI::OnEvent(Event::Event &event)

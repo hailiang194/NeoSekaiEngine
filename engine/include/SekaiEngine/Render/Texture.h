@@ -36,7 +36,7 @@ namespace SekaiEngine
              * 
              * @param texture copied object
              */
-            Texture(const Texture& texture);
+            Texture(const Texture& texture) = default;
 
             /**
              * @brief Copied assignment operator
@@ -44,13 +44,13 @@ namespace SekaiEngine
              * @param texture copied object
              * @return Texture& the reference of the object itself
              */
-            Texture& operator=(const Texture& texture);
+            Texture& operator=(const Texture& texture) = default;
 
             /**
              * @brief Destroy the Texture object
              * 
              */
-            ~Texture();
+            ~Texture() = default;
 
             /**
              * @brief Check if texture is validated
@@ -103,6 +103,8 @@ namespace SekaiEngine
             int Height();
         private:
             int m_id; /*!< The ID of texture */
+            int m_width; /*!< The width of the texture, cached at load time */
+            int m_height; /*!< The height of the texture, cached at load time */
         };
 
         /**
@@ -115,9 +117,11 @@ namespace SekaiEngine
          * @brief Load the texture and get the id
          * 
          * @param filename the file path of texture
+         * @param width if not null, receives the loaded texture's width
+         * @param height if not null, receives the loaded texture's height
          * @return int the ID of loaded texture. If the ID = 0, the texture is failed to load
          */
-        EXTENDAPI int LoadTextureFromFileAndGetID(const char * filename);
+        EXTENDAPI int LoadTextureFromFileAndGetID(const char * filename, int* width = nullptr, int* height = nullptr);
 
         /**
          * @brief Destroy all textures
@@ -140,6 +144,16 @@ namespace SekaiEngine
             return static_cast<const Texture&>(*this).Id();
         }
 
+        inline int Texture::Width() const
+        {
+            return m_width;
+        }
+
+        inline int Texture::Height() const
+        {
+            return m_height;
+        }
+
         inline int Texture::Width()
         {
             return static_cast<const Texture&>(*this).Width();
@@ -149,7 +163,6 @@ namespace SekaiEngine
         {
             return static_cast<const Texture&>(*this).Height();
         }
-
     } // namespace Render
     
 } // namespace SekaiEngine

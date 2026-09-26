@@ -50,7 +50,7 @@ namespace SekaiEngine
              * 
              * @param rect copied object
              */
-            Rectangle(const Rectangle& rect);
+            Rectangle(const Rectangle& rect) = default;
 
             /**
              * @brief Copied assignment operator
@@ -58,13 +58,13 @@ namespace SekaiEngine
              * @param rect copied object
              * @return Rectangle& the reference of the object itself
              */
-            Rectangle& operator=(const Rectangle& rect);
+            Rectangle& operator=(const Rectangle& rect) = default;
 
             /**
              * @brief Destroy the Rectangle object
              * 
              */
-            ~Rectangle();
+            ~Rectangle() = default;
 
             Math::Vector2D Position; /*!< The top left position of the rectangle*/
             float Width; /*!< The width of the rectangle*/

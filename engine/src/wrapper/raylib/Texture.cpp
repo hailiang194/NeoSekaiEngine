@@ -10,18 +10,11 @@ namespace SekaiEngine
 {
     namespace Render
     {
-            int Texture::Width() const
-            {
-                ::Texture* texture = getTexture(m_id);
-                return texture != nullptr ? texture->width : 0;
-            }
-            
-
-            int Texture::Height() const
-            {
-                ::Texture* texture = getTexture(m_id);
-                return texture != nullptr ? texture->height : 0;
-            }
+        Texture::Texture(const char* filename)
+            :m_id(0), m_width(0), m_height(0)
+        {
+            m_id = LoadTextureFromFileAndGetID(filename, &m_width, &m_height);
+        }
 
         std::unordered_map<int,::Texture> textures;
         void initTextures()
@@ -29,11 +22,21 @@ namespace SekaiEngine
             textures.clear();
         }
 
-        int LoadTextureFromFileAndGetID(const char * filename)
+        int LoadTextureFromFileAndGetID(const char * filename, int* width, int* height)
         {
+            if(width != nullptr)
+                *width = 0;
+            if(height != nullptr)
+                *height = 0;
+
             ::Texture texture = LoadTexture(filename);
             if(texture.id == 0)
                 return texture.id;
+
+            if(width != nullptr)
+                *width = texture.width;
+            if(height != nullptr)
+                *height = texture.height;
 
             textures.insert({texture.id, texture});
             return texture.id;
