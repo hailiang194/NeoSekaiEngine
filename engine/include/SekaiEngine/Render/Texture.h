@@ -109,7 +109,7 @@ namespace SekaiEngine
          * @brief initialize textures
          * 
          */
-        void initTextures();
+        EXTENDAPI void initTextures();
 
         /**
          * @brief Load the texture and get the id
@@ -117,13 +117,13 @@ namespace SekaiEngine
          * @param filename the file path of texture
          * @return int the ID of loaded texture. If the ID = 0, the texture is failed to load
          */
-        int LoadTextureFromFileAndGetID(const char * filename);
+        EXTENDAPI int LoadTextureFromFileAndGetID(const char * filename);
 
         /**
          * @brief Destroy all textures
          * 
          */
-        void destroyTextures();
+        EXTENDAPI void destroyTextures();
 
         inline bool Texture::IsValidTexture()
         {

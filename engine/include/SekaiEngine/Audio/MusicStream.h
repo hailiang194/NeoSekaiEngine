@@ -42,10 +42,10 @@ namespace SekaiEngine
             size_t m_id;
         };
 
-        void initMusicStreams();
-        size_t loadMusicStream(const char* filename);
-        void updateMusicStream();
-        void unloadMusicStreams();
+        EXTENDAPI void initMusicStreams();
+        EXTENDAPI size_t loadMusicStream(const char* filename);
+        EXTENDAPI void updateMusicStream();
+        EXTENDAPI void unloadMusicStreams();
 
         inline const size_t& MusicStream::Id() const
         {

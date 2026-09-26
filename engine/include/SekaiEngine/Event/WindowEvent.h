@@ -30,14 +30,14 @@ namespace SekaiEngine
              * @param width new width
              * @param height new height
              */
-            WindowResizeEvent(const int& width, const int& height);
+            EXTENDAPI WindowResizeEvent(const int& width, const int& height);
 
             /**
              * @brief Construct a new Window Resize Event object
              * 
              * @param event copied object
              */
-            WindowResizeEvent(const WindowResizeEvent& event);
+            EXTENDAPI WindowResizeEvent(const WindowResizeEvent& event);
 
             /**
              * @brief Copied operator assignment
@@ -45,13 +45,13 @@ namespace SekaiEngine
              * @param event copied object
              * @return WindowResizeEvent& the reference of inself 
              */
-            WindowResizeEvent& operator=(const WindowResizeEvent& event);
+            EXTENDAPI WindowResizeEvent& operator=(const WindowResizeEvent& event);
 
             /**
              * @brief Destroy the Window Resize Event object
              * 
              */
-            virtual ~WindowResizeEvent();
+            EXTENDAPI virtual ~WindowResizeEvent();
 
             EVENT_CLASS_TYPE(SekaiEngine::Event::EventType::WindowResize)
             EVENT_CLASS_CATEGORY(EventCategoryApplication)
@@ -61,28 +61,28 @@ namespace SekaiEngine
              * 
              * @return const int& the width of window
              */
-            const int& Width() const;
+            EXTENDAPI const int& Width() const;
 
             /**
              * @brief get the new width of window
              * 
              * @return const int& the width of window
              */
-            const int& Width();
+            EXTENDAPI const int& Width();
 
             /**
              * @brief get the new height of window
              * 
              * @return const int& the height of window
              */
-            const int& Height() const;
+            EXTENDAPI const int& Height() const;
 
             /**
              * @brief get the new height of window
              * 
              * @return const int& the height of window
              */
-            const int& Height();
+            EXTENDAPI const int& Height();
 
         protected:
             int m_width; /*!< width of window*/

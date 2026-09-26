@@ -152,14 +152,14 @@ namespace SekaiEngine
              * 
              * @param event dispatched event
              */
-            EventDispatcher(Event& event);
+            EXTENDAPI EventDispatcher(Event& event);
 
             /**
              * @brief Construct a new Event Dispatcher object
              * 
              * @param dispatcher copied object
              */
-            EventDispatcher(const EventDispatcher& dispatcher);
+            EXTENDAPI EventDispatcher(const EventDispatcher& dispatcher);
 
             /**
              * @brief Copy assignment object
@@ -167,13 +167,13 @@ namespace SekaiEngine
              * @param dispatcher copied object
              * @return EventDispatcher& the reference of itself
              */
-            EventDispatcher& operator=(const EventDispatcher& dispatcher);
+            EXTENDAPI EventDispatcher& operator=(const EventDispatcher& dispatcher);
 
             /**
              * @brief Destroy the Event Dispatcher object
              * 
              */
-            ~EventDispatcher();
+            EXTENDAPI ~EventDispatcher();
 
             /**
              * @brief dispatch the object

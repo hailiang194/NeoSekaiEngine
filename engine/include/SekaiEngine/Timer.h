@@ -156,14 +156,14 @@ namespace SekaiEngine
          * @brief Construct a new Timer object
          * 
          */
-        Timer();
+        EXTENDAPI Timer();
 
         /**
          * @brief Construct a new Timer object
          * 
          * @param timer copied object
          */
-        Timer(const Timer& timer);
+        EXTENDAPI Timer(const Timer& timer);
 
         /**
          * @brief Copied assignment operator
@@ -171,33 +171,33 @@ namespace SekaiEngine
          * @param timer copied object
          * @return Timer& the reference of the object itself
          */
-        Timer& operator=(const Timer& timer);
+        EXTENDAPI Timer& operator=(const Timer& timer);
 
         /**
          * @brief Destroy the Timer object
          * 
          */
-        ~Timer();
+        EXTENDAPI ~Timer();
         
         /**
          * @brief Set the Target FPS object
          * 
          * @param fps target fpg
          */
-        void SetTargetFPS(const int& fps);
+        EXTENDAPI void SetTargetFPS(const int& fps);
 
         /**
          * @brief wait until the frame reach to target fps, it is called at the end of a frame
          * 
          */
-        void wait();
+        EXTENDAPI void wait();
 
         /**
          * @brief update timer, it is called at the beginning of a frame
          * 
          * @return Timestep the timestep of last frame
          */
-        Timestep update();
+        EXTENDAPI Timestep update();
 
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> m_latestFrameTime; /*!< the application time of the latest frame */
