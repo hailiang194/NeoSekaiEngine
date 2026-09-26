@@ -1,13 +1,15 @@
 /*******************************************************************************************
 *
-*   raylib [audio] example - Module playing (streaming)
+*   raylib [audio] example - module playing
+*
+*   Example complexity rating: [★☆☆☆] 1/4
 *
 *   Example originally created with raylib 1.5, last time updated with raylib 3.5
 *
 *   Example licensed under an unmodified zlib/libpng license, which is an OSI-certified,
 *   BSD-like license that allows static linking with closed source software
 *
-*   Copyright (c) 2016-2023 Ramon Santamaria (@raysan5)
+*   Copyright (c) 2016-2025 Ramon Santamaria (@raysan5)
 *
 ********************************************************************************************/
 
@@ -35,7 +37,7 @@ int main(void)
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);  // NOTE: Try to enable MSAA 4X
 
-    InitWindow(screenWidth, screenHeight, "raylib [audio] example - module playing (streaming)");
+    InitWindow(screenWidth, screenHeight, "raylib [audio] example - module playing");
 
     InitAudioDevice();                  // Initialize audio device
 
@@ -79,6 +81,7 @@ int main(void)
         {
             StopMusicStream(music);
             PlayMusicStream(music);
+            pause = false;
         }
 
         // Pause/Resume music playing
@@ -133,6 +136,14 @@ int main(void)
             DrawRectangle(20, screenHeight - 20 - 12, screenWidth - 40, 12, LIGHTGRAY);
             DrawRectangle(20, screenHeight - 20 - 12, (int)timePlayed, 12, MAROON);
             DrawRectangleLines(20, screenHeight - 20 - 12, screenWidth - 40, 12, GRAY);
+
+            // Draw help instructions
+            DrawRectangle(20, 20, 425, 145, WHITE);
+            DrawRectangleLines(20, 20, 425, 145, GRAY);
+            DrawText("PRESS SPACE TO RESTART MUSIC", 40, 40, 20, BLACK);
+            DrawText("PRESS P TO PAUSE/RESUME", 40, 70, 20, BLACK);
+            DrawText("PRESS UP/DOWN TO CHANGE SPEED", 40, 100, 20, BLACK);
+            DrawText(TextFormat("SPEED: %f", pitch), 40, 130, 20, MAROON);
 
         EndDrawing();
         //----------------------------------------------------------------------------------
