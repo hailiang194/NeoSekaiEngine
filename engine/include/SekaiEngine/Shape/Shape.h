@@ -49,7 +49,7 @@ namespace SekaiEngine
              * @brief Destroy the IShape object
              * 
              */
-            virtual ~IShape();
+            ~IShape() = default;
         };
     } // namespace Shape
     

@@ -1,5 +1,4 @@
 #include "SekaiEngine/Object/TextureUI.h"
-#include "SekaiEngine/Render/Params/TextureRenderParams.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 
 namespace SekaiEngine
@@ -34,8 +33,7 @@ namespace SekaiEngine
         void TextureUI::OnRender()
         {
             UI::OnRender();
-            SekaiEngine::Render::TextureRenderParams param(m_render, m_texture);
-            SekaiEngine::Render::RenderCommand::Render(param);
+            SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeTexCmd(m_render, m_texture));
         }
 
         void TextureUI::OnEvent(Event::Event &event)

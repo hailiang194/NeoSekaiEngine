@@ -39,7 +39,7 @@ namespace SekaiEngine
              * 
              * @param circle copied object
              */
-            Circle(const Circle& circle);
+            Circle(const Circle& circle) = default;
 
             /**
              * @brief Copied assignment operator
@@ -47,13 +47,13 @@ namespace SekaiEngine
              * @param circle copied object
              * @return Circle& the reference of the object itself
              */
-            Circle& operator=(const Circle& circle);
+            Circle& operator=(const Circle& circle) = default;
 
             /**
              * @brief Destroy the Circle object
              * 
              */
-            ~Circle();
+            ~Circle() = default;
 
             Math::Vector2D Center; /*!< The center of the circle*/
             float Radius; /*!< The radius of the circle*/

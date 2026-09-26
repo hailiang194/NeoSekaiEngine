@@ -1,5 +1,4 @@
 #include "SekaiEngine/Object/CircleUI.h"
-#include "SekaiEngine/Render/Params/CircleRenderParams.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 
 namespace SekaiEngine
@@ -36,9 +35,7 @@ namespace SekaiEngine
         void CircleUI::OnRender()
         {
             UI::OnRender();
-            //SekaiEngine::Render::TextureRenderParams param(m_render, m_texture);
-            SekaiEngine::Render::CircleRenderParams param(m_render, m_circle);
-            SekaiEngine::Render::RenderCommand::Render(param);
+            SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeCircleCmd(m_render, m_circle));
         }
 
         void CircleUI::OnEvent(Event::Event &event)

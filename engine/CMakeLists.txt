@@ -50,10 +50,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Shape/Circle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Shape/Rectangle.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/RenderProperties.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/RenderParams.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/TextureRenderParams.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/RectangleRenderParams.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Params/CircleRenderParams.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/DrawCmd.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Utility.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Render/Font.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Math/Collision.h
@@ -96,16 +93,11 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Render/Renderer.cpp
     ./src/SekaiEngine/Render/Camera.cpp
     ./src/SekaiEngine/Timer.cpp
-    ./src/SekaiEngine/Render/Texture.cpp
-    ./src/SekaiEngine/Shape/Shape.cpp
     ./src/SekaiEngine/Shape/Circle.cpp
     ./src/SekaiEngine/Shape/Rectangle.cpp
     ./src/SekaiEngine/Render/RenderCommand.cpp
     ./src/SekaiEngine/Render/RenderProperties.cpp
-    ./src/SekaiEngine/Render/Params/RenderParams.cpp
-    ./src/SekaiEngine/Render/Params/TextureRenderParams.cpp
-    ./src/SekaiEngine/Render/Params/RectangleRenderParams.cpp
-    ./src/SekaiEngine/Render/Params/CircleRenderParams.cpp
+    ./src/SekaiEngine/Render/DrawCmd.cpp
     ./src/SekaiEngine/Math/Utility.cpp
     ./src/SekaiEngine/Render/Font.cpp
     ./src/SekaiEngine/Math/Collision.cpp

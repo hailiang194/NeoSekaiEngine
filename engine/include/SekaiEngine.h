@@ -2,7 +2,7 @@
  * @file SekaiEngine.h
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
- * @version 0.3
+ * @version 0.4
  * @date 2026-09-26
  * 
  * @copyright Copyright (c) 2024
@@ -32,10 +32,7 @@
 #include "SekaiEngine/Shape/Circle.h"
 #include "SekaiEngine/Shape/Rectangle.h"
 #include "SekaiEngine/Render/RenderProperties.h"
-#include "SekaiEngine/Render/Params/RenderParams.h"
-#include "SekaiEngine/Render/Params/TextureRenderParams.h"
-#include "SekaiEngine/Render/Params/RectangleRenderParams.h"
-#include "SekaiEngine/Render/Params/CircleRenderParams.h"
+#include "SekaiEngine/Render/DrawCmd.h"
 #include "SekaiEngine/Math/Utility.h"
 #include "SekaiEngine/Render/Font.h"
 #include "SekaiEngine/Math/Collision.h"
