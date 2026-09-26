@@ -20,7 +20,7 @@ namespace SekaiEngine
         size_t loadSound(const char* filename)
         {
             ::Sound sound = ::LoadSound(filename);
-            if(!IsSoundReady(sound))
+            if(!IsSoundValid(sound))
             {
                 return INVALID_SOUND;
             }

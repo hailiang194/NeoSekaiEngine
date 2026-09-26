@@ -1,6 +1,8 @@
 #include "SekaiEngine/Input.h"
 #include "raylib.h"
 
+static_assert(static_cast<int>(SekaiEngine::Input::KeyboardKey::KEY_MENU) == static_cast<int>(::KEY_MENU), "engine KeyboardKey::KEY_MENU must match raylib KEY_MENU");
+
 namespace SekaiEngine
 {
     namespace Input

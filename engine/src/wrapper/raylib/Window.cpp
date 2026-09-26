@@ -9,9 +9,9 @@ namespace Wrapper
     namespace Raylib
     {
         Window::Window(const SekaiEngine::WindowsProps& props)
-            :m_flag(FLAG_WINDOW_RESIZABLE), m_isFocus(true), m_windowPosition()
+            :m_flag(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT), m_isFocus(true), m_windowPosition()
         {
-            SetVSync(true);
+            SetConfigFlags(m_flag);
             InitWindow(props.Width, props.Height, props.Title);
         }
 
@@ -52,21 +52,19 @@ namespace Wrapper
 
         void Window::SetVSync(bool enable)
         {
-            if(!enable && IsVSync())
+            if(enable)
             {
-                m_flag -= FLAG_VSYNC_HINT;
+                SetWindowState(FLAG_VSYNC_HINT);
             }
-            else if(enable && !IsVSync())
+            else
             {
-                m_flag |= FLAG_VSYNC_HINT;
+                ClearWindowState(FLAG_VSYNC_HINT);
             }
-
-            SetConfigFlags(m_flag);
         }
 
         bool Window::IsVSync() const
         {
-            return m_flag & FLAG_VSYNC_HINT;
+            return IsWindowState(FLAG_VSYNC_HINT);
         }
 
         void Window::_pollEvent()

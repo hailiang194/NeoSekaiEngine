@@ -20,7 +20,7 @@ namespace SekaiEngine
         size_t loadMusicStream(const char* filename)
         {
             ::Music music = ::LoadMusicStream(filename);
-            if(!IsMusicReady(music))
+            if(!IsMusicValid(music))
             {
                 return INVALID_MUSIC;
             }
