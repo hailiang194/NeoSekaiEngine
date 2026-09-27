@@ -1,5 +1,7 @@
 #include "SekaiEngine.h"
 
+#include <cstdio>
+
 /**
  * @brief The script the labels are shown in, switched every LANGUAGE_SECONDS
  *
@@ -13,6 +15,9 @@ enum class Language
 
 static const int LANGUAGE_COUNT = 3;
 static const float LANGUAGE_SECONDS = 5.0f;
+/*!< Where the frame rate is drawn, just inside the top-left corner of the window */
+static const float FPS_LABEL_X = 10.0f;
+static const float FPS_LABEL_Y = 30.0f;
 
 /**
  * @brief One label per draw, in each of the three scripts
@@ -36,7 +41,8 @@ public:
         m_rect(SekaiEngine::Math::Vector2D(600.0f, 120.0f), 220.0f, 130.0f),
         m_texture("./icon.png"),
         m_language(0),
-        m_languageTimer(0.0f)
+        m_languageTimer(0.0f),
+        m_fpsLabel("FPS: 0.0")
     {
         //Loaded once at startup and never resized, so the glyph cache stays keyed
         //consistently by face name and size for the life of the example.
@@ -117,6 +123,17 @@ public:
             Vector2D(), Shape::Rectangle(Vector2D(48.0f, 48.0f), 96.0f, 96.0f)
         ));
         RenderCommand::Record(MakeLabel(LABELS[3][m_language], Vector2D(300.0f, 400.0f)));
+
+        //The frame rate, which the engine reports and this example only draws. It is
+        //recorded last so it lands on top of anything already there, and nothing else in
+        //this example is drawn near the corner, so it never covers a label. The reading is
+        //formatted into a member buffer rather than a literal, because a recorded DrawCmd
+        //keeps the pointer it was handed and it has to stay valid once the frame is
+        //replayed after this function has returned.
+        snprintf(m_fpsLabel, sizeof(m_fpsLabel), "FPS: %.1f",
+            SekaiEngine::Application::Instance()->FPS()
+        );
+        RenderCommand::Record(MakeLabel(m_fpsLabel, Vector2D(FPS_LABEL_X, FPS_LABEL_Y)));
     }
 private:
     /**
@@ -135,6 +152,7 @@ private:
     SekaiEngine::Render::Texture m_texture;
     int m_language;
     float m_languageTimer;
+    char m_fpsLabel[32];
 };
 
 

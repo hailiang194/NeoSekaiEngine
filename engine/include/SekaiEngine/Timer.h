@@ -11,6 +11,7 @@
 #ifndef _SEKAI_ENGINE_TICKER_H_
 #define _SEKAI_ENGINE_TICKER_H_
 
+#include <atomic>
 #include <chrono>
 #include "SekaiEngine/BaseType.h"
 
@@ -199,9 +200,36 @@ namespace SekaiEngine
          */
         EXTENDAPI Timestep update();
 
+        /**
+         * @brief Get the frame rate the loop is currently achieving, in frames per second
+         *
+         * @return float the frames completed in the last closed measurement window, or
+         * 0 before the first window closes
+         *
+         * @note The value is a rate over a recent interval, not the reciprocal of one
+         * frame's duration, so it holds steady while it is read. It is written on the
+         * thread that owns the window and may be read from any thread.
+         */
+        EXTENDAPI float FPS();
+
     private:
         std::chrono::time_point<std::chrono::high_resolution_clock> m_latestFrameTime; /*!< the application time of the latest frame */
+        /* The only member another thread may touch, so it is the only one that has to be
+           read as a whole: update() stores it on the window's thread, and a game may read
+           it from its own thread. */
+        std::atomic<float> m_fps; /*!< the frame rate of the last closed measurement window */
+        /* Plain, because update() is reached only from Application::BeginFrame, so only
+           the thread that owns the window ever counts. */
+        float m_windowSeconds; /*!< the seconds counted so far in the open window */
+        int m_windowFrames; /*!< the frames counted so far in the open window */
     };
+
+    inline float Timer::FPS()
+    {
+        /* Relaxed, because a lone scalar carries no other value that has to be seen
+           with it, and the value itself is already whole. */
+        return m_fps.load(std::memory_order_relaxed);
+    }
 
     inline float Timestep::ToSeconds() const
     {
