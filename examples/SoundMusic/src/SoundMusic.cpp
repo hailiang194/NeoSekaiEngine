@@ -11,7 +11,7 @@ public:
         //before the loop starts - the update thread may not load one while a frame
         //is being replayed.
         SekaiEngine::Application::Instance()->TextEngine().LoadFontFace(
-            "noto-20", SOUNDMUSIC_FONT_PATH, 20
+            "noto-20", "./NotoSansTC-VariableFont_wght.ttf", 20
         );
     }
 
