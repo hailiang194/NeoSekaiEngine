@@ -70,6 +70,18 @@ namespace SekaiEngine
         EXTENDAPI SekaiEngine::TextEngine::TextEngine& TextEngine();
 
         /**
+         * @brief Get the frame rate the loop is currently achieving
+         *
+         * @return float the frame rate in frames per second, or 0 before the first
+         * measurement window closes
+         *
+         * @note The value is a rate over a recent interval rather than the reciprocal of
+         * one frame, so it holds steady while it is read, and it costs no renderer or
+         * window call. Safe to read from any thread, including a layer's callbacks.
+         */
+        EXTENDAPI float FPS();
+
+        /**
          * @brief Handle events
          * 
          * @param event Event needs to handle
@@ -264,6 +276,11 @@ namespace SekaiEngine
     inline SekaiEngine::TextEngine::TextEngine& Application::TextEngine()
     {
         return m_textEngine;
+    }
+
+    inline float Application::FPS()
+    {
+        return m_timer.FPS();
     }
 
     /**
