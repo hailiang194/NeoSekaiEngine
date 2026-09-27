@@ -12,19 +12,43 @@ namespace SekaiEngine
             namespace
             {
                 /**
-                 * @brief The frame's recorded draws, replayed in order by FinishDrawing
+                 * @brief The buffer Record appends to, set by BeginRecording
+                 *
+                 * @note Thread local because the buffer belongs to the thread recording
+                 * the frame: the update thread and the thread replaying the frame are two
+                 * threads, and only the recording one ever holds this.
                  */
-                std::vector<DrawCmd> g_commands;
+                thread_local std::vector<DrawCmd>* g_recording = nullptr;
+            }
+
+            void BeginRecording(std::vector<DrawCmd>& commands)
+            {
+                g_recording = &commands;
+            }
+
+            void EndRecording()
+            {
+                g_recording = nullptr;
             }
 
             void Record(const DrawCmd& command)
             {
-                g_commands.push_back(command);
+                if(g_recording == nullptr)
+                {
+                    std::cerr << "SekaiEngine: dropped a draw recorded outside a recording scope"
+                        << std::endl;
+                    return;
+                }
+                g_recording->push_back(command);
             }
 
-            void FinishDrawing()
+            void ReplayFrame(const std::vector<DrawCmd>& commands, const Color& clearColor)
             {
-                for(std::vector<DrawCmd>::iterator iter = g_commands.begin(); iter != g_commands.end(); ++iter)
+                API::BeginDrawing();
+                API::SetClearColor(clearColor);
+                API::Clear();
+
+                for(std::vector<DrawCmd>::const_iterator iter = commands.begin(); iter != commands.end(); ++iter)
                 {
                     switch(iter->tag)
                     {
@@ -69,7 +93,6 @@ namespace SekaiEngine
                     }
                 }
 
-                g_commands.clear();
                 API::EndDrawing();
             }
         } // namespace RenderCommand

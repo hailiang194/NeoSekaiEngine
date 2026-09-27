@@ -94,38 +94,84 @@ digraph LifeCycle {
 		style=filled;
 		color=lightgrey;
 		node [style=filled,color=white];
-		game_start
-        -> game_update_elipse
-        -> game_update_window
-        -> update_layer
-        -> render_layer
-        -> game_end;
-		label = "Game loop";
-        labeljust="l"
-        game_start [
-            shape=circle
-            style=filled
-            color=black
-            label=""
-        ];
+
+		subgraph cluster_2_window {
+			style=filled;
+			color=white;
+			node [style=filled,color=lightblue];
+			game_start
+	        -> game_wait_frame
+	        -> game_update_elipse
+	        -> game_update_window
+	        -> game_take_frame
+	        -> game_release_permit
+	        -> game_replay_frame
+	        -> game_clear_frame
+	        -> game_wait_frame;
+			label = "Window thread (main): owns the graphics context, replays the draws";
+			labeljust="l"
+	        game_start [
+	            shape=circle
+	            style=filled
+	            color=black
+	            label=""
+	        ];
+	        game_wait_frame [
+	            label="Wait for a \nfinished frame"
+	        ];
+	        game_update_elipse [
+	            label="Update \ngame timer and elipse"
+	        ];
+	        game_update_window [
+	            label="Update window \nand handle window event"
+	        ];
+	        game_take_frame [
+	            label="Take the finished \nframe's buffer"
+	        ];
+	        game_release_permit [
+	            label="Permit the update thread \nto record the next frame"
+	        ];
+	        game_replay_frame [
+	            label="Replay the frame's \nrecorded draws"
+	        ];
+	        game_clear_frame [
+	            label="Clear the replayed \nframe's buffer"
+	        ];
+		}
+
+		subgraph cluster_2_update {
+			style=filled;
+			color=white;
+			node [style=filled,color=lightgoldenrod];
+	        game_update_layer
+	        -> game_record_layer
+	        -> game_publish_frame;
+			label = "Update thread: records the next frame while the frame above is replayed";
+			labeljust="l"
+	        game_update_layer [
+	            label="Update game layer stack";
+	        ];
+	        game_record_layer [
+	            label="Record every layer's draws into \nthe frame's buffer"
+	        ];
+	        game_publish_frame [
+	            label="Publish the finished buffer"
+	        ];
+		}
+
         game_end [
             shape=doublecircle
             style=filled
             color=black
             label=""
         ];
-        game_update_elipse [
-            label="Update \ngame timer and elipse"
-        ];
-        game_update_window [
-            label="Update window \nand handle window event"
-        ];
-        update_layer [
-            label="Update game layer stack";
-        ];
-        render_layer [
-            label="Render game layer stack"
-        ]
+
+		game_release_permit -> game_update_layer [style=dashed,label="permit"];
+		game_publish_frame -> game_wait_frame [style=dashed,label="one frame ahead"];
+		game_clear_frame -> game_end [label="window closed"];
+
+		label = "Game loop";
+        labeljust="l"
 	}
 
     check_game_run [

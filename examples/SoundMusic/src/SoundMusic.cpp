@@ -7,6 +7,12 @@ public:
         :m_sound("./Mission Completed.wav"),
         m_music("./Stream Loops 2023-11-29.ogg")
     {
+        //Recorded text replays through the text engine, so it needs a face loaded
+        //before the loop starts - the update thread may not load one while a frame
+        //is being replayed.
+        SekaiEngine::Application::Instance()->TextEngine().LoadFontFace(
+            "noto-20", "./NotoSansTC-VariableFont_wght.ttf", 20
+        );
     }
 
     ExampleLayer(const ExampleLayer& layer)
@@ -58,18 +64,19 @@ public:
 
     void OnRender() override
     {
-        SekaiEngine::Render::API::DrawText("Press Space to play sound", 
-            SekaiEngine::Math::Vector2D(200.0f, 180.0f), 
-            (SekaiEngine::Render::Color)0xff0000ff,
-            20
-        );
+        //The labels are recorded rather than drawn straight to the renderer:
+        //OnRender runs on the update thread, which does not hold the graphics
+        //context, and a recorded draw is the only thing that may cross to the
+        //thread that replays the frame.
+        SekaiEngine::Render::RenderProperties labelProps;
+        labelProps.Tint = (SekaiEngine::Render::Color)0xff0000ff;
 
-        SekaiEngine::Render::API::DrawText("Press P to play/pause music", 
-            SekaiEngine::Math::Vector2D(200.0f, 210.0f), 
-            (SekaiEngine::Render::Color)0xff0000ff,
-            20
-        );
-
+        SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeTextCmd(
+            labelProps, "Press Space to play sound", SekaiEngine::Math::Vector2D(200.0f, 180.0f), "noto-20"
+        ));
+        SekaiEngine::Render::RenderCommand::Record(SekaiEngine::Render::MakeTextCmd(
+            labelProps, "Press P to play/pause music", SekaiEngine::Math::Vector2D(200.0f, 210.0f), "noto-20"
+        ));
 
         SekaiEngine::Shape::Rectangle totalLength(SekaiEngine::Math::Vector2D(200, 500), 700, 20);
         SekaiEngine::Render::RenderProperties totalLengthProps;

@@ -19,6 +19,7 @@ add_executable(engine_test
     src/collision.cpp
     src/timestep.cpp
     src/text_engine.cpp
+    src/frame_threading.cpp
 )
 
 
