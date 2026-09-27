@@ -11,10 +11,17 @@
 #ifndef _SEKAI_ENGINE_APPLICATION_H_
 #define _SEKAI_ENGINE_APPLICATION_H_
 
+#include <atomic>
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+#include <vector>
+
 #include "BaseType.h"
 #include "SekaiEngine/Window.h"
 #include "SekaiEngine/Event/Event.h"
 #include "SekaiEngine/Layer/LayerStack.h"
+#include "SekaiEngine/Render/DrawCmd.h"
 #include "SekaiEngine/Timer.h"
 #include "SekaiEngine/Audio/Device.h"
 #include "SekaiEngine/TextEngine/TextEngine.h"
@@ -143,6 +150,9 @@ namespace SekaiEngine
          * @brief Add layer at the background of stack
          * 
          * @param layer added layer
+         *
+         * @note Refused and reported once Run has started: both threads read the stack
+         * every frame, so it cannot be changed while the loop runs.
          */
         EXTENDAPI void PushLayer(Layer::Layer* layer);
 
@@ -150,18 +160,25 @@ namespace SekaiEngine
          * @brief Add the layer at the frontgound of stack
          * 
          * @param overlay  added layer
+         *
+         * @note Refused and reported once Run has started, see PushLayer.
          */
         EXTENDAPI void PushOverlay(Layer::Layer* overlay);
 
         /**
          * @brief run the game loop
-         * 
+         *
+         * @note On desktop this runs the two-thread pipeline: the update thread
+         * records a frame's draws while this thread, which owns the graphics context,
+         * replays the previous frame. On Web it hands the serial loop to the browser.
          */
         EXTENDAPI void Run();
         
         /**
-         * @brief define the loop of the game
-         * 
+         * @brief define the loop of the game, update and replay on one thread
+         *
+         * @note The serial frame. It is what the Web build runs, and it is the
+         * reference the threaded pipeline has to match.
          */
         EXTENDAPI void loop();
 
@@ -174,14 +191,64 @@ namespace SekaiEngine
         
     private:
         IWindow* window;
-        bool m_running;
+        std::atomic<bool> m_running;
+        bool m_loopRunning;
         Timer m_timer;
         Layer::LayerStack m_layerStack;
         SekaiEngine::Audio::Device m_audioDevice;
         SekaiEngine::TextEngine::TextEngine m_textEngine;
 
+        /* Two frame buffers alternating: the update thread records into the one
+           main is not replaying, so no buffer is written while it is read. */
+        std::vector<Render::DrawCmd> m_frameBuffer[2];
+        /* The update thread may record a frame. Taken by the update thread when it
+           waits, given back by main once it has taken the frame it just filled. */
+        std::atomic<bool> m_permitted;
+        /* Index of the buffer holding a finished frame, or -1 when there is none. */
+        std::atomic<int> m_filled;
+        /* Held only while a thread is idle, and never while a buffer is touched. */
+        std::mutex m_park;
+        std::condition_variable m_parkSignal;
+        std::thread m_updateThread;
+        int m_writeSlot;
+        Timestep m_nextTimestep;
 
         static Application* g_instance;
+
+        /**
+         * @brief The window's half of a frame: tick event, timer, and the event poll
+         *
+         * @return Timestep the timestep of the frame, published before the update is permitted
+         */
+        Timestep BeginFrame();
+
+        /**
+         * @brief The update half of a frame, run on whichever thread the frame uses
+         *
+         * @param elipse timestep of the frame
+         *
+         * @note The caller owns the recording scope, so the buffer being written is
+         * chosen at the call site rather than hidden here.
+         */
+        void UpdateFrame(const Timestep& elipse);
+
+        /**
+         * @brief The update thread's body, for the whole run
+         *
+         */
+        void UpdateLoop();
+
+        /**
+         * @brief Refuse any further change to the layer stack, from here on
+         *
+         */
+        void EnterLoop();
+
+        /**
+         * @brief Request shutdown and wake the update thread
+         *
+         */
+        void RequestShutdown();
     };
 
     inline const IWindow& Application::Window()

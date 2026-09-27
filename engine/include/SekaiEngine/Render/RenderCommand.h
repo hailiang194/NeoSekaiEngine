@@ -25,17 +25,33 @@ namespace SekaiEngine
         {
 
             /**
-             * @brief Startup rendering for a frame
+             * @brief Start appending recorded draws to the frame's buffer
              *
-             * @param color background color
+             * @param commands the buffer this thread records the frame into
+             *
+             * @note The buffer is a parameter rather than engine state so the one being
+             * written is visible at the call site and cannot be confused with the one
+             * being replayed. Record only appends between BeginRecording and EndRecording.
              */
-            void StartDrawing(const Color& color);
+            EXTENDAPI void BeginRecording(std::vector<DrawCmd>& commands);
 
             /**
-             * @brief Replay the frame's recorded draws, then finish rendering for a frame
+             * @brief Stop recording, so a later Record is reported and dropped
              *
              */
-            EXTENDAPI void FinishDrawing();
+            EXTENDAPI void EndRecording();
+
+            /**
+             * @brief Replay a frame's recorded draws and bracket the frame
+             *
+             * @param commands the frame's recorded draws, in the order they were recorded
+             * @param clearColor background color
+             *
+             * @note Must run on the thread that created the window, which owns the
+             * graphics context. One call brackets the whole frame, so a caller cannot
+             * begin a frame without ending it.
+             */
+            EXTENDAPI void ReplayFrame(const std::vector<DrawCmd>& commands, const Color& clearColor);
 
             /**
              * @brief Record a draw to be replayed at the end of the frame
@@ -43,13 +59,6 @@ namespace SekaiEngine
              * @param command the draw to record
              */
             EXTENDAPI void Record(const DrawCmd& command);
-
-            inline void StartDrawing(const Color& color)
-            {
-                Render::API::BeginDrawing();
-                Render::API::SetClearColor(color);
-                Render::API::Clear();
-            }
         } // namespace RenderCommand
 
     } // namespace Render
