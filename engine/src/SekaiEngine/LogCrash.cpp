@@ -126,41 +126,8 @@ namespace SekaiEngine
         const char kCrashHeader[] = "SEKAI ENGINE CRASH: ";
         const char kNewline[] = "\n";
 
-        size_t DumpWrite(int fd, const char* bytes, size_t len)
-        {
-            size_t written = 0;
-            while (written < len)
-            {
-                const ssize_t n = ::write(fd, bytes + written, len - written);
-                if (n <= 0)
-                {
-                    break;
-                }
-                written += static_cast<size_t>(n);
-            }
-            return written;
-        }
-
-        void DumpRing(int fd)
-        {
-            const char* data = g_capture.data;
-            const size_t total = g_capture.total.load(std::memory_order_acquire);
-            const size_t n = (total < kRingCapacity) ? total : kRingCapacity;
-            if (0 == n)
-            {
-                return;
-            }
-
-            const size_t start = (total - n) % kRingCapacity;
-            const size_t first = (n <= kRingCapacity - start) ? n : (kRingCapacity - start);
-            DumpWrite(fd, data + start, first);
-            if (first < n)
-            {
-                DumpWrite(fd, data, n - first);
-            }
-        }
-
 #if defined(_WIN32)
+
         struct ExceptionName
         {
             DWORD code;
@@ -244,6 +211,40 @@ namespace SekaiEngine
             return EXCEPTION_CONTINUE_EXECUTION;
         }
 #else
+        size_t DumpWrite(int fd, const char* bytes, size_t len)
+        {
+            size_t written = 0;
+            while (written < len)
+            {
+                const ssize_t n = ::write(fd, bytes + written, len - written);
+                if (n <= 0)
+                {
+                    break;
+                }
+                written += static_cast<size_t>(n);
+            }
+            return written;
+        }
+
+        void DumpRing(int fd)
+        {
+            const char* data = g_capture.data;
+            const size_t total = g_capture.total.load(std::memory_order_acquire);
+            const size_t n = (total < kRingCapacity) ? total : kRingCapacity;
+            if (0 == n)
+            {
+                return;
+            }
+
+            const size_t start = (total - n) % kRingCapacity;
+            const size_t first = (n <= kRingCapacity - start) ? n : (kRingCapacity - start);
+            DumpWrite(fd, data + start, first);
+            if (first < n)
+            {
+                DumpWrite(fd, data, n - first);
+            }
+        }
+
         struct SignalName
         {
             int signum;
