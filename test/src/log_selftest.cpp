@@ -48,6 +48,16 @@ namespace
     size_t g_checks = 0;
     size_t g_failures = 0;
 
+    // Relay the phase to the captured log stream so a crash on Windows (where
+    // the probe's own stdout may not be inherited) still shows the last block
+    // that entered. stdout from the parent is reliable: the [INFO] lines show up.
+    void Phase(const char* name)
+    {
+        std::fputs(name, stdout);
+        std::fputc('\n', stdout);
+        std::fflush(stdout);
+    }
+
 #define CHECK(cond)                                                                      \
     do                                                                                   \
     {                                                                                    \
@@ -379,23 +389,33 @@ int main(int argc, char** argv)
     }
 #endif
 
+    Phase("phase=no-file");
     NoFileUntilRequested();
+    Phase("phase=gate");
     LevelGateSuppressesAndRoutes();
+    Phase("phase=format");
     FormattedLineAndOrdinal();
+    Phase("phase=concurrent");
     ConcurrentWritesProduceCompleteLines();
+    Phase("phase=ring");
     RingKeepsNewestWhenFull();
 
     // The fatal-fault crash dump is exercised through the platform's own
     // mechanism: a forked child on POSIX, a spawned probe on Windows
     // (tasks 5.2 / 5.3).
 #if defined(_WIN32)
+    Phase("phase=crash-probe");
     WindowsExceptionDumpsCrashLog();
 #else
+    Phase("phase=crash-fork");
     FatalSignalDumpsCrashLog();
 #endif
 
+    Phase("phase=web-map");
     WebConsoleChannelMapping();
+    Phase("phase=raylib-map");
     RaylibLevelMapping();
+    Phase("phase=rolling");
     RollingFileRotatesAndStaysBounded();
 
     if (g_failures == 0)
