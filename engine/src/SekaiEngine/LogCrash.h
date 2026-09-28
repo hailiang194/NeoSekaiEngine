@@ -22,7 +22,7 @@ namespace SekaiEngine
      * @brief Map an engine level onto the Web console channel of matching severity
      * 
      */
-    ConsoleChannel ChannelForLevel(LogLevel level);
+    EXTENDAPI ConsoleChannel ChannelForLevel(LogLevel level);
 
     /**
      * @brief Bounded lock-free in-memory capture of the most recent log lines,
@@ -49,7 +49,7 @@ namespace SekaiEngine
          * @param bytes formatted line already carrying its trailing newline
          * @param len   length of bytes
          */
-        static void Append(const char* bytes, size_t len);
+        EXTENDAPI static void Append(const char* bytes, size_t len);
 
         /**
          * @brief Copy the newest bytes of the ring out (for tests); the read
@@ -59,7 +59,7 @@ namespace SekaiEngine
          * @param cap    size of out
          * @return size_t number of bytes copied (<= cap)
          */
-        static size_t CopyLatest(char* out, size_t cap);
+        EXTENDAPI static size_t CopyLatest(char* out, size_t cap);
     };
 
     /**

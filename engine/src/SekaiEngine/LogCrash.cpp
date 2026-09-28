@@ -2,16 +2,9 @@
 
 #include <atomic>
 #include <cstddef>
-#include <cstring>
-
-#if !defined(PLATFORM_WEB)
-
 #include <cstdio>
 #include <cstdlib>
-#include <fcntl.h>
-#include <unistd.h>
-
-#endif
+#include <cstring>
 
 #if defined(_WIN32) && !defined(PLATFORM_WEB)
 #ifndef NOMINMAX
@@ -19,7 +12,9 @@
 #endif
 #include <windows.h>
 #elif !defined(PLATFORM_WEB)
+#include <fcntl.h>
 #include <signal.h>
+#include <unistd.h>
 #endif
 
 namespace SekaiEngine
