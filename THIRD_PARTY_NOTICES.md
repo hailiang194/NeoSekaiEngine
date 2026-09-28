@@ -231,3 +231,90 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+plog
+=======================================
+
+Mozilla Public License 2.0
+
+Copyright (c) Sergiu Deitsch and contributors.
+
+The plog logging library is vendored under engine/vendors/plog and used
+as the desktop sink backend of the engine logger. The source and full
+license text are available at https://github.com/SergiusTheBest/plog.
+
+Mozilla Public License Version 2.0
+==================================
+
+1. Definitions
+--------------
+
+"You" (or "Your") refers to the individual or legal entity exercising
+permissions granted by this License.
+
+"Source Code" means the preferred form of the copyrighted work for
+making modifications to it, including all modules it contains, plus any
+associated "Interface Definition" (or "IDL") files and documentation.
+
+"Executable Form" means any non-Source Code form of a work.
+
+"Generator" means a Source Code file that generates Source Code files.
+
+"Larger Work" means a work that combines Covered Software with other
+material, in a separate file or files, that is not Covered Software.
+
+"License" means this document.
+
+"Licensable" means having the right to grant, to the maximum extent
+possible, whether at the time of the initial grant or subsequently, any
+and all of the rights conveyed by this License.
+
+"Contributor" means each individual or legal entity that creates,
+contributes to the creation of, or owns Covered Software.
+
+"Patent Claims" of a Contributor means any patent claim(s), including
+without limitation, method, process, and apparatus claims, in any
+patent/Licensable by such Contributor that would be infringed, but for
+the grant of the License, by the making, using, selling, offering for
+sale, having made, import, or transfer of either its Contributions or
+its Contributor Version. Patent Claims do not include claims that would
+be infringed only as a consequence of the modification of the
+Contribution or its Contributor Version by another party.
+
+"Contributor Version" means the combination of the Contributions of
+others (if any) used by a Contributor and that particular Contributor's
+Contribution.
+
+"Contribution" means Covered Software of a particular Contributor.
+
+"Covered Software" means either the Initial Version, or a Contributor
+Version, or a combination of the foregoing.
+
+"Initial Version" means the Covered Software in an uncompiled form
+before being modified by a Contributor.
+
+"Initial Contributor" means the person or entity that makes the Initial
+Version available under this License.
+
+"Modified Version" means a version of the Covered Software that has
+been modified in whole or in part by a Contributor or by any person
+acting on behalf of a Contributor.
+
+"Patent Claims" of a Contributor includes the granted patent claims and
+all those patent claims that come into existence during the term of
+this License.
+
+Additional definitions of the MPL 2.0 ("Secondary License",
+"Executable Form", "Form of Source Code" and "Incompatible With
+Secondary Licenses") and the full license text are available at
+https://www.mozilla.org/en-US/MPL/2.0/ and in the plog source
+distribution.
+
+Summary of the terms that apply to the use of plog here:
+
+- plog is vendored as a Source Code library and used by NeoSekaiEngine.
+- The MPL 2.0 applies to the plog files themselves; files that merely
+  link to or use them are not themselves covered.
+- If you distribute the vendored plog source, the MPL notices in the
+  plog files must be retained, and any modifications to those files must
+  be made available under the MPL 2.0.
+

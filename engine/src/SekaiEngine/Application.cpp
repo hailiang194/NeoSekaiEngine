@@ -2,6 +2,7 @@
 #include "SekaiEngine/Event/WindowEvent.h"
 #include "SekaiEngine/Event/ApplicationEvent.h"
 #include "SekaiEngine/Application.h"
+#include "SekaiEngine/Log.h"
 #include "SekaiEngine/Render/Renderer.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 #include "SekaiEngine/Input.h"
@@ -10,7 +11,6 @@
 #include "SekaiEngine/TextEngine/TextEngine.h"
 #include "SekaiEngine/Audio/Sound.h"
 #include "SekaiEngine/Audio/MusicStream.h"
-#include <iostream>
 #include "version.h"
 
 namespace SekaiEngine
@@ -21,7 +21,7 @@ namespace SekaiEngine
         :window(IWindow::Create()), m_audioDevice(), m_running(true), m_loopRunning(false), m_layerStack(), m_timer(),
          m_permitted(false), m_filled(-1), m_writeSlot(0)
     {
-        std::cout << "You are using NeoSekaiEngine v" << SEKAI_ENGINE_VERSION << std::endl;
+        SEKAI_INFO("You are using NeoSekaiEngine v%s", SEKAI_ENGINE_VERSION);
         Application::g_instance = this;
         window->setEventCallbackFn(std::bind(&Application::OnEvent, this, std::placeholders::_1));
         SekaiEngine::Render::initTextures();
@@ -166,9 +166,9 @@ namespace SekaiEngine
     {
         if(m_loopRunning)
         {
-            std::cerr << "SekaiEngine: refused to add a layer while the loop is running. "
-                "Both threads read the layer stack every frame, so it cannot be changed "
-                "after Run has started" << std::endl;
+            SEKAI_WARNING("SekaiEngine: refused to add a layer while the loop is running. "
+                          "Both threads read the layer stack every frame, so it cannot be changed "
+                          "after Run has started");
             return;
         }
         m_layerStack.PushLayer(layer);
@@ -178,9 +178,9 @@ namespace SekaiEngine
     {
         if(m_loopRunning)
         {
-            std::cerr << "SekaiEngine: refused to add an overlay while the loop is running. "
-                "Both threads read the layer stack every frame, so it cannot be changed "
-                "after Run has started" << std::endl;
+            SEKAI_WARNING("SekaiEngine: refused to add an overlay while the loop is running. "
+                          "Both threads read the layer stack every frame, so it cannot be changed "
+                          "after Run has started");
             return;
         }
         m_layerStack.PushOverlay(overlay);
