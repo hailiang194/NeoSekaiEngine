@@ -175,7 +175,7 @@ namespace SekaiEngine
         const ExceptionName kExceptionTable[] = {
             { EXCEPTION_ACCESS_VIOLATION,      "ACCESS_VIOLATION"      },
             { EXCEPTION_INT_DIVIDE_BY_ZERO,    "INT_DIVIDE_BY_ZERO"    },
-            { EXCEPTION_FLOAT_DIVIDE_BY_ZERO,  "FLOAT_DIVIDE_BY_ZERO"  },
+            { EXCEPTION_FLT_DIVIDE_BY_ZERO,    "FLT_DIVIDE_BY_ZERO"    },
             { EXCEPTION_ILLEGAL_INSTRUCTION,   "ILLEGAL_INSTRUCTION"   },
             { EXCEPTION_STACK_OVERFLOW,        "STACK_OVERFLOW"        },
         };

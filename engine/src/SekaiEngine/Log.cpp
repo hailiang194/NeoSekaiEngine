@@ -28,7 +28,7 @@
 #endif
 
 #if defined(PLATFORM_WEB)
-#include <emscripten/emscripten.h>
+#include <emscripten/console.h>
 #endif
 
 namespace SekaiEngine
