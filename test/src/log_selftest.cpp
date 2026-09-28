@@ -203,9 +203,9 @@ namespace
         // appended last
         SekaiEngine::LogCrash::Append("AAA", 3);
         SekaiEngine::LogCrash::Append("BBB", 3);
-        const size_t small = SekaiEngine::LogCrash::CopyLatest(out, sizeof(out));
-        CHECK(small >= 6);
-        CHECK(std::string(out + small - 6, 6) == std::string("AAABBB"));
+        const size_t got = SekaiEngine::LogCrash::CopyLatest(out, sizeof(out));
+        CHECK(got >= 6);
+        CHECK(std::string(out + got - 6, 6) == std::string("AAABBB"));
 
         // overflow: with ~300 KiB of 1 KiB lines, only the tail survives
         const std::string line = std::string(1012, 'x') + "END_MARKER8899";
