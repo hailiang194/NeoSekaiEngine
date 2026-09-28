@@ -39,6 +39,8 @@ jobs:
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for Unix makefile
               run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
+            - name: run logging self-check for Unix makefile
+              run: ./build/out/log_selftest
             - name: Upload test result
               uses: actions/upload-artifact@v4
               with:
@@ -87,6 +89,12 @@ jobs:
           - name: run test for Unix makefile
             if: ${{ matrix.compiler != 'MSVC' }}
             run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
+          - name: run logging self-check for MSVC
+            if: ${{ matrix.compiler == 'MSVC' }}
+            run: .\build\out\${{ matrix.config }}\log_selftest.exe
+          - name: run logging self-check for Unix makefile
+            if: ${{ matrix.compiler != 'MSVC' }}
+            run: ./build/out/log_selftest
           - name: Upload test result
             uses: actions/upload-artifact@v4
             with:
