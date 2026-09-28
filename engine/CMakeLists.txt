@@ -1,5 +1,4 @@
 project(SekaiEngine VERSION 0.4.0)
-set (CMAKE_CXX_STANDARD 11)
 
 include(cmake/import_engine.cmake)
 include(cmake/set_version_header.cmake)
@@ -122,6 +121,10 @@ add_subdirectory(./vendors/freetype)
 find_package(Threads REQUIRED)
 
 add_library(SekaiEngine ${ENGINE_PUBLIC_HEADERS} ${ENGINE_SOURCES})
+# A PUBLIC compile feature rather than a directory-scope standard variable: a
+# variable does not leave engine/, so the examples, engine_test and downstream
+# projects would sit at their toolchain's default instead of the library's.
+target_compile_features(SekaiEngine PUBLIC cxx_std_17)
 target_link_libraries(SekaiEngine PUBLIC Threads::Threads)
 target_link_libraries(SekaiEngine PRIVATE raylib freetype)
 target_include_directories(SekaiEngine PUBLIC ./vendors/freetype/include)

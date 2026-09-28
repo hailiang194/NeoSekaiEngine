@@ -13,6 +13,7 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 ## Requirements
 * git
 * [CMake](https://cmake.org/download/) 3.25 or newer
+* C++17 or newer
 * [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
 * **MSVC** or **Makefile**
 * Doxygen and Graphviz
