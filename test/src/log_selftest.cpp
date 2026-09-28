@@ -153,14 +153,14 @@ namespace
         SekaiEngine::Log::SetFile(path.c_str());
 
         constexpr size_t kMessages = 400;
-        std::thread first([]()
+        std::thread first([kMessages]()
         {
             for (size_t i = 0; i < kMessages; ++i)
             {
                 SEKAI_INFO("HEAD_%zu", i);
             }
         });
-        std::thread second([]()
+        std::thread second([kMessages]()
         {
             for (size_t i = 0; i < kMessages; ++i)
             {
@@ -385,7 +385,11 @@ int main(int argc, char** argv)
     // The fatal-fault crash dump is exercised through the platform's own
     // mechanism: a forked child on POSIX, a spawned probe on Windows
     // (tasks 5.2 / 5.3).
+#if defined(_WIN32)
+    WindowsExceptionDumpsCrashLog();
+#else
     FatalSignalDumpsCrashLog();
+#endif
 
     WebConsoleChannelMapping();
     RaylibLevelMapping();
