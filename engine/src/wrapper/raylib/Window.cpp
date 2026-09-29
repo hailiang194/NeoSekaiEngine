@@ -1,4 +1,5 @@
 #include "wrapper/raylib/Window.h"
+#include "wrapper/raylib/Log.h"
 #include "SekaiEngine/Event/WindowEvent.h"
 
 #ifdef USE_RAYLIB
@@ -11,6 +12,9 @@ namespace Wrapper
         Window::Window(const SekaiEngine::WindowsProps& props)
             :m_flag(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT), m_isFocus(true), m_windowPosition()
         {
+            // Route raylib trace logs into the engine logger before the window
+            // and graphics device initialize, or their warnings would be lost.
+            InstallRaylibLogBridge();
             SetConfigFlags(m_flag);
             InitWindow(props.Width, props.Height, props.Title);
         }

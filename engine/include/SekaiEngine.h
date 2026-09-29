@@ -3,7 +3,7 @@
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
  * @version 0.4
- * @date 2026-09-27
+ * @date 2026-09-28
  * 
  * @copyright Copyright (c) 2024
  * 
@@ -46,6 +46,7 @@
 #include "SekaiEngine/Audio/Sound.h"
 #include "SekaiEngine/Audio/MusicStream.h"
 #include "SekaiEngine/TextEngine/TextEngine.h"
+#include "SekaiEngine/Log.h"
 
 #include "version.h"
 

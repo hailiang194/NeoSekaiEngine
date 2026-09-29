@@ -34,4 +34,20 @@ add_test(NAME Test COMMAND engine_test)
 include(GoogleTest)
 gtest_discover_tests(engine_test)
 
+# Logging is verified by a framework-free self-check (no Googletest): exit
+# code 0 means every check passed (see openspec/changes/engine-logging/design.md D10).
+add_executable(log_selftest
+    src/log_selftest.cpp
+)
+
+target_link_libraries(log_selftest SekaiEngine)
+target_include_directories(log_selftest PRIVATE
+    ${CMAKE_SOURCE_DIR}/engine/include
+    ${CMAKE_SOURCE_DIR}/engine/src
+    ${CMAKE_SOURCE_DIR}/engine/vendors/plog/include
+)
+target_compile_definitions(log_selftest PRIVATE PLOG_CHAR_IS_UTF8=1)
+
+add_test(NAME LogSelfCheck COMMAND log_selftest)
+
 set(BUILD_SHARED_LIBS ${PROJECT_BUILD_SHARED_LIBS})

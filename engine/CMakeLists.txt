@@ -8,6 +8,7 @@ set(WRAPPER_RAYLIB_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Parser.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Texture.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Font.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/wrapper/raylib/Log.h
 )
 
 set(WRAPPER_RAYLIB_SOURCES
@@ -24,6 +25,7 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/AudioDevice.cpp
     ./src/wrapper/raylib/Sound.cpp
     ./src/wrapper/raylib/MusicStream.cpp
+    ./src/wrapper/raylib/Log.cpp
 )
 
 set(ENGINE_PUBLIC_HEADERS
@@ -63,6 +65,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/Sound.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/MusicStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/TextEngine/TextEngine.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Log.h
 )
 
 find_package(Python3 COMPONENTS Interpreter)
@@ -108,6 +111,8 @@ set(ENGINE_SOURCES
     ./src/SekaiEngine/Audio/Sound.cpp
     ./src/SekaiEngine/Audio/MusicStream.cpp
     ./src/SekaiEngine/TextEngine/TextEngine.cpp
+    ./src/SekaiEngine/Log.cpp
+    ./src/SekaiEngine/LogCrash.cpp
 )
 
 option(BUILD_SHARED_LIBS "Build shared lib" ON)
@@ -129,6 +134,16 @@ target_link_libraries(SekaiEngine PUBLIC Threads::Threads)
 target_link_libraries(SekaiEngine PRIVATE raylib freetype)
 target_include_directories(SekaiEngine PUBLIC ./vendors/freetype/include)
 target_compile_definitions(SekaiEngine PRIVATE USE_RAYLIB)
+
+# Logging: vendored plog drives the desktop sinks; its char type must stay
+# UTF-8 on Windows. The internal ring/crash module lives under src/.
+target_include_directories(SekaiEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendors/plog/include)
+target_include_directories(SekaiEngine PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_compile_definitions(SekaiEngine PRIVATE PLOG_CHAR_IS_UTF8=1)
+
+if(${PLATFORM} STREQUAL "Web" OR EMSCRIPTEN)
+    target_compile_definitions(SekaiEngine PRIVATE PLATFORM_WEB)
+endif()
 
 if(BUILD_SHARED_LIBS)
     message(STATUS "Build shared lib for SekaiEngine")

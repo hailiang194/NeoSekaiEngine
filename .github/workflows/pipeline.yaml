@@ -39,6 +39,8 @@ jobs:
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for Unix makefile
               run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
+            - name: run logging self-check for Unix makefile
+              run: python3 ./scripts/run_log_selftest.py ./build/out/log_selftest
             - name: Upload test result
               uses: actions/upload-artifact@v4
               with:
@@ -87,6 +89,19 @@ jobs:
           - name: run test for Unix makefile
             if: ${{ matrix.compiler != 'MSVC' }}
             run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
+          - name: run logging self-check for MSVC
+            if: ${{ matrix.compiler == 'MSVC' }}
+            run: python ./scripts/run_log_selftest.py .\build\out\${{ matrix.config }}\log_selftest.exe
+          - name: run logging self-check for Unix makefile
+            if: ${{ matrix.compiler != 'MSVC' }}
+            run: python ./scripts/run_log_selftest.py ./build/out/log_selftest
+          - name: Upload crash dumps
+            if: always()
+            uses: actions/upload-artifact@v4
+            with:
+              name: crash-dumps-${{matrix.compiler}}-${{ matrix.config }}-${{ matrix.build_shared }}
+              path: crash-*.log
+              if-no-files-found: ignore
           - name: Upload test result
             uses: actions/upload-artifact@v4
             with:

@@ -122,3 +122,49 @@ Go to the browser and access to
 ```
 localhost:<port>/<Game-project-name>.html
 ```
+
+## Logging
+
+The engine ships a built-in logger (no extra setup) that prints to the console
+by default on every platform:
+
+```cpp
+#include "SekaiEngine/Log.h"
+
+SEKAI_INFO("Loading level %d", level);
+SEKAI_WARNING("Texture %s not found", name);
+SEKAI_ERROR("failed to connect: %s", error);
+```
+
+Levels are `SEKAI_TRACE`, `SEKAI_DEBUG`, `SEKAI_INFO`, `SEKAI_WARNING`,
+`SEKAI_ERROR` and `SEKAI_FATAL`. The minimum level that reaches any sink is
+`Info`; change it with `SekaiEngine::Log::SetLevel(...)`.
+
+### Desktop: optional log file
+
+Request a rotating log file from code or via the environment:
+
+```cpp
+SekaiEngine::Log::SetFile("sekai/log.txt");
+```
+or start the game with `SEKAI_LOG_FILE=path/to/sekai.log`. No file is ever
+created unless one of these is used. The file rolls over when it grows (max ~1 MB,
+5 kept).
+
+### Web: browser console
+
+On Web builds all messages go to the browser devtools console, mapped to
+`console.log` / `console.warn` / `console.error` by severity. `SetFile()` is a
+no-op on Web.
+
+### Desktop: crash log
+
+On desktop, the most recent log messages are captured in memory and, on a
+fatal fault (segfault, aborted assert, trap, ...), a `crash-<pid>.log` file is
+written to the working directory with the last lines intact — independent of
+the file-sink setting.
+
+### raylib
+
+raylib's own internal logs are routed through this logger and respect the same
+level threshold, so you will not see them printed twice.
