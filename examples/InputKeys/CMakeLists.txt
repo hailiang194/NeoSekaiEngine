@@ -11,4 +11,4 @@ target_link_libraries(InputKey PUBLIC SekaiEngine)
 target_include_directories(InputKey PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
 target_compile_definitions(InputKey PRIVATE HAS_ENTRY_POINT)
 
-configure_platform_and_web(InputKey "${PROJECT_SOURCE_DIR}/assets")
+configure_platform_and_web(InputKey)
