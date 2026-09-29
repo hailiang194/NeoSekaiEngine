@@ -11,4 +11,4 @@ target_link_libraries(Touch PUBLIC SekaiEngine)
 target_include_directories(Touch PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
 target_compile_definitions(Touch PRIVATE HAS_ENTRY_POINT)
 
-configure_platform_and_web(Touch "${PROJECT_SOURCE_DIR}/assets")
+configure_platform_and_web(Touch)

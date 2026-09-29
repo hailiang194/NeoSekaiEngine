@@ -15,4 +15,6 @@ if(MSVC)
     target_compile_options(DrawCmd PRIVATE /utf-8)
 endif()
 
-configure_platform_and_web(DrawCmd "${PROJECT_SOURCE_DIR}/assets")
+configure_platform_and_web(DrawCmd
+    "${CMAKE_SOURCE_DIR}/examples/assets/icon.png"
+    "${CMAKE_SOURCE_DIR}/examples/assets/NotoSansTC-VariableFont_wght.ttf")

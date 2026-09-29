@@ -11,4 +11,4 @@ target_link_libraries(InputMouse PUBLIC SekaiEngine)
 target_include_directories(InputMouse PUBLIC ${CMAKE_SOURCE_DIR}/engine/include)
 target_compile_definitions(InputMouse PRIVATE HAS_ENTRY_POINT)
 
-configure_platform_and_web(InputMouse "${PROJECT_SOURCE_DIR}/assets")
+configure_platform_and_web(InputMouse)
