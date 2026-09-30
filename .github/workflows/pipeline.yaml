@@ -140,6 +140,25 @@ jobs:
           run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_ENGINE_EXAMPLES=1 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
         - name: Build project
           run: cmake --build ./build --config ${{ matrix.config }}     
+        - name: Assert ES6 module output (no .html shell)
+          run: |
+            if find build/out -name '*.html' | grep -q .; then
+              echo "unexpected .html shell emitted:"; find build/out -name '*.html'
+              exit 1
+            fi
+            test -f build/out/BasicWindow/BasicWindow.js
+            test -f build/out/BasicWindow/BasicWindow.wasm
+            echo "ES6 module pair present in build/out/BasicWindow/"
+        - name: Build with web UI and assert staged game output
+          run: |
+            cmake -S . -B build-web-ui -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_ENGINE_EXAMPLES=1 \
+              -DBUILD_WEB_UI=ON -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+            cmake --build build-web-ui --target BasicWindow --config ${{ matrix.config }}
+            test -f build-web-ui/out/BasicWindow/index.html
+            test -f build-web-ui/out/BasicWindow/BasicWindow.js
+            test -f build-web-ui/out/BasicWindow/BasicWindow.wasm
+            test -f build-web-ui/out/BasicWindow/BasicWindow.data
+            echo "Vue UI staged with module + preloaded data in build-web-ui/out/BasicWindow/"
         - name: Upload WebAssembly
           uses: actions/upload-artifact@v4
           with:

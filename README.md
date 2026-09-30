@@ -14,7 +14,8 @@ Neo Sekai Game engine - my 2D game engine built base on what I know about game d
 * git
 * [CMake](https://cmake.org/download/) 3.25 or newer
 * C++17 or newer
-* [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform)
+* [Emscripten SDK](https://emscripten.org/docs/getting_started/downloads.html) (for Web platform) — or **Docker**, to build the Web platform through the pinned `emscripten/emsdk` image with no SDK installed
+* **Node.js** and **npm** (only when building the Web UI, `BUILD_WEB_UI=ON`)
 * **MSVC** or **Makefile**
 * Doxygen and Graphviz
 
@@ -78,6 +79,17 @@ At the root project folder run
 ``` bash
 emcmake cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0
 ```
+Add `-DBUILD_WEB_UI=ON` to also build and stage the Vue web UI (requires npm on the host):
+``` bash
+emcmake cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_WEB_UI=ON
+```
+
+Each Web target is emitted as an **ES6 module** — `<Game>.js`, `<Game>.wasm` and the preloaded `<Game>.data` — into its own output folder `build/out/<Game>/` (no `.html` shell is generated). With `BUILD_WEB_UI=ON`, the generic UI from `engine/web-ui/` is built (vite) and merged into that same folder as `index.html` + assets. Desktop/Windows builds are unaffected and still land directly in `build/out/`.
+
+**No Emscripten SDK installed?** The Docker wrapper does the exact same configure + build inside the pinned `emscripten/emsdk` image:
+``` bash
+./scripts/build-web.sh
+```
 ## Build project
 ### Desktop platform
 #### **MSVC:**
@@ -94,13 +106,9 @@ Go to build folder and run
 make
 ```
 ### Web platform
-Go to build folder
+Go to build folder and build the game target
 ``` bash
-cd build
-```
-Run makefile
-``` bash
-make PLATFORM=PLATFORM_WEB -B
+cmake --build build --target <Game>
 ```
 ## Start our game
 ### Desktop platformm
@@ -113,14 +121,17 @@ and if you use Visual Studio, just click **Run**
 #### **Makefile**
 Your execution file in in ```<Project root folder>\build\out``` folder
 ### Web platform
-Go to ```<Project root folder>\build\bin``` folder
-Run python server
+Go to the game's output folder
+``` bash
+cd build/out/<Game>
+```
+Run a static server in that folder (do **not** open `index.html` via `file://`, the module fetch needs http)
 ```
 python -m http.server <port>
 ```
 Go to the browser and access to
 ```
-localhost:<port>/<Game-project-name>.html
+localhost:<port>/
 ```
 
 ## Logging

@@ -1,0 +1,6 @@
+node_modules/
+dist/
+src/wasm/game.ts
+src/wasm/*.js
+src/wasm/*.wasm
+public/*.data
