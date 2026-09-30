@@ -211,6 +211,8 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: html-docs
+            # single-artifact download extracts flat into `path`, no name subdir
+            path: html-docs
         - name: Upload docs as Pages artifact
           uses: actions/upload-pages-artifact@v3
           with:
