@@ -1,4 +1,4 @@
-project(SekaiEngine VERSION 0.4.0)
+project(SekaiEngine VERSION 1.0.0)
 
 option(BUILD_WEB_UI "Build the Vue web UI for web targets and stage it into the game output dir" OFF)
 set(WEB_UI_BASE "./" CACHE STRING "Base URL for the built web UI (vite --base)")
