@@ -1,3 +1,13 @@
+/**
+ * @file GroupUI.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief UI object that groups other UI objects
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_OBJECT_GROUP_U_H_
 #define _SEKAI_ENGINE_OBJECT_GROUP_U_H_
 
@@ -8,6 +18,12 @@ namespace SekaiEngine
 {
     namespace Object
     {
+        /**
+         * @brief UI object that groups other UI objects
+         *
+         * The group forwards update, render and event handling to its children,
+         * and applies its own transform properties to them.
+         */
         class GroupUI: public UI
         {
         public:
@@ -95,7 +111,7 @@ namespace SekaiEngine
              */
             EXTENDAPI void SetRotation(const float& rotation) override;
         protected:
-            std::vector<UI*> m_children;
+            std::vector<UI*> m_children; /*!< the UI objects handled by the group, not owned */
         };
     } // namespace Object
     

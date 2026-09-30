@@ -1,3 +1,13 @@
+/**
+ * @file LogCrash.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief Internal log ring buffer and fatal-fault crash dump
+ * @version 0.1
+ * @date 2026-09-28
+ * 
+ * @copyright Copyright (c) 2026
+ * 
+ */
 #ifndef _SEKAI_ENGINE_LOG_CRASH_H_
 #define _SEKAI_ENGINE_LOG_CRASH_H_
 
@@ -35,7 +45,7 @@ namespace SekaiEngine
      * overwritten and dropped.
      * 
      * The crash handler is installed on the platform that supports it
-     * (desktop). It writes crash-<pid>.log (in the working directory) from the
+     * (desktop). It writes crash-`<pid>`.log (in the working directory) from the
      * ring using only async-signal-safe operations, independently of whether a
      * file sink was requested.
      * 

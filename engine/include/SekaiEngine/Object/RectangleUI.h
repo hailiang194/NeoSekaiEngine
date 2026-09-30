@@ -1,3 +1,13 @@
+/**
+ * @file RectangleUI.h
+ * @author Luong The Hai (hailuongthe2000@gmail.com)
+ * @brief UI object that draws a rectangle
+ * @version 0.1
+ * @date 2024-07-10
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #ifndef _SEKAI_ENGINE_OBJECT_RECTANGLE_UI_H_
 #define _SEKAI_ENGINE_OBJECT_RECTANGLE_UI_H_
 
@@ -8,6 +18,10 @@ namespace SekaiEngine
 {
     namespace Object
     {
+        /**
+         * @brief UI object that draws a rectangle
+         *
+         */
         class EXTENDAPI RectangleUI: public UI
         {
         public:
@@ -96,7 +110,7 @@ namespace SekaiEngine
              */
             void SetRotation(const float& rotation) override;
         protected:
-            Shape::Rectangle m_rectangle;
+            Shape::Rectangle m_rectangle; /*!< the rectangle drawn by the object */
         };
     } // namespace Object
     

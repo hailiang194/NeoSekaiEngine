@@ -15,6 +15,15 @@
 #include "SekaiEngine/Render/Color.h"
 #include "raylib.h"
 
+/**
+ * @brief Convert an engine color into the raylib color type
+ *
+ * Both types store RGBA in the same 32-bit code, so this is a copy of the
+ * 4 bytes with no per-channel arithmetic.
+ *
+ * @param color the engine color
+ * @return the equivalent raylib color
+ */
 ::Color parseToRaylibColor(const SekaiEngine::Render::Color& color);
 #endif
 

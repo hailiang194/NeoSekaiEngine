@@ -11,7 +11,7 @@ raylib
 
 zlib License
 
-Copyright (c) 2013-2026 Ramon Santamaria (@raysan5)
+Copyright (c) 2013-2026 Ramon Santamaria (`@raysan5`)
 
 This software is provided "as-is", without any express or implied warranty. In no event 
 will the authors be held liable for any damages arising from the use of this software.
@@ -81,11 +81,11 @@ Introduction
   encourage you to use the following text:
 
    """
-    Portions of this software are copyright © <year> The FreeType
+    Portions of this software are copyright © `<year>` The FreeType
     Project (www.freetype.org).  All rights reserved.
    """
 
-  Please replace <year> with the value from the FreeType version you
+  Please replace `<year>` with the value from the FreeType version you
   actually use.
 
 

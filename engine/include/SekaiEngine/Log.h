@@ -35,7 +35,8 @@ namespace SekaiEngine
      * Messages are printed to the console by default. On desktop platforms a
      * rotating file sink can be added with SetFile() (or the SEKAI_LOG_FILE
      * environment variable); the most recent messages are also captured in a
-     * bounded in-memory ring that a fatal-fault handler dumps to crash-<pid>.log.
+     * bounded in-memory ring that a fatal-fault handler dumps to
+     * crash-`<pid>`.log.
      * 
      */
     class EXTENDAPI Log
@@ -75,11 +76,41 @@ namespace SekaiEngine
     };
 }
 
+/**
+ * @brief Write a formatted message at the Trace level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_TRACE(...)     ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Trace,   __VA_ARGS__)
+/**
+ * @brief Write a formatted message at the Debug level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_DEBUG(...)     ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Debug,   __VA_ARGS__)
+/**
+ * @brief Write a formatted message at the Info level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_INFO(...)      ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Info,    __VA_ARGS__)
+/**
+ * @brief Write a formatted message at the Warning level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_WARNING(...)   ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Warning, __VA_ARGS__)
+/**
+ * @brief Write a formatted message at the Error level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_ERROR(...)     ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Error,   __VA_ARGS__)
+/**
+ * @brief Write a formatted message at the Fatal level
+ *
+ * @param ... a printf-style format string followed by its arguments
+ */
 #define SEKAI_FATAL(...)     ::SekaiEngine::Log::Write(::SekaiEngine::LogLevel::Fatal,   __VA_ARGS__)
 
 #endif //!_SEKAI_ENGINE_LOG_H_

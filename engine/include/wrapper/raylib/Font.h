@@ -18,6 +18,12 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Get the loaded font of a given name
+         *
+         * @param id the name the font was loaded with
+         * @return the font, or nullptr if no font carries that name
+         */
         ::Font* getFontById(const char* id);
     } // namespace Render
     
