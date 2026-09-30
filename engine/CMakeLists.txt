@@ -1,5 +1,13 @@
 project(SekaiEngine VERSION 0.4.0)
 
+option(BUILD_WEB_UI "Build the Vue web UI for web targets and stage it into the game output dir" OFF)
+set(WEB_UI_BASE "./" CACHE STRING "Base URL for the built web UI (vite --base)")
+
+find_program(NPM_EXECUTABLE npm)
+if(BUILD_WEB_UI AND EMSCRIPTEN AND NOT NPM_EXECUTABLE)
+    message(FATAL_ERROR "BUILD_WEB_UI=ON requires npm (the Vue UI is built with vite); install Node.js/npm or add it to PATH")
+endif()
+
 include(cmake/import_engine.cmake)
 include(cmake/set_version_header.cmake)
 

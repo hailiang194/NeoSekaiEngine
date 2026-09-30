@@ -140,11 +140,41 @@ jobs:
           run: cmake -S . -B build -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_ENGINE_EXAMPLES=1 -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
         - name: Build project
           run: cmake --build ./build --config ${{ matrix.config }}     
+        - name: Assert ES6 module output (no .html shell)
+          run: |
+            if find build/out -name '*.html' | grep -q .; then
+              echo "unexpected .html shell emitted:"; find build/out -name '*.html'
+              exit 1
+            fi
+            test -f build/out/BasicWindow/BasicWindow.js
+            test -f build/out/BasicWindow/BasicWindow.wasm
+            echo "ES6 module pair present in build/out/BasicWindow/"
+        - name: Build with web UI and assert staged game output
+          run: |
+            cmake -S . -B build-web-ui -DPLATFORM=Web -DBUILD_SHARED_LIBS=0 -DBUILD_ENGINE_EXAMPLES=1 \
+              -DBUILD_WEB_UI=ON -DCMAKE_TOOLCHAIN_FILE=$EMSDK/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake
+            cmake --build build-web-ui --config ${{ matrix.config }}
+            for dir in build-web-ui/out/*/; do
+              game=$(basename "$dir")
+              for f in index.html "$game.js" "$game.wasm"; do
+                test -f "$dir$f" || { echo "missing $dir$f"; exit 1; }
+              done
+              # A .data must carry named VFS entries: an empty preload destination makes
+              # emcc emit one nameless "/" entry, which then fails to mknod at runtime.
+              if [ -f "$dir$game.data" ]; then
+                if grep -q '"filename": "/",' "$dir$game.js"; then
+                  echo "$game: nameless entry in preloaded data"; exit 1
+                fi
+                echo "$game: UI + module pair + named .data"
+              else
+                echo "$game: UI + module pair (no assets declared, no .data)"
+              fi
+            done
         - name: Upload WebAssembly
           uses: actions/upload-artifact@v4
           with:
             name: webassembly-${{ matrix.config }}
-            path: build/out
+            path: build-web-ui/out
 
     Generate-Docs:
       runs-on: "ubuntu-latest"
