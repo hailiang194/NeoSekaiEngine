@@ -67,6 +67,11 @@ namespace SekaiEngine
          */
         EXTENDAPI SekaiEngine::Audio::Device& AudioDevice();
 
+        /**
+         * @brief Get the reference of the text engine
+         * 
+         * @return TextEngine& text engine object
+         */
         EXTENDAPI SekaiEngine::TextEngine::TextEngine& TextEngine();
 
         /**

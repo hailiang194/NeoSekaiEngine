@@ -19,6 +19,12 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        /**
+         * @brief Get a loaded texture by its engine texture id
+         *
+         * @param id the id of the texture
+         * @return the texture, or nullptr if no texture carries that id
+         */
         ::Texture* getTexture(const int& id);
     } // namespace Render
     

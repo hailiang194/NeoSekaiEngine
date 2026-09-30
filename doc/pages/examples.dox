@@ -1,0 +1,98 @@
+/** \page examples_guide Examples
+\tableofcontents
+
+\section examples_shape The shape of an example
+
+Every example is a complete application built against the engine library. It
+subclasses SekaiEngine::Application, pushes a SekaiEngine::Layer::Layer, and
+returns the application from SekaiEngine::CreateApplication(), which is the
+entry point the engine looks for.
+
+The layer is where a game lives: OnEvent() receives SekaiEngine::Event::Event,
+OnUpdate() runs once per frame with the timestep, and OnRender() records the
+draws for the frame.
+
+One thing to know before writing an OnRender(): it runs on the update thread,
+which does not hold the graphics context, so a draw may only be *recorded* with
+SekaiEngine::Render::RenderCommand::Record(). The recorded commands are
+replayed on the thread that owns the context, at the end of the frame, in the
+order they were recorded.
+
+The examples that load a file use a plain relative path such as
+<code>./icon.png</code>. The build copies the referenced assets from
+<code>examples/assets</code> next to the executable, so those paths resolve
+wherever the executable is run from.
+
+\section examples_basic_window Basic window
+
+The smallest example there is: an application with a layer that does nothing.
+Use it as the starting point, and as the check that a fresh toolchain can build
+and run a game.
+
+Source: <code>examples/BasicWindow/src/BasicWindow.cpp</code>
+
+\include BasicWindow/src/BasicWindow.cpp
+
+\section examples_input_keys Keyboard input
+
+WASD moves a circle one step per press, read through
+SekaiEngine::Input::IsKeyPressed(). Note that IsKeyPressed() is true for one
+frame, while IsKeyDown() stays true for as long as the key is held.
+
+Source: <code>examples/InputKeys/src/InputKey.cpp</code>
+
+\include InputKeys/src/InputKey.cpp
+
+\section examples_input_mouse Mouse input
+
+The circle follows the pointer, read through SekaiEngine::Input::GetMouseX()
+and SekaiEngine::Input::GetMouseY().
+
+Source: <code>examples/InputMouse/src/InputMouse.cpp</code>
+
+\include InputMouse/src/InputMouse.cpp
+
+\section examples_touch Touch input
+
+Draws a circle under every touch point. GetTotalTouchPoints() reports how many
+there are and GetTouchPointPosition() gives the position of each, so one
+circle per finger is a loop over the count.
+
+Source: <code>examples/Touch/src/Touch.cpp</code>
+
+\include Touch/src/Touch.cpp
+
+\section examples_draw_cmd Draw commands and text
+
+The drawing example: circles, rectangles, a whole texture, a sub-rectangle of
+that texture, and text drawn from a font face. Each of the four labels is
+written in English, Vietnamese and Traditional Chinese, and the language is
+switched every LANGUAGE_SECONDS, which shows the text engine falling back
+across scripts inside a single string.
+
+Two things worth copying from it:
+
+- The order of the Record() calls is the composite order, and the renderer
+  rotates a rectangle about its position plus its origin, so Origin is set to
+  half the rectangle to spin it about its centre.
+- A recorded command keeps the pointer it was handed. String literals are
+  fine, but a value formatted at runtime has to live in a member that outlives
+  the frame, which is why the frame rate is formatted into m_fpsLabel.
+
+Source: <code>examples/DrawCmd/src/DrawCmd.cpp</code>
+
+\include DrawCmd/src/DrawCmd.cpp
+
+\section examples_sound_music Sound and music
+
+Audio: SekaiEngine::Sound::Sound for a one-shot effect and
+SekaiEngine::Sound::MusicStream for a streamed track.
+
+- Space plays the sound.
+- P pauses and resumes the music, rate-limited to one toggle per second.
+- The bar at the bottom is the playback position, Played() over Length().
+
+Source: <code>examples/SoundMusic/src/SoundMusic.cpp</code>
+
+\include SoundMusic/src/SoundMusic.cpp
+*/

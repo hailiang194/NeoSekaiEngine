@@ -110,7 +110,7 @@ namespace SekaiEngine
              */
             void SetRotation(const float& rotation) override;
         protected:
-            Shape::Circle m_circle;
+            Shape::Circle m_circle; /*!< the circle drawn by the object */
         };
     } // namespace Object
     
