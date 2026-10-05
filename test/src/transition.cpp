@@ -30,13 +30,9 @@ template<typename TransitionType>
 class TransitionRecorder
 {
 public:
-    TransitionRecorder(const float& start, const float& end, const float& seconds,
-      const SekaiEngine::Animation::Ease::Mode& mode)
-      :m_transition(start, end, SekaiEngine::Timestep(seconds), mode,
-        [this](const float& value){ m_values.push_back(value); })
-    {
-    }
-
+    /*One constructor for every family. Linear and each of the catalogue's three directions
+      are told apart by their type rather than by an argument, so the recorder needs no
+      direction of its own and its TransitionType carries it.*/
     TransitionRecorder(const float& start, const float& end, const float& seconds)
       :m_transition(start, end, SekaiEngine::Timestep(seconds),
         [this](const float& value){ m_values.push_back(value); })
@@ -80,8 +76,8 @@ private:
 using namespace SekaiEngine;
 using namespace SekaiEngine::Animation;
 
-/*!< Every direction of every family, in the order the cases below sweep them*/
-static const Ease::Mode ALL_MODES[] = {Ease::In, Ease::Out, Ease::InOut};
+/*!< The three directions of every family, as the type each one is instantiated as. Written
+  out once so a case that sweeps all three names them the same way everywhere.*/
 
 /**
  * @brief The catalogue's own formulas, written out here independently of the headers
@@ -206,49 +202,66 @@ namespace Catalogue
 /**
  * @brief Compare one curve against the catalogue across the duration
  *
- * @tparam TransitionType the family under test
- * @param mode the direction under test
- * @param inFamily the catalogue's In curve for this family
- * @param outFamily the catalogue's Out curve
- * @param inOutFamily the catalogue's InOut curve
+ * @tparam MODE the direction under test, which is also what instantiates the family
+ * @tparam Family the family under test, before any direction is applied to it
+ * @param expected the catalogue's curve for this family in this direction
  */
-template<typename TransitionType>
-void ExpectMatchesCatalogue(const Ease::Mode& mode,
-  float (*inFamily)(float), float (*outFamily)(float), float (*inOutFamily)(float))
+template<Ease::Mode MODE, template<Ease::Mode> class Family>
+void ExpectMatchesCatalogue(float (*expected)(float))
 {
-    TransitionType curve(0.0f, 1.0f, Timestep(1.0f), mode, [](const float&){});
+    Family<MODE> curve(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
     const float fractions[] = {0.1f, 0.25f, 0.5f, 0.75f, 0.9f};
     for(int index = 0; index < 5; index++)
     {
         const float x = fractions[index];
-        float expected = 0.0f;
-        if(mode == Ease::In)
-            expected = inFamily(x);
-        else if(mode == Ease::Out)
-            expected = outFamily(x);
-        else
-            expected = inOutFamily(x);
-
         /*A tolerance rather than exact equality: the catalogue evaluates in double, so the
           last bit of the two can differ even when the algebra agrees.*/
-        EXPECT_NEAR(expected, curve.GetProgressValue(x), 1e-5f) << " at fraction " << x;
+        EXPECT_NEAR(expected(x), curve.GetProgressValue(x), 1e-5f) << " at fraction " << x;
     }
+}
+
+/**
+ * @brief Compare one family against the catalogue in all three of its directions
+ *
+ * @note The three arguments are the catalogue's own In, Out and InOut curves for this
+ * family, in that order, so a case below stays one line per family however many directions
+ * it sweeps. The family is named here without a direction, because the direction is what
+ * this function applies.
+ */
+template<template<Ease::Mode> class Family>
+void ExpectFamilyMatchesCatalogue(float (*inFamily)(float), float (*outFamily)(float),
+  float (*inOutFamily)(float))
+{
+    ExpectMatchesCatalogue<Ease::In, Family>(inFamily);
+    ExpectMatchesCatalogue<Ease::Out, Family>(outFamily);
+    ExpectMatchesCatalogue<Ease::InOut, Family>(inOutFamily);
 }
 
 /**
  * @brief Check the two ends of one curve in one direction, and its mid-point
  *
- * @tparam TransitionType the family under test
- * @param mode the direction under test
+ * @tparam MODE the direction under test, which is also what instantiates the family
+ * @tparam Family the family under test, before any direction is applied to it
  */
-template<typename TransitionType>
-void ExpectExactEnds(const Ease::Mode& mode)
+template<Ease::Mode MODE, template<Ease::Mode> class Family>
+void ExpectExactEnds()
 {
-    TransitionType curve(0.0f, 1.0f, Timestep(1.0f), mode, [](const float&){});
+    Family<MODE> curve(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
     EXPECT_EQ(0.0f, curve.GetProgressValue(0.0f));
     EXPECT_EQ(1.0f, curve.GetProgressValue(1.0f));
+}
+
+/**
+ * @brief Check the two ends of one family in all three of its directions
+ */
+template<template<Ease::Mode> class Family>
+void ExpectFamilyExactEnds()
+{
+    ExpectExactEnds<Ease::In, Family>();
+    ExpectExactEnds<Ease::Out, Family>();
+    ExpectExactEnds<Ease::InOut, Family>();
 }
 
 TEST(EngineTest, TestStartReportsTheStartValue)
@@ -352,21 +365,65 @@ TEST(EngineTest, TestEveryCurveLandsExactlyOnItsEnds)
     /*Every family, every direction: the start of a duration is exactly zero and the end is
       exactly one, on raw float equality rather than a tolerance. A curve whose algebra
       leaves residue at either end fails here even though it looks right on a plot.*/
-    for(int index = 0; index < 3; index++)
-    {
-        const Ease::Mode mode = ALL_MODES[index];
+    ExpectFamilyExactEnds<Quad>();
+    ExpectFamilyExactEnds<Cubic>();
+    ExpectFamilyExactEnds<Quart>();
+    ExpectFamilyExactEnds<Quint>();
+    ExpectFamilyExactEnds<Sine>();
+    ExpectFamilyExactEnds<Expo>();
+    ExpectFamilyExactEnds<Circ>();
+    ExpectFamilyExactEnds<Back>();
+    ExpectFamilyExactEnds<Elastic>();
+    ExpectFamilyExactEnds<Bounce>();
+}
 
-        ExpectExactEnds<Quad>(mode);
-        ExpectExactEnds<Cubic>(mode);
-        ExpectExactEnds<Quart>(mode);
-        ExpectExactEnds<Quint>(mode);
-        ExpectExactEnds<Sine>(mode);
-        ExpectExactEnds<Expo>(mode);
-        ExpectExactEnds<Circ>(mode);
-        ExpectExactEnds<Back>(mode);
-        ExpectExactEnds<Elastic>(mode);
-        ExpectExactEnds<Bounce>(mode);
+/**
+ * @brief Drive every family in one direction to the end of its duration and no further
+ *
+ * @tparam MODE the direction under test, applied to every family below
+ */
+template<Ease::Mode MODE>
+void ExpectEveryCurveReachesItsEndValueAndStops()
+{
+    TransitionRecorder<Quad<MODE>> quad(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Cubic<MODE>> cubic(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Quart<MODE>> quart(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Quint<MODE>> quint(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Sine<MODE>> sine(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Expo<MODE>> expo(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Circ<MODE>> circ(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Back<MODE>> back(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Elastic<MODE>> elastic(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Bounce<MODE>> bounce(30.0f, 70.0f, 1.0f);
+
+    for(int frame = 0; frame < 20; frame++)
+    {
+        quad.Step(0.1f);
+        cubic.Step(0.1f);
+        quart.Step(0.1f);
+        quint.Step(0.1f);
+        sine.Step(0.1f);
+        expo.Step(0.1f);
+        circ.Step(0.1f);
+        back.Step(0.1f);
+        elastic.Step(0.1f);
+        bounce.Step(0.1f);
     }
+
+    EXPECT_FLOAT_EQ(70.0f, quad.Last());
+    EXPECT_FLOAT_EQ(70.0f, cubic.Last());
+    EXPECT_FLOAT_EQ(70.0f, quart.Last());
+    EXPECT_FLOAT_EQ(70.0f, quint.Last());
+    EXPECT_FLOAT_EQ(70.0f, sine.Last());
+    EXPECT_FLOAT_EQ(70.0f, expo.Last());
+    EXPECT_FLOAT_EQ(70.0f, circ.Last());
+    EXPECT_FLOAT_EQ(70.0f, back.Last());
+    EXPECT_FLOAT_EQ(70.0f, elastic.Last());
+    EXPECT_FLOAT_EQ(70.0f, bounce.Last());
+
+    const int reported = static_cast<int>(quad.Values().size());
+    quad.Step(0.1f);
+    EXPECT_EQ(reported, static_cast<int>(quad.Values().size()));
 }
 
 TEST(EngineTest, TestEveryCurveReachesItsEndValueAndStops)
@@ -374,49 +431,61 @@ TEST(EngineTest, TestEveryCurveReachesItsEndValueAndStops)
     /*Driven through the engine's own transition rather than evaluated by hand, so this
       covers the requirement that a curve is usable wherever the linear transition is: the
       last reported value is the end value exactly, and nothing is reported after it.*/
-    for(int index = 0; index < 3; index++)
+    ExpectEveryCurveReachesItsEndValueAndStops<Ease::In>();
+    ExpectEveryCurveReachesItsEndValueAndStops<Ease::Out>();
+    ExpectEveryCurveReachesItsEndValueAndStops<Ease::InOut>();
+}
+
+/**
+ * @brief Hold the eight non-overshooting families between their two values in one direction
+ *
+ * @tparam MODE the direction under test, applied to every family below
+ */
+template<Ease::Mode MODE>
+void ExpectANonOvershootingCurveStaysBetweenItsValues()
+{
+    const float low = 10.0f;
+    const float high = 90.0f;
+    const float up[][2] = {{low, high}, {high, low}};
+
+    for(int travel = 0; travel < 2; travel++)
     {
-        const Ease::Mode mode = ALL_MODES[index];
+        const float start = up[travel][0];
+        const float end = up[travel][1];
+        const float floorValue = std::min(start, end);
+        const float ceiling = std::max(start, end);
 
-        TransitionRecorder<Quad> quad(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Cubic> cubic(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Quart> quart(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Quint> quint(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Sine> sine(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Expo> expo(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Circ> circ(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Back> back(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Elastic> elastic(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Bounce> bounce(30.0f, 70.0f, 1.0f, mode);
+        Quad<MODE> quad(start, end, Timestep(1.0f), [](const float&){});
+        Cubic<MODE> cubic(start, end, Timestep(1.0f), [](const float&){});
+        Quart<MODE> quart(start, end, Timestep(1.0f), [](const float&){});
+        Quint<MODE> quint(start, end, Timestep(1.0f), [](const float&){});
+        Sine<MODE> sine(start, end, Timestep(1.0f), [](const float&){});
+        Expo<MODE> expo(start, end, Timestep(1.0f), [](const float&){});
+        Circ<MODE> circ(start, end, Timestep(1.0f), [](const float&){});
+        Bounce<MODE> bounce(start, end, Timestep(1.0f), [](const float&){});
 
-        for(int frame = 0; frame < 20; frame++)
+        for(int step = 0; step <= 200; step++)
         {
-            quad.Step(0.1f);
-            cubic.Step(0.1f);
-            quart.Step(0.1f);
-            quint.Step(0.1f);
-            sine.Step(0.1f);
-            expo.Step(0.1f);
-            circ.Step(0.1f);
-            back.Step(0.1f);
-            elastic.Step(0.1f);
-            bounce.Step(0.1f);
+            const float ratio = step / 200.0f;
+
+            const float reported[] = {
+                start + (end - start) * quad.GetProgressValue(ratio),
+                start + (end - start) * cubic.GetProgressValue(ratio),
+                start + (end - start) * quart.GetProgressValue(ratio),
+                start + (end - start) * quint.GetProgressValue(ratio),
+                start + (end - start) * sine.GetProgressValue(ratio),
+                start + (end - start) * expo.GetProgressValue(ratio),
+                start + (end - start) * circ.GetProgressValue(ratio),
+                start + (end - start) * bounce.GetProgressValue(ratio)
+            };
+
+            for(int family = 0; family < 8; family++)
+            {
+                EXPECT_TRUE(std::isfinite(reported[family]));
+                EXPECT_GE(reported[family], floorValue);
+                EXPECT_LE(reported[family], ceiling);
+            }
         }
-
-        EXPECT_FLOAT_EQ(70.0f, quad.Last());
-        EXPECT_FLOAT_EQ(70.0f, cubic.Last());
-        EXPECT_FLOAT_EQ(70.0f, quart.Last());
-        EXPECT_FLOAT_EQ(70.0f, quint.Last());
-        EXPECT_FLOAT_EQ(70.0f, sine.Last());
-        EXPECT_FLOAT_EQ(70.0f, expo.Last());
-        EXPECT_FLOAT_EQ(70.0f, circ.Last());
-        EXPECT_FLOAT_EQ(70.0f, back.Last());
-        EXPECT_FLOAT_EQ(70.0f, elastic.Last());
-        EXPECT_FLOAT_EQ(70.0f, bounce.Last());
-
-        const int reported = static_cast<int>(quad.Values().size());
-        quad.Step(0.1f);
-        EXPECT_EQ(reported, static_cast<int>(quad.Values().size()));
     }
 }
 
@@ -425,127 +494,134 @@ TEST(EngineTest, TestANonOvershootingCurveStaysBetweenItsValues)
     /*The eight families the catalogue does not define to overshoot, in all three
       directions and travelling both upwards and downwards: nothing they report may leave
       the two values they run between.*/
-    for(int index = 0; index < 3; index++)
-    {
-        const Ease::Mode mode = ALL_MODES[index];
-
-        const float low = 10.0f;
-        const float high = 90.0f;
-        const float up[][2] = {{low, high}, {high, low}};
-
-        for(int travel = 0; travel < 2; travel++)
-        {
-            const float start = up[travel][0];
-            const float end = up[travel][1];
-            const float floorValue = std::min(start, end);
-            const float ceiling = std::max(start, end);
-
-            Quad quad(start, end, Timestep(1.0f), mode, [](const float&){});
-            Cubic cubic(start, end, Timestep(1.0f), mode, [](const float&){});
-            Quart quart(start, end, Timestep(1.0f), mode, [](const float&){});
-            Quint quint(start, end, Timestep(1.0f), mode, [](const float&){});
-            Sine sine(start, end, Timestep(1.0f), mode, [](const float&){});
-            Expo expo(start, end, Timestep(1.0f), mode, [](const float&){});
-            Circ circ(start, end, Timestep(1.0f), mode, [](const float&){});
-            Bounce bounce(start, end, Timestep(1.0f), mode, [](const float&){});
-
-            for(int step = 0; step <= 200; step++)
-            {
-                const float ratio = step / 200.0f;
-
-                const float reported[] = {
-                    start + (end - start) * quad.GetProgressValue(ratio),
-                    start + (end - start) * cubic.GetProgressValue(ratio),
-                    start + (end - start) * quart.GetProgressValue(ratio),
-                    start + (end - start) * quint.GetProgressValue(ratio),
-                    start + (end - start) * sine.GetProgressValue(ratio),
-                    start + (end - start) * expo.GetProgressValue(ratio),
-                    start + (end - start) * circ.GetProgressValue(ratio),
-                    start + (end - start) * bounce.GetProgressValue(ratio)
-                };
-
-                for(int family = 0; family < 8; family++)
-                {
-                    EXPECT_TRUE(std::isfinite(reported[family]));
-                    EXPECT_GE(reported[family], floorValue);
-                    EXPECT_LE(reported[family], ceiling);
-                }
-            }
-        }
-    }
+    ExpectANonOvershootingCurveStaysBetweenItsValues<Ease::In>();
+    ExpectANonOvershootingCurveStaysBetweenItsValues<Ease::Out>();
+    ExpectANonOvershootingCurveStaysBetweenItsValues<Ease::InOut>();
 }
 
 /*!< How far past its ends each overshooting family travels, per direction. Where the
   catalogue's In curve dips below the start, and its Out curve sails past the end, is the
   whole difference between the two directions: the shape is spent at different ends, so it
-  overshoots in opposite directions.*/
-static const bool OVERSHOOTS_PAST_END[] = {false, true, true};
-static const bool OVERSHOOTS_PAST_START[] = {true, false, true};
+  overshoots in opposite directions. Held by the caller rather than looked up from an array
+  indexed by the direction, because the direction is a type and has no run-time index.*/
+
+/**
+ * @brief Back travels past the end and past the start as the two arguments say
+ *
+ * @tparam MODE the direction under test
+ * @tparam PAST_END whether this direction's Back curve sails past its end value
+ * @tparam PAST_START whether this direction's Back curve leaves in the wrong direction and
+ * so dips below its start value
+ */
+template<Ease::Mode MODE, bool PAST_END, bool PAST_START>
+void ExpectBackOvershootsAsSpecified()
+{
+    Back<MODE> back(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+
+    float highest = -1e30f;
+    float lowest = 1e30f;
+    for(int step = 0; step <= 200; step++)
+    {
+        const float value = back.GetProgressValue(step / 200.0f);
+        highest = std::max(highest, value);
+        lowest = std::min(lowest, value);
+    }
+
+    /*Where the shape is spent decides which way it overshoots: In leaves in the wrong
+      direction and never passes the end, Out arrives early and never returns below the
+      start, and InOut does both.*/
+    if constexpr(PAST_END)
+        EXPECT_GT(highest, 1.0f);
+    else
+        EXPECT_LE(highest, 1.0f);
+
+    if constexpr(PAST_START)
+        EXPECT_LT(lowest, 0.0f);
+    else
+        EXPECT_GE(lowest, 0.0f);
+
+    EXPECT_EQ(0.0f, back.GetProgressValue(0.0f));
+    EXPECT_EQ(1.0f, back.GetProgressValue(1.0f));
+}
 
 TEST(EngineTest, TestBackOvershootsAndStillLandsOnItsEnd)
 {
     /*Both halves matter, and neither satisfies the other: an overshoot that is never
       removed fails the second, and one that was never there fails the first.*/
-    for(int index = 0; index < 3; index++)
+    ExpectBackOvershootsAsSpecified<Ease::In, false, true>();
+    ExpectBackOvershootsAsSpecified<Ease::Out, true, false>();
+    ExpectBackOvershootsAsSpecified<Ease::InOut, true, true>();
+}
+
+/**
+ * @brief Elastic oscillates past both of its ends and still lands on them
+ *
+ * @tparam MODE the direction under test
+ * @tparam PAST_END whether this direction's Elastic curve sails past its end value
+ * @tparam PAST_START whether this direction's Elastic curve dips below its start value
+ */
+template<Ease::Mode MODE, bool PAST_END, bool PAST_START>
+void ExpectElasticOvershootsAsSpecified()
+{
+    Elastic<MODE> elastic(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+
+    float highest = -1e30f;
+    float lowest = 1e30f;
+    for(int step = 0; step <= 400; step++)
     {
-        const Ease::Mode mode = ALL_MODES[index];
-
-        Back back(0.0f, 1.0f, Timestep(1.0f), mode, [](const float&){});
-
-        float highest = -1e30f;
-        float lowest = 1e30f;
-        for(int step = 0; step <= 200; step++)
-        {
-            const float value = back.GetProgressValue(step / 200.0f);
-            highest = std::max(highest, value);
-            lowest = std::min(lowest, value);
-        }
-
-        /*Where the shape is spent decides which way it overshoots: In leaves in the wrong
-          direction and never passes the end, Out arrives early and never returns below the
-          start, and InOut does both.*/
-        if(OVERSHOOTS_PAST_END[index])
-            EXPECT_GT(highest, 1.0f) << "Back in mode " << index << " never passed its end";
-        else
-            EXPECT_LE(highest, 1.0f);
-
-        if(OVERSHOOTS_PAST_START[index])
-            EXPECT_LT(lowest, 0.0f) << "Back in mode " << index << " never went back before its start";
-        else
-            EXPECT_GE(lowest, 0.0f);
-
-        EXPECT_EQ(0.0f, back.GetProgressValue(0.0f));
-        EXPECT_EQ(1.0f, back.GetProgressValue(1.0f));
+        const float value = elastic.GetProgressValue(step / 400.0f);
+        EXPECT_TRUE(std::isfinite(value));
+        highest = std::max(highest, value);
+        lowest = std::min(lowest, value);
     }
+
+    if constexpr(PAST_END)
+        EXPECT_GT(highest, 1.0f);
+
+    if constexpr(PAST_START)
+        EXPECT_LT(lowest, 0.0f);
+
+    EXPECT_EQ(0.0f, elastic.GetProgressValue(0.0f));
+    EXPECT_EQ(1.0f, elastic.GetProgressValue(1.0f));
 }
 
 TEST(EngineTest, TestElasticOvershootsBothWaysAndStillLandsOnItsEnd)
 {
-    for(int index = 0; index < 3; index++)
+    ExpectElasticOvershootsAsSpecified<Ease::In, false, true>();
+    ExpectElasticOvershootsAsSpecified<Ease::Out, true, false>();
+    ExpectElasticOvershootsAsSpecified<Ease::InOut, true, true>();
+}
+
+/**
+ * @brief Step one overshooting transition far past its end in one direction
+ *
+ * @tparam MODE the direction under test, applied to both families below
+ */
+template<Ease::Mode MODE>
+void ExpectAnOvershootingTransitionSettlesOntoItsEnd()
+{
+    TransitionRecorder<Back<MODE>> back(30.0f, 70.0f, 1.0f);
+    TransitionRecorder<Elastic<MODE>> elastic(30.0f, 70.0f, 1.0f);
+
+    for(int frame = 0; frame < 40; frame++)
     {
-        const Ease::Mode mode = ALL_MODES[index];
+        /*Every frame is ten times longer than the whole transition, so the run is past
+          its end from the second frame onwards.*/
+        back.Step(10.0f);
+        elastic.Step(10.0f);
 
-        Elastic elastic(0.0f, 1.0f, Timestep(1.0f), mode, [](const float&){});
-
-        float highest = -1e30f;
-        float lowest = 1e30f;
-        for(int step = 0; step <= 400; step++)
-        {
-            const float value = elastic.GetProgressValue(step / 400.0f);
-            EXPECT_TRUE(std::isfinite(value));
-            highest = std::max(highest, value);
-            lowest = std::min(lowest, value);
-        }
-
-        if(OVERSHOOTS_PAST_END[index])
-            EXPECT_GT(highest, 1.0f) << "Elastic in mode " << index << " never passed its end";
-
-        if(OVERSHOOTS_PAST_START[index])
-            EXPECT_LT(lowest, 0.0f) << "Elastic in mode " << index << " never dipped back before its start";
-
-        EXPECT_EQ(0.0f, elastic.GetProgressValue(0.0f));
-        EXPECT_EQ(1.0f, elastic.GetProgressValue(1.0f));
+        EXPECT_TRUE(std::isfinite(back.Last()));
+        EXPECT_TRUE(std::isfinite(elastic.Last()));
+        EXPECT_FLOAT_EQ(70.0f, back.Last());
+        EXPECT_FLOAT_EQ(70.0f, elastic.Last());
     }
+
+    /*Once past its end it stops reporting, so an overshooting curve cannot keep
+      pushing a value at the game.*/
+    const int reported = static_cast<int>(back.Values().size());
+    back.Step(10.0f);
+    elastic.Step(10.0f);
+    EXPECT_EQ(reported, static_cast<int>(back.Values().size()));
 }
 
 TEST(EngineTest, TestAnOvershootingTransitionSettlesOntoItsEndInsteadOfDiverging)
@@ -555,33 +631,9 @@ TEST(EngineTest, TestAnOvershootingTransitionSettlesOntoItsEndInsteadOfDiverging
       than the transition must get the end value and then silence, never a value that keeps
       travelling. The base caps the elapsed time at the duration, so the curve is asked
       about a ratio of one at most however long the frame was.*/
-    for(int index = 0; index < 3; index++)
-    {
-        const Ease::Mode mode = ALL_MODES[index];
-
-        TransitionRecorder<Back> back(30.0f, 70.0f, 1.0f, mode);
-        TransitionRecorder<Elastic> elastic(30.0f, 70.0f, 1.0f, mode);
-
-        for(int frame = 0; frame < 40; frame++)
-        {
-            /*Every frame is ten times longer than the whole transition, so the run is past
-              its end from the second frame onwards.*/
-            back.Step(10.0f);
-            elastic.Step(10.0f);
-
-            EXPECT_TRUE(std::isfinite(back.Last()));
-            EXPECT_TRUE(std::isfinite(elastic.Last()));
-            EXPECT_FLOAT_EQ(70.0f, back.Last());
-            EXPECT_FLOAT_EQ(70.0f, elastic.Last());
-        }
-
-        /*Once past its end it stops reporting, so an overshooting curve cannot keep
-          pushing a value at the game.*/
-        const int reported = static_cast<int>(back.Values().size());
-        back.Step(10.0f);
-        elastic.Step(10.0f);
-        EXPECT_EQ(reported, static_cast<int>(back.Values().size()));
-    }
+    ExpectAnOvershootingTransitionSettlesOntoItsEnd<Ease::In>();
+    ExpectAnOvershootingTransitionSettlesOntoItsEnd<Ease::Out>();
+    ExpectAnOvershootingTransitionSettlesOntoItsEnd<Ease::InOut>();
 }
 
 TEST(EngineTest, TestOutIsTheComplementOfIn)
@@ -592,22 +644,22 @@ TEST(EngineTest, TestOutIsTheComplementOfIn)
       in between, which is what this catches. The two overshooting families are excluded:
       they deliberately report values outside 0 to 1, so the complement of one is not a
       fraction any more.*/
-    Quad inQuad(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Quad outQuad(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Cubic inCubic(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Cubic outCubic(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Quart inQuart(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Quart outQuart(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Quint inQuint(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Quint outQuint(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Sine inSine(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Sine outSine(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Expo inExpo(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Expo outExpo(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Circ inCirc(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Circ outCirc(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Bounce inBounce(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Bounce outBounce(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
+    Quad<Ease::In> inQuad(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quad<Ease::Out> outQuad(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Cubic<Ease::In> inCubic(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Cubic<Ease::Out> outCubic(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quart<Ease::In> inQuart(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quart<Ease::Out> outQuart(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quint<Ease::In> inQuint(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quint<Ease::Out> outQuint(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Sine<Ease::In> inSine(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Sine<Ease::Out> outSine(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Expo<Ease::In> inExpo(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Expo<Ease::Out> outExpo(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Circ<Ease::In> inCirc(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Circ<Ease::Out> outCirc(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Bounce<Ease::In> inBounce(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Bounce<Ease::Out> outBounce(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
     for(int step = 0; step <= 10; step++)
     {
@@ -631,19 +683,17 @@ TEST(EngineTest, TestInOutIsAtItsMidpointHalfwayThrough)
       its shape across both ends, so its halfway value is the midpoint by definition. The In
       and Out directions are not, and for the two overshooting families they are far from
       it — that is the overshoot, checked in the cases above.*/
-    const Ease::Mode mode = Ease::InOut;
-
     {
-        TransitionRecorder<Quad> quad(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Cubic> cubic(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Quart> quart(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Quint> quint(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Sine> sine(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Expo> expo(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Circ> circ(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Back> back(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Elastic> elastic(20.0f, 80.0f, 1.0f, mode);
-        TransitionRecorder<Bounce> bounce(20.0f, 80.0f, 1.0f, mode);
+        TransitionRecorder<Quad<Ease::InOut>> quad(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Cubic<Ease::InOut>> cubic(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Quart<Ease::InOut>> quart(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Quint<Ease::InOut>> quint(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Sine<Ease::InOut>> sine(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Expo<Ease::InOut>> expo(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Circ<Ease::InOut>> circ(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Back<Ease::InOut>> back(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Elastic<Ease::InOut>> elastic(20.0f, 80.0f, 1.0f);
+        TransitionRecorder<Bounce<Ease::InOut>> bounce(20.0f, 80.0f, 1.0f);
 
         quad.Step(0.5f);
         cubic.Step(0.5f);
@@ -673,13 +723,13 @@ TEST(EngineTest, TestTheThreeDirectionsAreNotTheSameCurve)
 {
     /*Each direction spends the shape somewhere different, so the same family in the same
       three directions must not report the same value part way through.*/
-    Quad quadIn(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Quad quadOut(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Quad quadInOut(0.0f, 1.0f, Timestep(1.0f), Ease::InOut, [](const float&){});
+    Quad<Ease::In> quadIn(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quad<Ease::Out> quadOut(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Quad<Ease::InOut> quadInOut(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
-    Elastic elasticIn(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
-    Elastic elasticOut(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Elastic elasticInOut(0.0f, 1.0f, Timestep(1.0f), Ease::InOut, [](const float&){});
+    Elastic<Ease::In> elasticIn(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Elastic<Ease::Out> elasticOut(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Elastic<Ease::InOut> elasticInOut(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
     for(int step = 1; step < 10; step++)
     {
@@ -699,10 +749,10 @@ TEST(EngineTest, TestACurvesShapeDoesNotDependOnItsDuration)
 {
     /*The same fraction of two different durations over the same distance reports the same
       value: a curve is a function of elapsed proportion, never of elapsed seconds.*/
-    Quad quick(0.0f, 100.0f, Timestep(1.0f), Ease::InOut, [](const float&){});
-    Quad slow(0.0f, 100.0f, Timestep(10.0f), Ease::InOut, [](const float&){});
-    Elastic quickElastic(0.0f, 100.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Elastic slowElastic(0.0f, 100.0f, Timestep(10.0f), Ease::Out, [](const float&){});
+    Quad<Ease::InOut> quick(0.0f, 100.0f, Timestep(1.0f), [](const float&){});
+    Quad<Ease::InOut> slow(0.0f, 100.0f, Timestep(10.0f), [](const float&){});
+    Elastic<Ease::Out> quickElastic(0.0f, 100.0f, Timestep(1.0f), [](const float&){});
+    Elastic<Ease::Out> slowElastic(0.0f, 100.0f, Timestep(10.0f), [](const float&){});
 
     for(int step = 0; step <= 20; step++)
     {
@@ -714,8 +764,8 @@ TEST(EngineTest, TestACurvesShapeDoesNotDependOnItsDuration)
 
 TEST(EngineTest, TestACurveIsTheSameValueEveryTimeItIsEvaluated)
 {
-    Back back(0.0f, 1.0f, Timestep(1.0f), Ease::Out, [](const float&){});
-    Elastic elastic(0.0f, 1.0f, Timestep(1.0f), Ease::In, [](const float&){});
+    Back<Ease::Out> back(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+    Elastic<Ease::In> elastic(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
 
     for(int step = 0; step <= 20; step++)
     {
@@ -725,14 +775,36 @@ TEST(EngineTest, TestACurveIsTheSameValueEveryTimeItIsEvaluated)
     }
 }
 
+/**
+ * @brief Rewind both overshooting families in one direction and report the start again
+ *
+ * @tparam MODE the direction under test, applied to both families below
+ */
+template<Ease::Mode MODE>
+void ExpectEveryDirectionRewindsBackAndElastic()
+{
+    TransitionRecorder<Back<MODE>> rewoundBack(20.0f, 80.0f, 1.0f);
+    TransitionRecorder<Elastic<MODE>> rewoundElastic(20.0f, 80.0f, 1.0f);
+
+    rewoundBack.Step(1.0f);
+    rewoundElastic.Step(1.0f);
+    EXPECT_FLOAT_EQ(80.0f, rewoundBack.Last());
+    EXPECT_FLOAT_EQ(80.0f, rewoundElastic.Last());
+
+    rewoundBack.Start();
+    rewoundElastic.Start();
+    EXPECT_FLOAT_EQ(20.0f, rewoundBack.Last());
+    EXPECT_FLOAT_EQ(20.0f, rewoundElastic.Last());
+}
+
 TEST(EngineTest, TestACurveCanBePlayedAgainAfterItFinishes)
 {
     /*The InOut direction, whose halfway value is the midpoint, so a replay is checked
       against a value the curve is known to produce. An overshooting family's In curve is
       deliberately below its midpoint at that point, which is what the overshoot cases
       above already cover.*/
-    TransitionRecorder<Back> back(20.0f, 80.0f, 1.0f, Ease::InOut);
-    TransitionRecorder<Elastic> elastic(20.0f, 80.0f, 1.0f, Ease::InOut);
+    TransitionRecorder<Back<Ease::InOut>> back(20.0f, 80.0f, 1.0f);
+    TransitionRecorder<Elastic<Ease::InOut>> elastic(20.0f, 80.0f, 1.0f);
 
     back.Step(1.0f);
     elastic.Step(1.0f);
@@ -750,107 +822,115 @@ TEST(EngineTest, TestACurveCanBePlayedAgainAfterItFinishes)
     EXPECT_FLOAT_EQ(50.0f, elastic.Last());
 
     /*And every direction reports its start again when rewound, overshooting or not.*/
-    for(int index = 0; index < 3; index++)
-    {
-        TransitionRecorder<Back> rewoundBack(20.0f, 80.0f, 1.0f, ALL_MODES[index]);
-        TransitionRecorder<Elastic> rewoundElastic(20.0f, 80.0f, 1.0f, ALL_MODES[index]);
+    ExpectEveryDirectionRewindsBackAndElastic<Ease::In>();
+    ExpectEveryDirectionRewindsBackAndElastic<Ease::Out>();
+    ExpectEveryDirectionRewindsBackAndElastic<Ease::InOut>();
+}
 
-        rewoundBack.Step(1.0f);
-        rewoundElastic.Step(1.0f);
-        EXPECT_FLOAT_EQ(80.0f, rewoundBack.Last());
-        EXPECT_FLOAT_EQ(80.0f, rewoundElastic.Last());
+/**
+ * @brief Start a zero-length transition in one direction and expect the end value at once
+ *
+ * @tparam MODE the direction under test, applied to all three families below
+ */
+template<Ease::Mode MODE>
+void ExpectAZeroLengthTransitionJumpsStraightToItsEndValue()
+{
+    TransitionRecorder<Quad<MODE>> quad(30.0f, 70.0f, 0.0f);
+    TransitionRecorder<Elastic<MODE>> elastic(30.0f, 70.0f, 0.0f);
+    TransitionRecorder<Bounce<MODE>> bounce(30.0f, 70.0f, 0.0f);
 
-        rewoundBack.Start();
-        rewoundElastic.Start();
-        EXPECT_FLOAT_EQ(20.0f, rewoundBack.Last());
-        EXPECT_FLOAT_EQ(20.0f, rewoundElastic.Last());
-    }
+    quad.Start();
+    elastic.Start();
+    bounce.Start();
+
+    EXPECT_FLOAT_EQ(70.0f, quad.Last());
+    EXPECT_FLOAT_EQ(70.0f, elastic.Last());
+    EXPECT_FLOAT_EQ(70.0f, bounce.Last());
 }
 
 TEST(EngineTest, TestAZeroLengthCurveTransitionJumpsStraightToItsEndValue)
 {
     /*The base has no duration to divide the elapsed time by for any family, so none of them
       may produce a NaN here.*/
-    for(int index = 0; index < 3; index++)
+    ExpectAZeroLengthTransitionJumpsStraightToItsEndValue<Ease::In>();
+    ExpectAZeroLengthTransitionJumpsStraightToItsEndValue<Ease::Out>();
+    ExpectAZeroLengthTransitionJumpsStraightToItsEndValue<Ease::InOut>();
+}
+
+/**
+ * @brief Count Bounce's direction reversals in one direction
+ *
+ * @tparam MODE the direction under test
+ */
+template<Ease::Mode MODE>
+void ExpectBounceReversesDirection()
+{
+    Bounce<MODE> bounce(0.0f, 1.0f, Timestep(1.0f), [](const float&){});
+
+    int reversals = 0;
+    float rising = bounce.GetProgressValue(0.0f) < bounce.GetProgressValue(0.01f);
+    for(int step = 1; step < 400; step++)
     {
-        TransitionRecorder<Quad> quad(30.0f, 70.0f, 0.0f, ALL_MODES[index]);
-        TransitionRecorder<Elastic> elastic(30.0f, 70.0f, 0.0f, ALL_MODES[index]);
-        TransitionRecorder<Bounce> bounce(30.0f, 70.0f, 0.0f, ALL_MODES[index]);
-
-        quad.Start();
-        elastic.Start();
-        bounce.Start();
-
-        EXPECT_FLOAT_EQ(70.0f, quad.Last());
-        EXPECT_FLOAT_EQ(70.0f, elastic.Last());
-        EXPECT_FLOAT_EQ(70.0f, bounce.Last());
+        const bool nowRising = bounce.GetProgressValue(step / 400.0f) > bounce.GetProgressValue((step - 1) / 400.0f);
+        if(nowRising != rising)
+        {
+            reversals++;
+            rising = nowRising;
+        }
     }
+
+    EXPECT_GE(reversals, 2);
 }
 
 TEST(EngineTest, TestBounceReversesDirection)
 {
-    for(int index = 0; index < 3; index++)
-    {
-        Bounce bounce(0.0f, 1.0f, Timestep(1.0f), ALL_MODES[index], [](const float&){});
-
-        int reversals = 0;
-        float rising = bounce.GetProgressValue(0.0f) < bounce.GetProgressValue(0.01f);
-        for(int step = 1; step < 400; step++)
-        {
-            const bool nowRising = bounce.GetProgressValue(step / 400.0f) > bounce.GetProgressValue((step - 1) / 400.0f);
-            if(nowRising != rising)
-            {
-                reversals++;
-                rising = nowRising;
-            }
-        }
-
-        EXPECT_GE(reversals, 2) << "Bounce in mode " << index << " never rebounded";
-    }
+    ExpectBounceReversesDirection<Ease::In>();
+    ExpectBounceReversesDirection<Ease::Out>();
+    ExpectBounceReversesDirection<Ease::InOut>();
 }
 
 TEST(EngineTest, TestQuadMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Quad>(ALL_MODES[index], Catalogue::InQuad, Catalogue::OutQuad, Catalogue::InOutQuad);
+    ExpectFamilyMatchesCatalogue<Quad>(Catalogue::InQuad, Catalogue::OutQuad,
+      Catalogue::InOutQuad);
 }
 
 TEST(EngineTest, TestCubicMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Cubic>(ALL_MODES[index], Catalogue::InCubic, Catalogue::OutCubic, Catalogue::InOutCubic);
+    ExpectFamilyMatchesCatalogue<Cubic>(Catalogue::InCubic, Catalogue::OutCubic,
+      Catalogue::InOutCubic);
 }
 
 TEST(EngineTest, TestQuartMatchesTheCatalogue)
 {
     /*Swapping this family's exponent for Cubic's fails here and nowhere else in the file:
       every other case either passes for both powers or checks a property both share.*/
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Quart>(ALL_MODES[index], Catalogue::InQuart, Catalogue::OutQuart, Catalogue::InOutQuart);
+    ExpectFamilyMatchesCatalogue<Quart>(Catalogue::InQuart, Catalogue::OutQuart,
+      Catalogue::InOutQuart);
 }
 
 TEST(EngineTest, TestQuintMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Quint>(ALL_MODES[index], Catalogue::InQuint, Catalogue::OutQuint, Catalogue::InOutQuint);
+    ExpectFamilyMatchesCatalogue<Quint>(Catalogue::InQuint, Catalogue::OutQuint,
+      Catalogue::InOutQuint);
 }
 
 TEST(EngineTest, TestSineMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Sine>(ALL_MODES[index], Catalogue::InSine, Catalogue::OutSine, Catalogue::InOutSine);
+    ExpectFamilyMatchesCatalogue<Sine>(Catalogue::InSine, Catalogue::OutSine,
+      Catalogue::InOutSine);
 }
 
 TEST(EngineTest, TestExpoMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Expo>(ALL_MODES[index], Catalogue::InExpo, Catalogue::OutExpo, Catalogue::InOutExpo);
+    ExpectFamilyMatchesCatalogue<Expo>(Catalogue::InExpo, Catalogue::OutExpo,
+      Catalogue::InOutExpo);
 }
 
 TEST(EngineTest, TestCircMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Circ>(ALL_MODES[index], Catalogue::InCirc, Catalogue::OutCirc, Catalogue::InOutCirc);
+    ExpectFamilyMatchesCatalogue<Circ>(Catalogue::InCirc, Catalogue::OutCirc,
+      Catalogue::InOutCirc);
 }
 
 TEST(EngineTest, TestBackMatchesTheCatalogueAtItsFixedOvershoot)
@@ -859,20 +939,20 @@ TEST(EngineTest, TestBackMatchesTheCatalogueAtItsFixedOvershoot)
       so a changed constant in the header fails instead of agreeing with itself.*/
     EXPECT_FLOAT_EQ(1.70158f, BACK_OVERSHOOT);
 
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Back>(ALL_MODES[index], Catalogue::InBack, Catalogue::OutBack, Catalogue::InOutBack);
+    ExpectFamilyMatchesCatalogue<Back>(Catalogue::InBack, Catalogue::OutBack,
+      Catalogue::InOutBack);
 }
 
 TEST(EngineTest, TestElasticMatchesTheCatalogueAtItsFixedPeriod)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Elastic>(ALL_MODES[index], Catalogue::InElastic, Catalogue::OutElastic, Catalogue::InOutElastic);
+    ExpectFamilyMatchesCatalogue<Elastic>(Catalogue::InElastic, Catalogue::OutElastic,
+      Catalogue::InOutElastic);
 }
 
 TEST(EngineTest, TestBounceMatchesTheCatalogue)
 {
-    for(int index = 0; index < 3; index++)
-        ExpectMatchesCatalogue<Bounce>(ALL_MODES[index], Catalogue::InBounce, Catalogue::OutBounce, Catalogue::InOutBounce);
+    ExpectFamilyMatchesCatalogue<Bounce>(Catalogue::InBounce, Catalogue::OutBounce,
+      Catalogue::InOutBounce);
 }
 
 TEST(EngineTest, TestTheLinearTransitionStillBehavesAsItDid)

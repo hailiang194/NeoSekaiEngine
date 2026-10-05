@@ -112,7 +112,12 @@ along, as a fraction, is this frame?
 - The ten non-linear families of the easings.net catalogue: Quad, Cubic,
   Quart, Quint, Sine, Expo, Circ, Back, Elastic and Bounce.
 - SekaiEngine::Animation::Ease::Mode picks the direction. In spends the whole
-  shape at the start, Out at the end, InOut splits it across both.
+  shape at the start, Out at the end, InOut splits it across both. It is a
+  template argument rather than a value passed at construction — a curve is
+  written SekaiEngine::Animation::Quad&lt;SekaiEngine::Animation::Ease::In&gt;
+  — so the shape is fixed in the type and no step has to select between the
+  three. A direction naming none of the three fails the build instead of
+  quietly running as In.
 - Back and Elastic overshoot deliberately: Back leaves in the wrong direction
   or arrives early, Elastic oscillates before settling. Both still land
   exactly on their end value.

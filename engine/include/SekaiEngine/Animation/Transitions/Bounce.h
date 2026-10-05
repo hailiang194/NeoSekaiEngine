@@ -19,30 +19,33 @@ namespace SekaiEngine {
      *
      * @note A CRTP transition: the base template parameter is the derived class itself, so
      * Transition calls GetProgressValue on the derived object without a virtual call.
-     * The direction is given at construction, so the three curves of this family are one
-     * class rather than three that differ only in their body.
+     * The direction is a template parameter too, so the three curves of this family share
+     * one body and an instantiation is left holding only the shape it was asked for.
+     *
+     * @tparam MODE the direction the shape is spent at, one of Ease::In, Ease::Out or
+     * Ease::InOut
      */
-    class EXTENDAPI Bounce: public Transition<Bounce>
+    template<Ease::Mode MODE>
+    class EXTENDAPI Bounce: public Transition<Bounce<MODE>>
     {
     public:
       /**
-       * @brief Build a bounce transition that eases in the given direction
+       * @brief Build a bounce transition that eases in the direction its type names
        *
        * @param start the value the transition starts at
        * @param end the value the transition finishes at
        * @param duration the seconds the transition takes to cover the whole distance
-       * @param mode the direction the curve spends its shape at
        * @param handler the function called with the value on every step
        * @param total the time the transition has already run, for a transition being
        * resumed part way through
        */
       Bounce(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-        const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
+        OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
 
-      Bounce(const Bounce& bounce) = default;
-      Bounce& operator=(const Bounce& bounce) = default;
-      Bounce(Bounce&& bounce) = default;
-      Bounce& operator=(Bounce&& bounce) = default;
+      Bounce(const Bounce<MODE>& bounce) = default;
+      Bounce& operator=(const Bounce<MODE>& bounce) = default;
+      Bounce(Bounce<MODE>&& bounce) = default;
+      Bounce& operator=(Bounce<MODE>&& bounce) = default;
       ~Bounce() = default;
 
       /**
@@ -53,8 +56,11 @@ namespace SekaiEngine {
        */
       float GetProgressValue(const float& timeRatio) const;
 
-    protected:
-      Ease::Mode m_mode; /*!< The direction this transition eases in*/
+      /*Each direction is the family's own algebra on a different argument, so only the
+        argument changes between them. Checked here rather than left to the chain below,
+        whose final else would quietly build any other value as In.*/
+      static_assert(MODE == Ease::In || MODE == Ease::Out || MODE == Ease::InOut,
+        "Ease::Mode must name one of the catalogue's three directions");
 
     private:
       /**
@@ -63,18 +69,23 @@ namespace SekaiEngine {
        * @param timeRatio the elapsed fraction, which for the Out direction is the progress
        * already made
        * @return float the fraction of the distance covered
+       *
+       * @note A function of the elapsed fraction alone: it never reads the direction, which
+       * is why it takes no direction of its own.
        */
       float BounceOut(const float& timeRatio) const;
     };
 
 
-    inline Bounce::Bounce(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-      const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total)
-      :Transition<Bounce>(start, end, duration, handler, total), m_mode(mode)
+    template<Ease::Mode MODE>
+    inline Bounce<MODE>::Bounce(const float& start, const float& end, const SekaiEngine::Timestep& duration,
+      OnUpdateHandler handler, const SekaiEngine::Timestep& total)
+      :Transition<Bounce<MODE>>(start, end, duration, handler, total)
     {
     }
 
-    inline float Bounce::BounceOut(const float& timeRatio) const
+    template<Ease::Mode MODE>
+    inline float Bounce<MODE>::BounceOut(const float& timeRatio) const
     {
       /*Each segment is the same parabola shifted right and up, so the value it reaches at
         the far end of the segment is the height the next one starts falling from.*/
@@ -97,20 +108,23 @@ namespace SekaiEngine {
       return BOUNCE_SCALE * shifted * shifted + 0.984375f;
     }
 
-    inline float Bounce::GetProgressValue(const float& timeRatio) const
+    template<Ease::Mode MODE>
+    inline float Bounce<MODE>::GetProgressValue(const float& timeRatio) const
     {
-      switch(m_mode)
+      if constexpr(MODE == Ease::Out)
       {
-        case Ease::Out:
-          return BounceOut(timeRatio);
-        case Ease::InOut:
-          /*A bounce out over the first half, then the same bounce run backwards.*/
-          return timeRatio < 0.5f ?
-            (1.0f - BounceOut(1.0f - 2.0f * timeRatio)) / 2.0f :
-            (1.0f + BounceOut(2.0f * timeRatio - 1.0f)) / 2.0f;
-        case Ease::In:
-        default:
-          return 1.0f - BounceOut(1.0f - timeRatio);
+        return BounceOut(timeRatio);
+      }
+      else if constexpr(MODE == Ease::InOut)
+      {
+        /*A bounce out over the first half, then the same bounce run backwards.*/
+        return timeRatio < 0.5f ?
+          (1.0f - BounceOut(1.0f - 2.0f * timeRatio)) / 2.0f :
+          (1.0f + BounceOut(2.0f * timeRatio - 1.0f)) / 2.0f;
+      }
+      else
+      {
+        return 1.0f - BounceOut(1.0f - timeRatio);
       }
     }
   } //namespace Animation

@@ -24,28 +24,32 @@ static const float DURATION_SECONDS = 6.0f;
 static const float LABEL_X = 10.0f;
 static const float LABEL_Y = 30.0f;
 
-/*!< The families the cycle plays, one per entry, in the order they are listed*/
-typedef SekaiEngine::Animation::Quad Quad;
-typedef SekaiEngine::Animation::Cubic Cubic;
-typedef SekaiEngine::Animation::Sine Sine;
-typedef SekaiEngine::Animation::Expo Expo;
-typedef SekaiEngine::Animation::Back Back;
-typedef SekaiEngine::Animation::Elastic Elastic;
-typedef SekaiEngine::Animation::Bounce Bounce;
+/*!< The families the cycle plays, one per entry, in the order they are listed. The
+  direction is part of the type, so each alias names both the family and the direction its
+  entry plays, and the alias is what tells the variant below which alternative it wants.*/
+typedef SekaiEngine::Animation::Ease Ease;
+typedef SekaiEngine::Animation::Quad<Ease::In> QuadIn;
+typedef SekaiEngine::Animation::Cubic<Ease::InOut> CubicInOut;
+typedef SekaiEngine::Animation::Sine<Ease::Out> SineOut;
+typedef SekaiEngine::Animation::Expo<Ease::In> ExpoIn;
+typedef SekaiEngine::Animation::Back<Ease::InOut> BackInOut;
+typedef SekaiEngine::Animation::Elastic<Ease::Out> ElasticOut;
+typedef SekaiEngine::Animation::Bounce<Ease::In> BounceIn;
 
 /**
- * @brief One entry of the cycle: the family to play, the direction to play it in, and the
- * name to put on screen while it plays
+ * @brief One entry of the cycle: the family to play and the name to put on screen while
+ * it plays
  *
  * @note Which family is a tag rather than a stored object, because the curve itself lives
  * in the variant below. Storing one of each family here would mean a second copy of every
- * curve that nothing ever reads.
+ * curve that nothing ever reads. The direction needs no entry of its own for the same
+ * reason: it is part of the curve's type, which the tag already picks.
  */
 struct CurveEntry
 {
     const char* name;
-    SekaiEngine::Animation::Ease::Mode mode;
-    /*!< Which alternative of the variant below this entry means.*/
+    /*!< Which alternative of the variant below this entry means, the alias that already
+      carries the direction this entry plays.*/
     enum Family {QUAD, CUBIC, SINE, EXPO, BACK, ELASTIC, BOUNCE} family;
 };
 
@@ -56,20 +60,20 @@ struct CurveEntry
  */
 static const CurveEntry CURVES[] =
 {
-    { "Quad In", SekaiEngine::Animation::Ease::In, CurveEntry::QUAD },
-    { "Cubic InOut", SekaiEngine::Animation::Ease::InOut, CurveEntry::CUBIC },
-    { "Sine Out", SekaiEngine::Animation::Ease::Out, CurveEntry::SINE },
-    { "Expo In", SekaiEngine::Animation::Ease::In, CurveEntry::EXPO },
-    { "Back InOut", SekaiEngine::Animation::Ease::InOut, CurveEntry::BACK },
-    { "Elastic Out", SekaiEngine::Animation::Ease::Out, CurveEntry::ELASTIC },
-    { "Bounce In", SekaiEngine::Animation::Ease::In, CurveEntry::BOUNCE }
+    { "Quad In", CurveEntry::QUAD },
+    { "Cubic InOut", CurveEntry::CUBIC },
+    { "Sine Out", CurveEntry::SINE },
+    { "Expo In", CurveEntry::EXPO },
+    { "Back InOut", CurveEntry::BACK },
+    { "Elastic Out", CurveEntry::ELASTIC },
+    { "Bounce In", CurveEntry::BOUNCE }
 };
 static const int CURVE_COUNT = 7;
 
-/*!< Any of the families above, whichever the current entry names. No curve is
-  default-constructible, so the variant is built from the first entry of the cycle in the
-  constructor's initialiser list.*/
-typedef std::variant<Quad, Cubic, Sine, Expo, Back, Elastic, Bounce> AnyCurve;
+/*!< Any of the families above, whichever the current entry names, each in the direction it
+  is played. No curve is default-constructible, so the variant is built from the first entry
+  of the cycle in the constructor's initialiser list.*/
+typedef std::variant<QuadIn, CubicInOut, SineOut, ExpoIn, BackInOut, ElasticOut, BounceIn> AnyCurve;
 
 class ExampleLayer: public SekaiEngine::Layer::Layer
 {
@@ -85,8 +89,8 @@ public:
     ExampleLayer()
       :m_circle(SekaiEngine::Math::Vector2D(200.0f, 200.0f), START_RADIUS),
       m_handler([this](const float& radius){ m_circle.Radius = radius; }),
-      m_transition(Quad(START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
-        CURVES[0].mode, m_handler)),
+      m_transition(QuadIn(START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
+        m_handler)),
       m_index(0),
       m_label()
     {
@@ -95,7 +99,13 @@ public:
         SekaiEngine::Application::Instance()->TextEngine().LoadFontFace(
             "noto-24", "./NotoSansTC-VariableFont_wght.ttf", 24
         );
-        std::visit([](auto& curve){ curve.Start(); }, m_transition);
+        std::visit([](auto& curve)
+        { 
+            curve.Start(); 
+
+        }, m_transition);
+
+        snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
     }
 
     ExampleLayer(const ExampleLayer& layer)
@@ -132,6 +142,7 @@ public:
             return;
 
         m_index = (m_index + 1) % CURVE_COUNT;
+        snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
         PlayCurrent();
     }
 
@@ -144,7 +155,7 @@ public:
         SekaiEngine::Render::RenderCommand::Record(
             SekaiEngine::Render::MakeCircleCmd(props, m_circle));
 
-        snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
+        // snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
 
         SekaiEngine::Render::RenderProperties labelProps;
         labelProps.Tint = (SekaiEngine::Render::Color)0xffffffff;
@@ -165,30 +176,32 @@ private:
 
         /*A switch over the tag, because each family is its own type and emplace is the one
           call that fills whichever alternative is named. Every case builds the same
-          transition and hands it the same handler, so only the family differs.*/
+          transition and hands it the same handler, so only the family differs. Each
+          alternative is the alias above, which already names the direction its entry plays,
+          so no direction is passed at construction.*/
         switch(entry.family)
         {
             case CurveEntry::QUAD:
-                m_transition.template emplace<Quad>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<QuadIn>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::CUBIC:
-                m_transition.template emplace<Cubic>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<CubicInOut>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::SINE:
-                m_transition.template emplace<Sine>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<SineOut>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::EXPO:
-                m_transition.template emplace<Expo>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<ExpoIn>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::BACK:
-                m_transition.template emplace<Back>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<BackInOut>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::ELASTIC:
-                m_transition.template emplace<Elastic>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<ElasticOut>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::BOUNCE:
             default:
-                m_transition.template emplace<Bounce>(START_RADIUS, END_RADIUS, duration, entry.mode, m_handler);
+                m_transition.emplace<BounceIn>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
         }
 

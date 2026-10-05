@@ -41,6 +41,23 @@ jobs:
               run: cmake --build build --config ${{ matrix.config }}
             - name: run test for Unix makefile
               run: ./build/out/engine_test --gtest_output="xml:build/test-results.xml"
+            - name: check an invalid ease direction is rejected
+              env:
+                CC: ${{ matrix.compiler.C }}
+                CXX: ${{ matrix.compiler.CXX }}
+              run: |
+                # The ease families take their direction as a template argument, so a
+                # direction naming none of the three can only be rejected at compile time.
+                # This snippet is kept out of engine_test precisely because it must not
+                # build; the build failing on all ten static_asserts is the passing result.
+                if ${{ matrix.compiler.CXX }} -std=c++17 -fsyntax-only -Iengine/include \
+                    test/compile_fail/invalid_ease_mode.cpp 2>build/invalid_ease_mode.log; then
+                    echo "::error::an Ease::Mode outside the three directions compiled; a static_assert is gone"
+                    exit 1
+                fi
+                rejected=$(grep -c "one of the catalogue" build/invalid_ease_mode.log)
+                echo "families rejecting the bad direction: $rejected"
+                test "$rejected" -eq 10
             - name: run logging self-check for Unix makefile
               run: python3 ./scripts/run_log_selftest.py ./build/out/log_selftest
             - name: Upload test result

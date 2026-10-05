@@ -14,30 +14,33 @@ namespace SekaiEngine {
      *
      * @note A CRTP transition: the base template parameter is the derived class itself, so
      * Transition calls GetProgressValue on the derived object without a virtual call.
-     * The direction is given at construction, so the three curves of this family are one
-     * class rather than three that differ only in their body.
+     * The direction is a template parameter too, so the three curves of this family share
+     * one body and an instantiation is left holding only the shape it was asked for.
+     *
+     * @tparam MODE the direction the shape is spent at, one of Ease::In, Ease::Out or
+     * Ease::InOut
      */
-    class EXTENDAPI Circ: public Transition<Circ>
+    template<Ease::Mode MODE>
+    class EXTENDAPI Circ: public Transition<Circ<MODE>>
     {
     public:
       /**
-       * @brief Build a circular transition that eases in the given direction
+       * @brief Build a circular transition that eases in the direction its type names
        *
        * @param start the value the transition starts at
        * @param end the value the transition finishes at
        * @param duration the seconds the transition takes to cover the whole distance
-       * @param mode the direction the curve spends its shape at
        * @param handler the function called with the value on every step
        * @param total the time the transition has already run, for a transition being
        * resumed part way through
        */
       Circ(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-        const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
+        OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
 
-      Circ(const Circ& circ) = default;
-      Circ& operator=(const Circ& circ) = default;
-      Circ(Circ&& circ) = default;
-      Circ& operator=(Circ&& circ) = default;
+      Circ(const Circ<MODE>& circ) = default;
+      Circ& operator=(const Circ<MODE>& circ) = default;
+      Circ(Circ<MODE>&& circ) = default;
+      Circ& operator=(Circ<MODE>&& circ) = default;
       ~Circ() = default;
 
       /**
@@ -48,31 +51,38 @@ namespace SekaiEngine {
        */
       float GetProgressValue(const float& timeRatio) const;
 
-    protected:
-      Ease::Mode m_mode; /*!< The direction this transition eases in*/
+      /*Each direction is the family's own algebra on a different argument, so only the
+        argument changes between them. Checked here rather than left to the chain below,
+        whose final else would quietly build any other value as In.*/
+      static_assert(MODE == Ease::In || MODE == Ease::Out || MODE == Ease::InOut,
+        "Ease::Mode must name one of the catalogue's three directions");
     };
 
 
-    inline Circ::Circ(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-      const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total)
-      :Transition<Circ>(start, end, duration, handler, total), m_mode(mode)
+    template<Ease::Mode MODE>
+    inline Circ<MODE>::Circ(const float& start, const float& end, const SekaiEngine::Timestep& duration,
+      OnUpdateHandler handler, const SekaiEngine::Timestep& total)
+      :Transition<Circ<MODE>>(start, end, duration, handler, total)
     {
     }
 
-    inline float Circ::GetProgressValue(const float& timeRatio) const
+    template<Ease::Mode MODE>
+    inline float Circ<MODE>::GetProgressValue(const float& timeRatio) const
     {
-      switch(m_mode)
+      if constexpr(MODE == Ease::Out)
       {
-        case Ease::Out:
-          return std::sqrt(1.0f - std::pow(timeRatio - 1.0f, 2.0f));
-        case Ease::InOut:
-          /*Two quarter circles, each run over its own half of the duration.*/
-          return timeRatio < 0.5f ?
-            (1.0f - std::sqrt(1.0f - std::pow(2.0f * timeRatio, 2.0f))) / 2.0f :
-            (std::sqrt(1.0f - std::pow(2.0f * timeRatio - 2.0f, 2.0f)) + 1.0f) / 2.0f;
-        case Ease::In:
-        default:
-          return 1.0f - std::sqrt(1.0f - std::pow(timeRatio, 2.0f));
+        return std::sqrt(1.0f - std::pow(timeRatio - 1.0f, 2.0f));
+      }
+      else if constexpr(MODE == Ease::InOut)
+      {
+        /*Two quarter circles, each run over its own half of the duration.*/
+        return timeRatio < 0.5f ?
+          (1.0f - std::sqrt(1.0f - std::pow(2.0f * timeRatio, 2.0f))) / 2.0f :
+          (std::sqrt(1.0f - std::pow(2.0f * timeRatio - 2.0f, 2.0f)) + 1.0f) / 2.0f;
+      }
+      else
+      {
+        return 1.0f - std::sqrt(1.0f - std::pow(timeRatio, 2.0f));
       }
     }
   } //namespace Animation

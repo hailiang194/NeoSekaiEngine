@@ -17,30 +17,33 @@ namespace SekaiEngine {
      *
      * @note A CRTP transition: the base template parameter is the derived class itself, so
      * Transition calls GetProgressValue on the derived object without a virtual call.
-     * The direction is given at construction, so the three curves of this family are one
-     * class rather than three that differ only in their body.
+     * The direction is a template parameter too, so the three curves of this family share
+     * one body and an instantiation is left holding only the shape it was asked for.
+     *
+     * @tparam MODE the direction the shape is spent at, one of Ease::In, Ease::Out or
+     * Ease::InOut
      */
-    class EXTENDAPI Sine: public Transition<Sine>
+    template<Ease::Mode MODE>
+    class EXTENDAPI Sine: public Transition<Sine<MODE>>
     {
     public:
       /**
-       * @brief Build a sinusoidal transition that eases in the given direction
+       * @brief Build a sinusoidal transition that eases in the direction its type names
        *
        * @param start the value the transition starts at
        * @param end the value the transition finishes at
        * @param duration the seconds the transition takes to cover the whole distance
-       * @param mode the direction the curve spends its shape at
        * @param handler the function called with the value on every step
        * @param total the time the transition has already run, for a transition being
        * resumed part way through
        */
       Sine(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-        const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
+        OnUpdateHandler handler, const SekaiEngine::Timestep& total = SekaiEngine::Timestep());
 
-      Sine(const Sine& sine) = default;
-      Sine& operator=(const Sine& sine) = default;
-      Sine(Sine&& sine) = default;
-      Sine& operator=(Sine&& sine) = default;
+      Sine(const Sine<MODE>& sine) = default;
+      Sine& operator=(const Sine<MODE>& sine) = default;
+      Sine(Sine<MODE>&& sine) = default;
+      Sine& operator=(Sine<MODE>&& sine) = default;
       ~Sine() = default;
 
       /**
@@ -51,33 +54,40 @@ namespace SekaiEngine {
        */
       float GetProgressValue(const float& timeRatio) const;
 
-    protected:
-      Ease::Mode m_mode; /*!< The direction this transition eases in*/
+      /*Each direction is the family's own algebra on a different argument, so only the
+        argument changes between them. Checked here rather than left to the chain below,
+        whose final else would quietly build any other value as In.*/
+      static_assert(MODE == Ease::In || MODE == Ease::Out || MODE == Ease::InOut,
+        "Ease::Mode must name one of the catalogue's three directions");
     };
 
 
-    inline Sine::Sine(const float& start, const float& end, const SekaiEngine::Timestep& duration,
-      const Ease::Mode& mode, OnUpdateHandler handler, const SekaiEngine::Timestep& total)
-      :Transition<Sine>(start, end, duration, handler, total), m_mode(mode)
+    template<Ease::Mode MODE>
+    inline Sine<MODE>::Sine(const float& start, const float& end, const SekaiEngine::Timestep& duration,
+      OnUpdateHandler handler, const SekaiEngine::Timestep& total)
+      :Transition<Sine<MODE>>(start, end, duration, handler, total)
     {
     }
 
-    inline float Sine::GetProgressValue(const float& timeRatio) const
+    template<Ease::Mode MODE>
+    inline float Sine<MODE>::GetProgressValue(const float& timeRatio) const
     {
       /*The shift at the start is what makes this family gentler than a power: the value
         leaves its start with no rate of change at all.*/
-      switch(m_mode)
+      if constexpr(MODE == Ease::Out)
       {
-        case Ease::Out:
-          return std::sin(timeRatio * HALF_PI);
-        case Ease::InOut:
-          /*The full half-cosine over the whole duration, halved so it spans 0 to 1.
-            Written with the subtraction the other way round so the start of the duration
-            is a positive zero rather than the negative one the catalogue's form yields.*/
-          return (1.0f - std::cos(2.0f * HALF_PI * timeRatio)) / 2.0f;
-        case Ease::In:
-        default:
-          return 1.0f - std::cos(timeRatio * HALF_PI);
+        return std::sin(timeRatio * HALF_PI);
+      }
+      else if constexpr(MODE == Ease::InOut)
+      {
+        /*The full half-cosine over the whole duration, halved so it spans 0 to 1.
+          Written with the subtraction the other way round so the start of the duration
+          is a positive zero rather than the negative one the catalogue's form yields.*/
+        return (1.0f - std::cos(2.0f * HALF_PI * timeRatio)) / 2.0f;
+      }
+      else
+      {
+        return 1.0f - std::cos(timeRatio * HALF_PI);
       }
     }
   } //namespace Animation
