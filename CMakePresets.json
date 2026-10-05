@@ -9,6 +9,7 @@
         {
             "name": "Desktop-shared",
             "displayName": "Desktop platform with shared library",
+            "binaryDir": "${sourceDir}/build/${presetName}", 
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": {
                     "type": "BOOL",
@@ -19,6 +20,7 @@
         {
             "name": "Desktop-static",
             "displayName": "Desktop platform with static library",
+            "binaryDir": "${sourceDir}/build/${presetName}", 
             "cacheVariables": {
                 "BUILD_SHARED_LIBS": {
                     "type": "BOOL",
@@ -29,6 +31,7 @@
         {
             "name": "Web",
             "displayName": "Web platform",
+            "binaryDir": "${sourceDir}/build/${presetName}", 
             "cacheVariables": {
                 "PLATFORM": {
                     "type": "STRING",

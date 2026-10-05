@@ -18,6 +18,7 @@ add_executable(engine_test
     src/color.cpp
     src/collision.cpp
     src/timestep.cpp
+    src/transition.cpp
     src/text_engine.cpp
     src/frame_threading.cpp
 )

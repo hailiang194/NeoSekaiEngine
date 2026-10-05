@@ -96,3 +96,31 @@ Source: <code>examples/SoundMusic/src/SoundMusic.cpp</code>
 
 \include SoundMusic/src/SoundMusic.cpp
 */
+
+/**
+ * @page examples_animation Animation
+ *
+ * @section examples_animation_transitions Easing curves
+ *
+A transition moves a value from one end to the other over a duration.
+SekaiEngine::Animation::Transition is the CRTP base that does the
+bookkeeping — clamping the elapsed time, rewinding, treating a zero duration
+as a jump to the end — and the curve only answers one question: how far
+along, as a fraction, is this frame?
+
+- SekaiEngine::Animation::Linear, the constant rate, unchanged.
+- The ten non-linear families of the easings.net catalogue: Quad, Cubic,
+  Quart, Quint, Sine, Expo, Circ, Back, Elastic and Bounce.
+- SekaiEngine::Animation::Ease::Mode picks the direction. In spends the whole
+  shape at the start, Out at the end, InOut splits it across both.
+- Back and Elastic overshoot deliberately: Back leaves in the wrong direction
+  or arrives early, Elastic oscillates before settling. Both still land
+  exactly on their end value.
+
+The example holds one circle and cycles a few curves through it, with the
+name of the current curve drawn at the top-left.
+
+Source: <code>examples/Animation/src/Animation.cpp</code>
+
+\include Animation/src/Animation.cpp
+*/
