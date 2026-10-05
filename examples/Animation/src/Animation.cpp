@@ -3,11 +3,14 @@
 
 #include "SekaiEngine.h"
 #include "SekaiEngine/Animation/Transitions/Back.h"
+#include "SekaiEngine/Animation/Transitions/Ease.h"
 #include "SekaiEngine/Animation/Transitions/Elastic.h"
 #include "SekaiEngine/Animation/Transitions/Bounce.h"
 #include "SekaiEngine/Animation/Transitions/Expo.h"
 #include "SekaiEngine/Animation/Transitions/Cubic.h"
+#include "SekaiEngine/Animation/Transitions/Quad.h"
 #include "SekaiEngine/Animation/Transitions/Sine.h"
+#include "SekaiEngine/Animation/Transitions/Types.h"
 #include "SekaiEngine/Math/Vector.h"
 #include "SekaiEngine/Shape/Circle.h"
 
@@ -23,18 +26,6 @@ static const float DURATION_SECONDS = 6.0f;
 /*!< Where the name of the curve being played is drawn, just inside the top-left*/
 static const float LABEL_X = 10.0f;
 static const float LABEL_Y = 30.0f;
-
-/*!< The families the cycle plays, one per entry, in the order they are listed. The
-  direction is part of the type, so each alias names both the family and the direction its
-  entry plays, and the alias is what tells the variant below which alternative it wants.*/
-typedef SekaiEngine::Animation::Ease Ease;
-typedef SekaiEngine::Animation::Quad<Ease::In> QuadIn;
-typedef SekaiEngine::Animation::Cubic<Ease::InOut> CubicInOut;
-typedef SekaiEngine::Animation::Sine<Ease::Out> SineOut;
-typedef SekaiEngine::Animation::Expo<Ease::In> ExpoIn;
-typedef SekaiEngine::Animation::Back<Ease::InOut> BackInOut;
-typedef SekaiEngine::Animation::Elastic<Ease::Out> ElasticOut;
-typedef SekaiEngine::Animation::Bounce<Ease::In> BounceIn;
 
 /**
  * @brief One entry of the cycle: the family to play and the name to put on screen while
@@ -70,11 +61,6 @@ static const CurveEntry CURVES[] =
 };
 static const int CURVE_COUNT = 7;
 
-/*!< Any of the families above, whichever the current entry names, each in the direction it
-  is played. No curve is default-constructible, so the variant is built from the first entry
-  of the cycle in the constructor's initialiser list.*/
-typedef std::variant<QuadIn, CubicInOut, SineOut, ExpoIn, BackInOut, ElasticOut, BounceIn> AnyCurve;
-
 class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
@@ -89,7 +75,7 @@ public:
     ExampleLayer()
       :m_circle(SekaiEngine::Math::Vector2D(200.0f, 200.0f), START_RADIUS),
       m_handler([this](const float& radius){ m_circle.Radius = radius; }),
-      m_transition(QuadIn(START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
+      m_transition(SekaiEngine::Animation::Quad<SekaiEngine::Animation::Ease::In>(START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
         m_handler)),
       m_index(0),
       m_label()
@@ -182,26 +168,26 @@ private:
         switch(entry.family)
         {
             case CurveEntry::QUAD:
-                m_transition.emplace<QuadIn>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Quad<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::CUBIC:
-                m_transition.emplace<CubicInOut>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Cubic<SekaiEngine::Animation::Ease::InOut>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::SINE:
-                m_transition.emplace<SineOut>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Sine<SekaiEngine::Animation::Ease::Out>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::EXPO:
-                m_transition.emplace<ExpoIn>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Expo<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::BACK:
-                m_transition.emplace<BackInOut>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Back<SekaiEngine::Animation::Ease::InOut>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::ELASTIC:
-                m_transition.emplace<ElasticOut>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Elastic<SekaiEngine::Animation::Ease::Out>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
             case CurveEntry::BOUNCE:
             default:
-                m_transition.emplace<BounceIn>(START_RADIUS, END_RADIUS, duration, m_handler);
+                m_transition.emplace<SekaiEngine::Animation::Bounce<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
                 break;
         }
 
@@ -221,7 +207,7 @@ private:
     /*!< The handler the current curve reports to, built once and reused by every curve the
       cycle plays, so each new curve is not handed a new one.*/
     SekaiEngine::Animation::OnUpdateHandler m_handler;
-    AnyCurve m_transition;
+    SekaiEngine::Animation::TransitionVariant m_transition;
     int m_index;
     /*!< The name of the curve being played. A member, not a local in OnRender, because a
       recorded command keeps the pointer it was handed and replays it after that function

@@ -3,7 +3,7 @@
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
  * @version 1.0
- * @date 2026-10-05
+ * @date 2026-10-06
  * 
  * @copyright Copyright (c) 2024
  * 
@@ -60,6 +60,7 @@
 #include "SekaiEngine/Animation/Transitions/Back.h"
 #include "SekaiEngine/Animation/Transitions/Elastic.h"
 #include "SekaiEngine/Animation/Transitions/Bounce.h"
+#include "SekaiEngine/Animation/Transitions/Types.h"
 
 #include "version.h"
 

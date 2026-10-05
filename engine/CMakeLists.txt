@@ -87,6 +87,7 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Back.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Elastic.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Bounce.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Types.h
 )
 
 find_package(Python3 COMPONENTS Interpreter)
