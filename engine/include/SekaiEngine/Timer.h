@@ -14,6 +14,7 @@
 #include <atomic>
 #include <chrono>
 #include "SekaiEngine/BaseType.h"
+#include "SekaiEngine/Math/Utility.h"
 
 namespace SekaiEngine
 {
@@ -99,9 +100,9 @@ namespace SekaiEngine
          */
         bool operator>(const Timestep& cmpTimestep);
 
-        /**
+         /**
          * @brief Greater than or equal comparation operator
-         * 
+         *
          * @param cmpTimestep the right-hand side timestep in comparation
          * @return true the timestep is greater than or equal to cmpTimestep
          * @return false the timestep is not greater than or equal to cmpTimestep
@@ -109,35 +110,90 @@ namespace SekaiEngine
         bool operator>=(const Timestep& cmpTimestep);
 
         /**
+         * @brief Equality comparison with float (seconds)
+         */
+        bool operator==(const float& seconds) const;
+
+        /**
+         * @brief Inequality comparison with float (seconds)
+         */
+        bool operator!=(const float& seconds) const;
+
+        /**
+         * @brief Less-than comparison with float (seconds)
+         */
+        bool operator<(const float& seconds) const;
+
+        /**
+         * @brief Less-than-or-equal comparison with float (seconds)
+         */
+        bool operator<=(const float& seconds) const;
+
+        /**
+         * @brief Greater-than comparison with float (seconds)
+         */
+        bool operator>(const float& seconds) const;
+
+        /**
+         * @brief Greater-than-or-equal comparison with float (seconds)
+         */
+        bool operator>=(const float& seconds) const;
+
+        /**
+         * @brief Convert Timestep to seconds (implicit)
+         */
+        operator float() const;
+
+        /**
+         * @brief Addition assignment operator
+         */
+        Timestep& operator+=(const Timestep& step);
+
+        /**
+         * @brief Subtraction assignment operator
+         */
+        Timestep& operator-=(const Timestep& step);
+
+        /**
+         * @brief Multiplication assignment operator (scale by scalar)
+         */
+        Timestep& operator*=(const float& scalar);
+
+        /**
+         * @brief Division assignment operator (scale by scalar)
+         */
+        Timestep& operator/=(const float& scalar);
+
+        /**
          * @brief Destroy the Timestep object
-         * 
+         *
          */
         ~Timestep();
 
         /**
          * @brief Get the seconds of time step
-         * 
+         *
          * @return float the seconds
          */
         float ToSeconds() const;
 
         /**
          * @brief Get the seconds of time step
-         * 
+         *
          * @return float the seconds
          */
         float ToSeconds();
 
         /**
          * @brief Get the miliseconds of time step
-         * 
+         *
          * @return float the miliseconds
          */
         float ToMiliseconds() const;
 
         /**
          * @brief Get the miliseconds of time step
-         * 
+         *
          * @return float the miliseconds
          */
         float ToMiliseconds();
@@ -145,6 +201,32 @@ namespace SekaiEngine
     private:
         float m_time; /*!< The value of timestep in seconds*/
     };
+
+    // Arithmetic operators
+    inline Timestep operator+(const Timestep& lhs, const Timestep& rhs)
+    {
+        return Timestep(lhs.ToSeconds() + rhs.ToSeconds());
+    }
+
+    inline Timestep operator-(const Timestep& lhs, const Timestep& rhs)
+    {
+        return Timestep(lhs.ToSeconds() - rhs.ToSeconds());
+    }
+
+    inline Timestep operator*(const Timestep& lhs, const float& scalar)
+    {
+        return Timestep(lhs.ToSeconds() * scalar);
+    }
+
+    inline Timestep operator*(const float& scalar, const Timestep& rhs)
+    {
+        return Timestep(scalar * rhs.ToSeconds());
+    }
+
+    inline Timestep operator/(const Timestep& lhs, const float& scalar)
+    {
+        return Timestep(lhs.ToSeconds() / scalar);
+    }
 
     /**
      * @brief Game timer
@@ -249,6 +331,65 @@ namespace SekaiEngine
     inline float Timestep::ToMiliseconds()
     {
         return static_cast<const Timestep&>(*this).ToMiliseconds();
+    }
+
+    inline bool Timestep::operator==(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) == 0;
+    }
+
+    inline bool Timestep::operator!=(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) != 0;
+    }
+
+    inline bool Timestep::operator<(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) < 0;
+    }
+
+    inline bool Timestep::operator<=(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) <= 0;
+    }
+
+    inline bool Timestep::operator>(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) > 0;
+    }
+
+    inline bool Timestep::operator>=(const float& seconds) const
+    {
+        return Math::cmpFloat(m_time, seconds) >= 0;
+    }
+
+    inline Timestep::operator float() const
+    {
+        return m_time;
+    }
+
+    inline Timestep& Timestep::operator+=(const Timestep& step)
+    {
+        m_time += step.m_time;
+        return (*this);
+    }
+
+    inline Timestep& Timestep::operator-=(const Timestep& step)
+    {
+        m_time -= step.m_time;
+        return (*this);
+    }
+
+    inline Timestep& Timestep::operator*=(const float& scalar)
+    {
+        m_time *= scalar;
+        return (*this);
+    }
+
+    inline Timestep& Timestep::operator/=(const float& scalar)
+    {
+        m_time /= scalar;
+        return (*this);
     }
 
 } // namespace SekaiEngine

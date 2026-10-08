@@ -23,6 +23,7 @@
 #include "SekaiEngine/Layer/LayerStack.h"
 #include "SekaiEngine/Render/DrawCmd.h"
 #include "SekaiEngine/Timer.h"
+#include "SekaiEngine/Animation/Animator.h"
 #include "SekaiEngine/Audio/Device.h"
 #include "SekaiEngine/TextEngine/TextEngine.h"
 
@@ -73,6 +74,18 @@ namespace SekaiEngine
          * @return TextEngine& text engine object
          */
         EXTENDAPI SekaiEngine::TextEngine::TextEngine& TextEngine();
+
+        /**
+         * @brief Get the reference of the animation manager
+         *
+         * @return Animation::Animator& the animation manager, which owns every animation a
+         * game hands over, advances them each frame and lets go of the ones that finished
+         *
+         * @note Advanced inside UpdateFrame, after the frame's update event has been emitted
+         * and before any layer's update is called, on the thread that updates the layers — so
+         * a layer's update reads the values the animations of that frame wrote.
+         */
+        EXTENDAPI SekaiEngine::Animation::Animator& Animator();
 
         /**
          * @brief Get the frame rate the loop is currently achieving
@@ -212,6 +225,10 @@ namespace SekaiEngine
         bool m_loopRunning;
         Timer m_timer;
         Layer::LayerStack m_layerStack;
+        /*Declared after the layer stack so that destruction, which runs in declaration
+          order reversed, tears the animations down before the layers their handlers point
+          at are gone.*/
+        SekaiEngine::Animation::Animator m_animator;
         SekaiEngine::Audio::Device m_audioDevice;
         SekaiEngine::TextEngine::TextEngine m_textEngine;
 
@@ -281,6 +298,11 @@ namespace SekaiEngine
     inline SekaiEngine::TextEngine::TextEngine& Application::TextEngine()
     {
         return m_textEngine;
+    }
+
+    inline SekaiEngine::Animation::Animator& Application::Animator()
+    {
+        return m_animator;
     }
 
     inline float Application::FPS()

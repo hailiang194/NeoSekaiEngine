@@ -275,6 +275,11 @@ namespace SekaiEngine
     {
         Event::ApplicationUpdateEvent updateEvent(elipse);
         OnEvent(updateEvent);
+        /*Between the update event and the layer loop on purpose: an animation played while
+          the event was being dispatched has already been handed over by here, so this is the
+          first advance that begins after it, and every layer's update below reads the values
+          this advance wrote.*/
+        m_animator.Update(elipse);
         for(auto it = m_layerStack.begin(); it != m_layerStack.end(); ++it)
         {
             (*it)->OnUpdate(elipse);

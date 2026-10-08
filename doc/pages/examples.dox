@@ -96,3 +96,96 @@ Source: <code>examples/SoundMusic/src/SoundMusic.cpp</code>
 
 \include SoundMusic/src/SoundMusic.cpp
 */
+
+/**
+ * @page examples_animation Animation
+ *
+ * @section examples_animation_nodes What an animation is
+ *
+ * Every animation answers to four calls: Start() to begin (and to report where it
+ * begins), Update() to advance by one timestep, IsFinish() to say whether it has
+ * run out, and Reverse() to turn around. SekaiEngine::Animation::Node is the
+ * interface that says so, and SekaiEngine::Animation::Transition — the easing
+ * curve — is one of the things that implements it.
+ *
+ * A transition moves a value from one end to the other over a duration. Its base
+ * class does the bookkeeping — clamping the elapsed time, rewinding, treating a
+ * zero duration as a jump to the end — and the curve only answers one question:
+ * how far along, as a fraction, is this frame?
+ *
+ * - SekaiEngine::Animation::Linear, the constant rate, unchanged.
+ * - The ten non-linear families of the easings.net catalogue: Quad, Cubic,
+ *   Quart, Quint, Sine, Expo, Circ, Back, Elastic and Bounce.
+ * - SekaiEngine::Animation::Ease::Mode picks the direction. In spends the whole
+ *   shape at the start, Out at the end, InOut splits it across both. It is a
+ *   template argument rather than a value passed at construction — a curve is
+ *   written SekaiEngine::Animation::Quad&lt;SekaiEngine::Animation::Ease::In&gt;
+ *   — so the shape is fixed in the type and no step has to select between the
+ *   three. A direction naming none of the three fails the build instead of
+ *   quietly running as In.
+ * - Back and Elastic overshoot deliberately: Back leaves in the wrong direction
+ *   or arrives early, Elastic oscillates before settling. Both still land
+ *   exactly on their end value.
+ *
+ * @section examples_animation_containers Composing animations
+ *
+ * Three containers are animations themselves, so they nest without anything
+ * knowing what is inside them:
+ *
+ * - SekaiEngine::Animation::Sequence advances exactly one child per call and,
+ *   when that one finishes, starts the next within the same advance. Start()
+ *   starts only the first child.
+ * - SekaiEngine::Animation::Parallel advances every child by the same timestep
+ *   and is finished only once every child has.
+ * - SekaiEngine::Animation::Repeat runs one child a given number of times,
+ *   restarting it at each boundary. SekaiEngine::Animation::Repeat::Forever is
+ *   the count that never runs out, and SekaiEngine::Animation::Repeat::Order
+ *   picks whether each run starts again from the beginning (Replay) or carries
+ *   on from where the last one stopped (PingPong).
+ *
+ * Reversing a container reverses its children and leaves the structure alone: a
+ * reversed sequence still runs its children in the same order, only each one
+ * travels the other way.
+ *
+ * @section examples_animation_manager The animation manager
+ *
+ * SekaiEngine::Animation::Animator holds the animations a game has handed it and
+ * advances them all once per frame, after events have been handled and before
+ * the layers update. Play() starts an animation at once — so its handler
+ * receives the value it begins at in the same call, and an animation of no
+ * duration both receives its end value and is released there — and then queues
+ * it. Update() advances what is already running, lets go of everything that has
+ * finished, and only then admits what was queued, which is what makes it safe
+ * for a handler to Play another animation from inside an advance. Clear() lets
+ * go of everything, finished or not.
+ *
+ * OnTransitionEnd() sets what is told as animations the manager owns finish: the
+ * handler runs once for every leaf transition that finishes, whether the manager
+ * holds the leaf directly or holds a container that does, in the advance that
+ * finishes that leaf and before the container advances past it, with the leaf
+ * still alive to look at. No container is reported for itself, and a leaf that
+ * runs again inside a repeat is reported again when it finishes again.
+ * Discarding is not finishing, so Clear() reports nothing.
+ *
+ * A game never steps an animation itself: it hands the animation over and the
+ * engine advances it from then on.
+ *
+ * @section examples_animation_example The example
+ *
+ * The example holds one circle and a label. Its layer builds a
+ * SekaiEngine::Animation::Sequence of the seven curves above, wraps it in a
+ * SekaiEngine::Animation::Repeat of Forever, and hands that to the application's
+ * animation manager from the constructor. Each curve carries a handler of its
+ * own that writes the circle's radius. The layer also sets OnTransitionEnd: as
+ * each curve ends, the handler refreshes the label to the name of the curve now
+ * running — the one after the curve that just ended, wrapping at the end of the
+ * cycle — and logs the boundary, so the label is written once per curve and the
+ * endless loop comes from the repeat rather than from the end handler. The layer
+ * has no update of its own at
+ * all: the radius eases through all seven curves and starts again from the
+ * first, and nothing in the layer is asked to move anything.
+ *
+ * Source: <code>examples/Animation/src/Animation.cpp</code>
+ *
+ * \include Animation/src/Animation.cpp
+ */
