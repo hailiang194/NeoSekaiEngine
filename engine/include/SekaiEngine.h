@@ -3,7 +3,7 @@
  * @author Luong The Hai (hailuongthe2000@gmail.com)
  * @brief The header which includes all the needed headers for game engine
  * @version 1.0
- * @date 2026-10-06
+ * @date 2026-10-07
  * 
  * @copyright Copyright (c) 2024
  * 
@@ -47,7 +47,12 @@
 #include "SekaiEngine/Audio/MusicStream.h"
 #include "SekaiEngine/TextEngine/TextEngine.h"
 #include "SekaiEngine/Log.h"
+#include "SekaiEngine/Animation/Node.h"
 #include "SekaiEngine/Animation/Transition.h"
+#include "SekaiEngine/Animation/Sequence.h"
+#include "SekaiEngine/Animation/Parallel.h"
+#include "SekaiEngine/Animation/Repeat.h"
+#include "SekaiEngine/Animation/Animator.h"
 #include "SekaiEngine/Animation/Transitions/Linear.h"
 #include "SekaiEngine/Animation/Transitions/Ease.h"
 #include "SekaiEngine/Animation/Transitions/Quad.h"

@@ -1,5 +1,8 @@
+#include <cstddef>
 #include <cstdio>
-#include <variant>
+#include <map>
+#include <memory>
+#include <vector>
 
 #include "SekaiEngine.h"
 #include "SekaiEngine/Animation/Transitions/Back.h"
@@ -10,7 +13,6 @@
 #include "SekaiEngine/Animation/Transitions/Cubic.h"
 #include "SekaiEngine/Animation/Transitions/Quad.h"
 #include "SekaiEngine/Animation/Transitions/Sine.h"
-#include "SekaiEngine/Animation/Transitions/Types.h"
 #include "SekaiEngine/Math/Vector.h"
 #include "SekaiEngine/Shape/Circle.h"
 
@@ -21,86 +23,78 @@
 /*!< The radius the circle starts at, and the one it ends at*/
 static const float START_RADIUS = 30.0f;
 static const float END_RADIUS = 70.0f;
-/*!< The seconds the transition takes to cover the whole distance, 6 in this case*/
+/*!< The seconds each curve takes to cover the whole distance, 6 in this case*/
 static const float DURATION_SECONDS = 6.0f;
 /*!< Where the name of the curve being played is drawn, just inside the top-left*/
 static const float LABEL_X = 10.0f;
 static const float LABEL_Y = 30.0f;
 
-/**
- * @brief One entry of the cycle: the family to play and the name to put on screen while
- * it plays
- *
- * @note Which family is a tag rather than a stored object, because the curve itself lives
- * in the variant below. Storing one of each family here would mean a second copy of every
- * curve that nothing ever reads. The direction needs no entry of its own for the same
- * reason: it is part of the curve's type, which the tag already picks.
- */
-struct CurveEntry
-{
-    const char* name;
-    /*!< Which alternative of the variant below this entry means, the alias that already
-      carries the direction this entry plays.*/
-    enum Family {QUAD, CUBIC, SINE, EXPO, BACK, ELASTIC, BOUNCE} family;
-};
-
-/**
- * @brief The curves the example cycles through, chosen so both the plain shapes and the two
- * overshooting families are visible on one screen
- *
- */
-static const CurveEntry CURVES[] =
-{
-    { "Quad In", CurveEntry::QUAD },
-    { "Cubic InOut", CurveEntry::CUBIC },
-    { "Sine Out", CurveEntry::SINE },
-    { "Expo In", CurveEntry::EXPO },
-    { "Back InOut", CurveEntry::BACK },
-    { "Elastic Out", CurveEntry::ELASTIC },
-    { "Bounce In", CurveEntry::BOUNCE }
-};
-static const int CURVE_COUNT = 7;
-
 class ExampleLayer: public SekaiEngine::Layer::Layer
 {
 public:
     /**
-     * @brief The circle starts at its start radius, and the first curve of the cycle drives
-     * it to its end radius
+     * @brief Build the seven curves as one sequence inside a repeat of forever, hand it to
+     * the engine's animation manager, and tell the manager what to do when a curve ends
      *
-     * @note The circle is declared before the handler on purpose: the handler writes to the
-     * circle, and the members are built in the order they are declared, so the circle is
-     * already there when the handler is created.
+     * @note The circle is declared before anything that writes to it, and the members are
+     * built in the order they are declared, so the circle is already there when the first
+     * handler is created.
+     *
+     * @note The endless cycle comes from the `Repeat` of forever, not from the end handler:
+     * the repeat restarts its sequence on its own, and the manager reports each curve of it
+     * as that curve ends.
      */
     ExampleLayer()
       :m_circle(SekaiEngine::Math::Vector2D(200.0f, 200.0f), START_RADIUS),
-      m_handler([this](const float& radius){ m_circle.Radius = radius; }),
-      m_transition(SekaiEngine::Animation::Quad<SekaiEngine::Animation::Ease::In>(START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
-        m_handler)),
-      m_index(0),
-      m_label()
+      m_label(), m_curveNames()
     {
         //Loaded once at startup and never resized, so the glyph cache stays keyed
         //consistently by face name and size for the life of the example.
         SekaiEngine::Application::Instance()->TextEngine().LoadFontFace(
             "noto-24", "./NotoSansTC-VariableFont_wght.ttf", 24
         );
-        std::visit([](auto& curve)
-        { 
-            curve.Start(); 
 
-        }, m_transition);
+        SekaiEngine::Application::Instance()->Animator().OnTransitionEnd(
+          [this](const SekaiEngine::Animation::Node& curve)
+          {
+              /*The manager reports every curve as it ends, so the label is refreshed here,
+                once per boundary rather than on every frame. It names the curve that is now
+                running — the one after the curve that just ended, wrapping back to the
+                first at the end of the cycle — so the label is on the current curve and not
+                the one before it. The names are held against the curve objects themselves,
+                because a handler is handed the curve and not its name.*/
+              for(std::size_t played = 0; played < m_curveOrder.size(); played++)
+              {
+                  if(m_curveOrder[played] != &curve)
+                      continue;
 
-        snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
+                  const std::size_t current = (played + 1) % m_curveOrder.size();
+                  snprintf(m_label, sizeof(m_label), "%s",
+                    m_curveNames[m_curveOrder[current]]);
+                  SEKAI_INFO("ANIMATION: %s ended, %s begins",
+                    m_curveNames[&curve], m_curveNames[m_curveOrder[current]]);
+                  break;
+              }
+          });
+
+        /*One hand-over: the repeat runs its sequence of curves forever, and the manager
+          advances it on every frame of the engine's own update. This layer never touches it
+          again.*/
+        SekaiEngine::Application::Instance()->Animator().Play(
+            std::make_unique<SekaiEngine::Animation::Repeat>(
+              MakeCycle(), SekaiEngine::Animation::Repeat::Forever,
+              SekaiEngine::Animation::Repeat::Replay));
+
+        /*The first curve is the one running before any boundary has passed, so its name
+          goes on screen now; every later refresh comes from the end handler.*/
+        snprintf(m_label, sizeof(m_label), "%s", m_curveNames[m_curveOrder.front()]);
     }
 
     ExampleLayer(const ExampleLayer& layer)
       :m_circle(layer.m_circle),
-      m_handler(layer.m_handler),
-      m_transition(layer.m_transition),
-      m_index(layer.m_index),
-      m_label()
+      m_label(), m_curveNames()
     {
+        snprintf(m_label, sizeof(m_label), "%s", layer.m_label);
     }
 
     ~ExampleLayer()
@@ -112,26 +106,6 @@ public:
     {
     }
 
-    /**
-     * @brief Hand the frame's elapsed time to the current transition, and move on to the
-     * next curve in the cycle once it has finished
-     *
-     * @note A generic lambda handed to std::visit, rather than a call on the variant:
-     * whichever family is currently held is a Transition, so all of them answer to Update,
-     * and the visitor does not care which one it has been given.
-     */
-    void OnUpdate(const SekaiEngine::Timestep& elipse) override
-    {
-        std::visit([&elipse](auto& curve){ curve.Update(elipse); }, m_transition);
-
-        if(!IsFinished())
-            return;
-
-        m_index = (m_index + 1) % CURVE_COUNT;
-        snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
-        PlayCurrent();
-    }
-
     void OnRender() override
     {
         /*Recorded, not drawn: the command goes into the frame's buffer and is replayed at
@@ -141,8 +115,6 @@ public:
         SekaiEngine::Render::RenderCommand::Record(
             SekaiEngine::Render::MakeCircleCmd(props, m_circle));
 
-        // snprintf(m_label, sizeof(m_label), "%s", CURVES[m_index].name);
-
         SekaiEngine::Render::RenderProperties labelProps;
         labelProps.Tint = (SekaiEngine::Render::Color)0xffffffff;
         SekaiEngine::Render::RenderCommand::Record(
@@ -151,68 +123,64 @@ public:
     }
 private:
     /**
-     * @brief Build the transition the current entry names, over the same distance, and
-     * start it
+     * @brief Build the whole seven-curve cycle, fresh, ready to be wrapped in a repeat
      *
+     * @return std::unique_ptr<SekaiEngine::Animation::Node> the sequence of curves
+     *
+     * @note Built once: the repeat of forever hands the sequence back to its first curve at
+     * every boundary, so the sequence does not have to be rebuilt to run again.
      */
-    void PlayCurrent()
+    std::unique_ptr<SekaiEngine::Animation::Node> MakeCycle()
     {
-        const CurveEntry& entry = CURVES[m_index];
-        const SekaiEngine::Timestep duration(DURATION_SECONDS);
-
-        /*A switch over the tag, because each family is its own type and emplace is the one
-          call that fills whichever alternative is named. Every case builds the same
-          transition and hands it the same handler, so only the family differs. Each
-          alternative is the alias above, which already names the direction its entry plays,
-          so no direction is passed at construction.*/
-        switch(entry.family)
-        {
-            case CurveEntry::QUAD:
-                m_transition.emplace<SekaiEngine::Animation::Quad<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::CUBIC:
-                m_transition.emplace<SekaiEngine::Animation::Cubic<SekaiEngine::Animation::Ease::InOut>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::SINE:
-                m_transition.emplace<SekaiEngine::Animation::Sine<SekaiEngine::Animation::Ease::Out>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::EXPO:
-                m_transition.emplace<SekaiEngine::Animation::Expo<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::BACK:
-                m_transition.emplace<SekaiEngine::Animation::Back<SekaiEngine::Animation::Ease::InOut>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::ELASTIC:
-                m_transition.emplace<SekaiEngine::Animation::Elastic<SekaiEngine::Animation::Ease::Out>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-            case CurveEntry::BOUNCE:
-            default:
-                m_transition.emplace<SekaiEngine::Animation::Bounce<SekaiEngine::Animation::Ease::In>>(START_RADIUS, END_RADIUS, duration, m_handler);
-                break;
-        }
-
-        std::visit([](auto& curve){ curve.Start(); }, m_transition);
+        auto sequence = std::make_unique<SekaiEngine::Animation::Sequence>();
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Quad<SekaiEngine::Animation::Ease::In>>("Quad In"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Cubic<SekaiEngine::Animation::Ease::InOut>>("Cubic InOut"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Sine<SekaiEngine::Animation::Ease::Out>>("Sine Out"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Expo<SekaiEngine::Animation::Ease::In>>("Expo In"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Back<SekaiEngine::Animation::Ease::InOut>>("Back InOut"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Elastic<SekaiEngine::Animation::Ease::Out>>("Elastic Out"));
+        sequence->Add(MakeCurve<SekaiEngine::Animation::Bounce<SekaiEngine::Animation::Ease::In>>("Bounce In"));
+        return sequence;
     }
 
     /**
-     * @brief Whether the current curve has run out of time
+     * @brief Build one curve of the cycle, over the same distance, with a handler of its own
      *
+     * @tparam Curve the family and direction, named at the point of use
+     * @param name what to put on screen while this curve is the one running
+     * @return std::unique_ptr<SekaiEngine::Animation::Node> the curve, ready to join the
+     * sequence
+     *
+     * @note The curve writes the radius only. Its name is refreshed by the manager's end
+     * handler when the curve ends, so the label is written once per boundary instead of on
+     * every frame. The curve is filed against that name here, and its place in the cycle
+     * recorded, while its address is still known.
      */
-    bool IsFinished() const
+    template<typename Curve>
+    std::unique_ptr<SekaiEngine::Animation::Node> MakeCurve(const char* name)
     {
-        return std::visit([](const auto& curve){ return curve.IsFinish(); }, m_transition);
+        std::unique_ptr<SekaiEngine::Animation::Node> curve = std::make_unique<Curve>(
+          START_RADIUS, END_RADIUS, SekaiEngine::Timestep(DURATION_SECONDS),
+          [this](const float& radius)
+          {
+              m_circle.Radius = radius;
+          });
+        m_curveNames[curve.get()] = name;
+        m_curveOrder.push_back(curve.get());
+        return curve;
     }
 
     SekaiEngine::Shape::Circle m_circle;
-    /*!< The handler the current curve reports to, built once and reused by every curve the
-      cycle plays, so each new curve is not handed a new one.*/
-    SekaiEngine::Animation::OnUpdateHandler m_handler;
-    SekaiEngine::Animation::TransitionVariant m_transition;
-    int m_index;
     /*!< The name of the curve being played. A member, not a local in OnRender, because a
       recorded command keeps the pointer it was handed and replays it after that function
       has returned.*/
     char m_label[32];
+    /*!< Each curve against the name to put on screen when it ends. Keyed by address, so it
+      stays valid while the sequence owns the curves and moves none of them.*/
+    std::map<const SekaiEngine::Animation::Node*, const char*> m_curveNames;
+    /*!< The curves in the order they run, so the curve after a finished one can be found
+      and the last one wraps back to the first.*/
+    std::vector<const SekaiEngine::Animation::Node*> m_curveOrder;
 };
 
 class Animation: public SekaiEngine::Application

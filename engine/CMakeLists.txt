@@ -74,7 +74,12 @@ set(ENGINE_PUBLIC_HEADERS
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Audio/MusicStream.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/TextEngine/TextEngine.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Log.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Node.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transition.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Sequence.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Parallel.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Repeat.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Animator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Linear.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Ease.h
     ${CMAKE_CURRENT_SOURCE_DIR}/include/SekaiEngine/Animation/Transitions/Quad.h
@@ -106,6 +111,7 @@ include(cmake/set_include_all_header.cmake)
 set(ENGINE_SOURCES
     ${WRAPPER_RAYLIB_SOURCES}
     ./src/SekaiEngine/Application.cpp
+    ./src/SekaiEngine/Animation/Animator.cpp
     ./src/SekaiEngine/Window.cpp
     ./src/SekaiEngine/Event/Event.cpp
     ./src/SekaiEngine/Event/WindowEvent.cpp

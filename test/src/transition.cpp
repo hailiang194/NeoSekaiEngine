@@ -53,6 +53,11 @@ public:
         m_transition.Start();
     }
 
+    void Reverse()
+    {
+        m_transition.Reverse();
+    }
+
     bool Finished() const
     {
         return m_transition.IsFinish();
@@ -968,4 +973,184 @@ TEST(EngineTest, TestTheLinearTransitionStillBehavesAsItDid)
     recorder.Start();
     recorder.Step(3.0f);
     EXPECT_FLOAT_EQ(50.0f, recorder.Last());
+}
+/*Below: reversal. Every case in this group runs in this test binary, which constructs no
+  Application, no window, no display and no clock, so a case here doubles as the check that
+  reversal needs nothing from the engine: the transition is handed its elapsed time by the
+  recorder and reports from the exchanged values with no subsystem contacted.*/
+
+TEST(EngineTest, TestAReversedTransitionBeginsWhereItUsedToEnd)
+{
+    TransitionRecorder<Quad<Ease::In>> before(30.0f, 70.0f, 6.0f);
+    before.Start();
+    before.Step(6.0f);
+    ASSERT_FLOAT_EQ(70.0f, before.Last());
+
+    TransitionRecorder<Quad<Ease::In>> reversed(30.0f, 70.0f, 6.0f);
+    reversed.Reverse();
+    reversed.Start();
+
+    EXPECT_FLOAT_EQ(before.Last(), reversed.Last());
+    EXPECT_FLOAT_EQ(70.0f, reversed.Last());
+}
+
+TEST(EngineTest, TestARunAndTheRunAfterItMeetWithNoGap)
+{
+    TransitionRecorder<Quad<Ease::In>> recorder(30.0f, 70.0f, 6.0f);
+    recorder.Start();
+
+    for(int step = 0; step < 12; step++)
+        recorder.Step(0.5f);
+
+    ASSERT_TRUE(recorder.Finished());
+    const float endOfRun = recorder.Last();
+
+    recorder.Reverse();
+    recorder.Start();
+
+    /*The value it reports now is the value the finished run reported last, so the two runs
+      meet at one value with nothing between them rather than jumping to the other end.*/
+    EXPECT_FLOAT_EQ(endOfRun, recorder.Last());
+    EXPECT_FLOAT_EQ(70.0f, recorder.Last());
+}
+
+TEST(EngineTest, TestAReversedTransitionRunsTheSameCurveOverTheOppositeDistance)
+{
+    /*The family, the direction and the two values in their new order, transcribed from the
+      catalogue rather than read back out of the header: an inverted time argument would land
+      on the original start value with the shape backwards, and fail every value below.*/
+    TransitionRecorder<Quad<Ease::In>> recorder(30.0f, 70.0f, 6.0f);
+    recorder.Reverse();
+    recorder.Start();
+
+    for(int step = 0; step < 20; step++)
+        recorder.Step(0.3f);
+
+    const std::vector<float> reported = recorder.Values();
+    ASSERT_EQ(21u, reported.size());
+
+    for(size_t point = 0; point < reported.size(); point++)
+    {
+        const float ratio = static_cast<float>(point) / 20.0f;
+        const float expected = 70.0f + (30.0f - 70.0f) * Catalogue::InQuad(ratio);
+        EXPECT_FLOAT_EQ(expected, reported[point]);
+    }
+
+    /*No residue from the curve's shape: it lands on the value it began at, exactly.*/
+    EXPECT_FLOAT_EQ(30.0f, reported.back());
+}
+
+TEST(EngineTest, TestReversingTwiceLeavesATransitionAlone)
+{
+    TransitionRecorder<Quad<Ease::In>> plain(30.0f, 70.0f, 6.0f);
+    plain.Start();
+    for(int step = 0; step < 20; step++)
+        plain.Step(0.3f);
+
+    TransitionRecorder<Quad<Ease::In>> twice(30.0f, 70.0f, 6.0f);
+    twice.Reverse();
+    twice.Reverse();
+    twice.Start();
+    for(int step = 0; step < 20; step++)
+        twice.Step(0.3f);
+
+    EXPECT_EQ(plain.Values(), twice.Values());
+}
+
+TEST(EngineTest, TestReversalLeavesTheDirectionAlone)
+{
+    /*Out, so a reversal that inverted the time argument would read as In and fail here: the
+      shape still decelerates into the value being travelled to, which is what the direction
+      means, and it is read over the two values in their new order.*/
+    TransitionRecorder<Quad<Ease::Out>> recorder(30.0f, 70.0f, 6.0f);
+    recorder.Reverse();
+    recorder.Start();
+
+    for(int step = 0; step < 20; step++)
+        recorder.Step(0.3f);
+
+    const std::vector<float> reported = recorder.Values();
+    ASSERT_EQ(21u, reported.size());
+
+    for(size_t point = 0; point < reported.size(); point++)
+    {
+        const float ratio = static_cast<float>(point) / 20.0f;
+        const float expected = 70.0f + (30.0f - 70.0f) * Catalogue::OutQuad(ratio);
+        EXPECT_FLOAT_EQ(expected, reported[point]);
+    }
+}
+
+/**
+ * @brief Drive one transition backwards to the end of its duration and check it lands on
+ * the value it started from, exactly
+ *
+ * @tparam TransitionType the family and direction under test
+ * @param start the value the transition was built to begin at
+ * @param end the value the transition was built to end at
+ */
+template<typename TransitionType>
+void ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues(const float& start,
+  const float& end)
+{
+    TransitionRecorder<TransitionType> recorder(start, end, 1.0f);
+    recorder.Reverse();
+    recorder.Start();
+
+    for(int step = 0; step < 20; step++)
+        recorder.Step(0.05f);
+
+    ASSERT_TRUE(recorder.Finished());
+
+    /*The value it lands on is the one it began at before it was reversed, on raw float
+      equality, and it is one of exactly the two values it was built with: never a value
+      near one of them and never a value left outside them by the run.*/
+    EXPECT_FLOAT_EQ(start, recorder.Last());
+    EXPECT_TRUE(recorder.Last() == start || recorder.Last() == end);
+}
+
+/**
+ * @brief Every family and one direction, reversed, landing exactly on one of its two values
+ *
+ * @tparam MODE the direction under test, applied to every family below
+ */
+template<Ease::Mode MODE>
+void ExpectEveryReversedCurveLandsExactlyOnOneOfItsTwoValues()
+{
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Quad<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Cubic<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Quart<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Quint<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Sine<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Expo<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Circ<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Back<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Elastic<MODE>>(30.0f, 70.0f);
+    ExpectAReversedTransitionLandsExactlyOnOneOfItsTwoValues<Bounce<MODE>>(30.0f, 70.0f);
+}
+
+TEST(EngineTest, TestAReversedTransitionStillLandsExactlyOnOneOfItsTwoValues)
+{
+    /*The overshooting families included: Back and Elastic are the ones that could leave a
+      value outside the pair, and both are required to settle onto the exchanged end value.*/
+    ExpectEveryReversedCurveLandsExactlyOnOneOfItsTwoValues<Ease::In>();
+    ExpectEveryReversedCurveLandsExactlyOnOneOfItsTwoValues<Ease::Out>();
+    ExpectEveryReversedCurveLandsExactlyOnOneOfItsTwoValues<Ease::InOut>();
+}
+
+TEST(EngineTest, TestReversalNeedsNothingFromTheEngine)
+{
+    /*No Application is constructed anywhere in this binary, so there is no window, no
+      display, no graphics context and no frame loop running here: the transition is handed
+      its elapsed time by the recorder alone and reports from the exchanged values.*/
+    TransitionRecorder<Linear> recorder(30.0f, 70.0f, 2.0f);
+    recorder.Reverse();
+    recorder.Start();
+
+    EXPECT_FLOAT_EQ(70.0f, recorder.Last());
+
+    recorder.Step(1.0f);
+    EXPECT_FLOAT_EQ(50.0f, recorder.Last());
+
+    recorder.Step(1.0f);
+    EXPECT_FLOAT_EQ(30.0f, recorder.Last());
 }
