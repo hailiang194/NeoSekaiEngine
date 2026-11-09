@@ -18,6 +18,7 @@
 #include "SekaiEngine/Shape/Circle.h"
 #include "SekaiEngine/Shape/Rectangle.h"
 #include "SekaiEngine/Render/Font.h"
+#include "SekaiEngine/Render/DrawCmd.h"
 
 namespace SekaiEngine
 {
@@ -48,6 +49,19 @@ namespace SekaiEngine
              * 
              */
             EXTENDAPI void EndDrawing();
+
+            /**
+             * @brief Enter a 2D camera
+             *
+             * @param camera the camera to enter
+             */
+            EXTENDAPI void BeginCamera(const CameraDraw& camera);
+
+            /**
+             * @brief Leave the camera entered by the nearest BeginCamera
+             *
+             */
+            EXTENDAPI void EndCamera();
 
             /**
              * @brief Draw circle

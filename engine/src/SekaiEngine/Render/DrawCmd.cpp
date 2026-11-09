@@ -1,4 +1,5 @@
 #include "SekaiEngine/Render/DrawCmd.h"
+#include "SekaiEngine/Render/Camera.h"
 
 namespace SekaiEngine
 {
@@ -75,6 +76,26 @@ namespace SekaiEngine
                 props.Offset.Y() + position.Y() * props.Scale.Y()
             );
             command.variant.text.fontName = fontName;
+            return command;
+        }
+
+        DrawCmd MakeBeginCameraCmd(const Camera2D& camera)
+        {
+            DrawCmd command;
+            command.tag = DrawTag::BeginCamera;
+            command.tint = Color();
+            command.variant.camera.position = camera.Position;
+            command.variant.camera.offset = camera.Offset;
+            command.variant.camera.zoom = camera.Zoom;
+            command.variant.camera.rotation = camera.Rotation;
+            return command;
+        }
+
+        DrawCmd MakeEndCameraCmd()
+        {
+            DrawCmd command;
+            command.tag = DrawTag::EndCamera;
+            command.tint = Color();
             return command;
         }
     } // namespace Render

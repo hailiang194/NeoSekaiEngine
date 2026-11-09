@@ -1,4 +1,5 @@
 #include "SekaiEngine/Render/Camera.h"
+#include "SekaiEngine/Render/RenderCommand.h"
 
 namespace SekaiEngine
 {
@@ -24,6 +25,16 @@ namespace SekaiEngine
             Rotation = camera.Rotation;
 
             return (*this);
+        }
+
+        void Camera2D::applyCamera()
+        {
+            RenderCommand::Record(MakeBeginCameraCmd(*this));
+        }
+
+        void Camera2D::unapplyCamera()
+        {
+            RenderCommand::Record(MakeEndCameraCmd());
         }
 
         Camera2D::~Camera2D()

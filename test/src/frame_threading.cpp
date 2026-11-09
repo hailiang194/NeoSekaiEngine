@@ -20,6 +20,7 @@
 #include "SekaiEngine/Shape/Circle.h"
 #include "SekaiEngine/Shape/Rectangle.h"
 #include "SekaiEngine/Render/DrawCmd.h"
+#include "SekaiEngine/Render/Camera.h"
 #include "SekaiEngine/Render/RenderCommand.h"
 
 namespace
@@ -136,4 +137,59 @@ TEST(FrameThreadingTest, RecordOutsideRecordingScopeIsReportedAndDropped)
     SekaiEngine::Render::RenderCommand::BeginRecording(frameBuffer[0]);
     SekaiEngine::Render::RenderCommand::EndRecording();
     EXPECT_TRUE(frameBuffer[0].empty());
+}
+
+//A camera bracket records its payload and keeps its place in the stream
+TEST(FrameThreadingTest, CameraBracketRecordsPayloadAndOrder)
+{
+    SekaiEngine::Render::Camera2D camera(
+        SekaiEngine::Math::Vector2D(100.0f, 50.0f),
+        SekaiEngine::Math::Vector2D(640.0f, 360.0f),
+        2.0f, 15.0f
+    );
+
+    std::vector<SekaiEngine::Render::DrawCmd> buffer;
+    SekaiEngine::Render::RenderCommand::BeginRecording(buffer);
+    SekaiEngine::Render::RenderCommand::Record(
+        SekaiEngine::Render::MakeBeginCameraCmd(camera));
+    SekaiEngine::Render::RenderCommand::Record(MarkerRect(10.0f));
+    SekaiEngine::Render::RenderCommand::Record(
+        SekaiEngine::Render::MakeEndCameraCmd());
+    SekaiEngine::Render::RenderCommand::EndRecording();
+
+    ASSERT_EQ(buffer.size(), 3u);
+    EXPECT_EQ(buffer[0].tag, SekaiEngine::Render::DrawTag::BeginCamera);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.position.X(), 100.0f);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.position.Y(), 50.0f);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.offset.X(), 640.0f);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.offset.Y(), 360.0f);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.zoom, 2.0f);
+    EXPECT_FLOAT_EQ(buffer[0].variant.camera.rotation, 15.0f);
+    EXPECT_EQ(buffer[1].tag, SekaiEngine::Render::DrawTag::Rectangle);
+    EXPECT_EQ(buffer[2].tag, SekaiEngine::Render::DrawTag::EndCamera);
+}
+
+//The bracket captures the camera at record time, so later changes do not reach it
+TEST(FrameThreadingTest, CameraBracketSnapshotsAtRecordTime)
+{
+    SekaiEngine::Render::Camera2D camera(
+        SekaiEngine::Math::Vector2D(1.0f, 2.0f),
+        SekaiEngine::Math::Vector2D(3.0f, 4.0f),
+        5.0f, 6.0f
+    );
+
+    SekaiEngine::Render::DrawCmd command =
+        SekaiEngine::Render::MakeBeginCameraCmd(camera);
+
+    camera.Position = SekaiEngine::Math::Vector2D(100.0f, 200.0f);
+    camera.Offset = SekaiEngine::Math::Vector2D(300.0f, 400.0f);
+    camera.Zoom = 50.0f;
+    camera.Rotation = 60.0f;
+
+    EXPECT_FLOAT_EQ(command.variant.camera.position.X(), 1.0f);
+    EXPECT_FLOAT_EQ(command.variant.camera.position.Y(), 2.0f);
+    EXPECT_FLOAT_EQ(command.variant.camera.offset.X(), 3.0f);
+    EXPECT_FLOAT_EQ(command.variant.camera.offset.Y(), 4.0f);
+    EXPECT_FLOAT_EQ(command.variant.camera.zoom, 5.0f);
+    EXPECT_FLOAT_EQ(command.variant.camera.rotation, 6.0f);
 }

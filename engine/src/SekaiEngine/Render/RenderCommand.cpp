@@ -86,6 +86,12 @@ namespace SekaiEngine
                             }
                             break;
                         }
+                        case DrawTag::BeginCamera:
+                            API::BeginCamera(iter->variant.camera);
+                            break;
+                        case DrawTag::EndCamera:
+                            API::EndCamera();
+                            break;
                         default:
                             std::cerr << "SekaiEngine: skipped a draw command of unrecognised kind "
                                 << static_cast<int>(iter->tag) << std::endl;

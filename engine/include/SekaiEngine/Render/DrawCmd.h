@@ -25,6 +25,8 @@ namespace SekaiEngine
 {
     namespace Render
     {
+        class Camera2D;
+
         /**
          * @brief The kind of draw a DrawCmd carries, selecting the active union member
          *
@@ -34,7 +36,9 @@ namespace SekaiEngine
             Circle, /*!< a circle or a circular sector*/
             Rectangle, /*!< a rectangle*/
             Texture, /*!< a texture or a region of one*/
-            Text /*!< a text label*/
+            Text, /*!< a text label*/
+            BeginCamera, /*!< enter a 2D camera for the draws that follow*/
+            EndCamera /*!< leave the camera entered by the nearest BeginCamera*/
         };
 
         /**
@@ -92,6 +96,21 @@ namespace SekaiEngine
         };
 
         /**
+         * @brief The payload of a camera entry
+         *
+         * @note A plain snapshot rather than a Camera2D, so the command stays
+         * trivially copyable and replay reads no state owned by the recording
+         * thread.
+         */
+        struct CameraDraw
+        {
+            Math::Vector2D position; /*!< the camera target position*/
+            Math::Vector2D offset; /*!< the camera offset from the target*/
+            float zoom; /*!< the camera zoom value*/
+            float rotation; /*!< the camera rotation in degree*/
+        };
+
+        /**
          * @brief The union of every draw payload, discriminated by DrawCmd::tag
          *
          */
@@ -113,6 +132,7 @@ namespace SekaiEngine
             RectDraw rect; /*!< valid when the tag is DrawTag::Rectangle*/
             TexDraw tex; /*!< valid when the tag is DrawTag::Texture*/
             TextDraw text; /*!< valid when the tag is DrawTag::Text*/
+            CameraDraw camera; /*!< valid when the tag is DrawTag::BeginCamera*/
         };
 
         /**
@@ -184,6 +204,25 @@ namespace SekaiEngine
         EXTENDAPI DrawCmd MakeTextCmd(const RenderProperties& props, const char* text,
             const Math::Vector2D& position, const char* fontName
         );
+
+        /**
+         * @brief Make the command for entering a camera
+         *
+         * @param camera the camera to enter
+         * @return DrawCmd the command to record
+         *
+         * @note The camera's values are captured now, so changing the camera after
+         * this call does not change the recorded command.
+         */
+        EXTENDAPI DrawCmd MakeBeginCameraCmd(const Camera2D& camera);
+
+        /**
+         * @brief Make the command for leaving the camera entered by the nearest
+         * preceding BeginCamera
+         *
+         * @return DrawCmd the command to record
+         */
+        EXTENDAPI DrawCmd MakeEndCameraCmd();
 
         static_assert(std::is_trivially_copyable<DrawCmd>::value,
             "DrawCmd must stay trivially copyable so a recorded draw can be moved between threads");

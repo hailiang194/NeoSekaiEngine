@@ -98,6 +98,35 @@ Source: <code>examples/SoundMusic/src/SoundMusic.cpp</code>
 */
 
 /**
+ * @page examples_camera Camera
+ *
+ * @section examples_camera_brackets Recording a camera
+ *
+ * A camera is applied through the recorded command stream, not by calling the
+ * renderer from OnRender(). MakeBeginCameraCmd() captures the camera's position,
+ * offset, zoom and rotation, and MakeEndCameraCmd() closes the bracket. Every
+ * draw recorded between the two is transformed by the camera; every draw
+ * recorded after the end is not. The order of the Record() calls is therefore
+ * both the composite order and the camera scope. Camera2D::applyCamera() and
+ * Camera2D::unapplyCamera() record the same two commands, so a layer may use
+ * whichever form reads better.
+ *
+ * @section examples_camera_example The example
+ *
+ * The example scatters rectangles at random positions, sizes and colors from a
+ * fixed seed, so every run looks the same. WASD moves the camera, so the
+ * rectangles scroll while the camera bracket is open. A text label is recorded
+ * after MakeEndCameraCmd(), so it stays at a fixed position on the screen and
+ * reports the camera's position. The position is formatted into two alternating
+ * buffers, one per recorded frame, so the text a frame recorded stays valid
+ * until that frame is replayed.
+ *
+ * Source: <code>examples/Camera/src/Camera.cpp</code>
+ *
+ * \include Camera/src/Camera.cpp
+ */
+
+/**
  * @page examples_animation Animation
  *
  * @section examples_animation_nodes What an animation is

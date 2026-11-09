@@ -25,7 +25,6 @@ set(WRAPPER_RAYLIB_SOURCES
     ./src/wrapper/raylib/Input.cpp
     ./src/wrapper/raylib/RendererAPI.cpp
     ./src/wrapper/raylib/Parser.cpp
-    ./src/wrapper/raylib/Camera.cpp
     ./src/wrapper/raylib/Texture.cpp
     ./src/wrapper/raylib/Timer.cpp
     ./src/wrapper/raylib/Font.cpp

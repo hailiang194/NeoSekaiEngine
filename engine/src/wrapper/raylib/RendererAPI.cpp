@@ -34,6 +34,21 @@ namespace SekaiEngine
                 ::EndDrawing();
             }
 
+            void BeginCamera(const CameraDraw& camera)
+            {
+                ::Camera2D raylibCamera;
+                raylibCamera.target = { camera.position.X(), camera.position.Y() };
+                raylibCamera.offset = { camera.offset.X(), camera.offset.Y() };
+                raylibCamera.rotation = camera.rotation;
+                raylibCamera.zoom = camera.zoom;
+                ::BeginMode2D(raylibCamera);
+            }
+
+            void EndCamera()
+            {
+                ::EndMode2D();
+            }
+
             void DrawCircle(const Shape::Circle& circle, const Color& color,
                 const float& startAngle, const float& endAngle, const int& segment
             )
